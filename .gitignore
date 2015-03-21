@@ -30,3 +30,13 @@ local.properties
  
 # PDT-specific
 .buildpath
+
+#NetBeans
+
+dist/
+nbproject/
+build/
+build.xml
+config.properties
+manifest.mf
+config.properties
