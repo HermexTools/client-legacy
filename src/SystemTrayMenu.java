@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
@@ -33,11 +35,22 @@ public class SystemTrayMenu{
     private StringSelection stringSelection;
     private TrayIcon trayIcon;
     private SystemTray st;
+    private JPopupMenu p;
+    private Clip clip;
+    
+    private String ip;
+    private String id;
+    private String pass;
     
     
-    public SystemTrayMenu(final String ip, final String id, final String pass)
+    public SystemTrayMenu(String ip,String id,String pass)
             throws AWTException, IOException, UnsupportedAudioFileException,
             LineUnavailableException {
+        
+        this.ip=ip;
+        this.id=id;
+        this.pass=pass;
+        
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException
@@ -52,7 +65,7 @@ public class SystemTrayMenu{
                     .getResource("/res/icona.jpg")), "ownPuush");
             trayIcon.setImageAutoSize(true);
             
-            final JPopupMenu p = new JPopupMenu();
+            p = new JPopupMenu();
             JMenuItem catturaArea = new JMenuItem("Cattura area");
             JMenuItem catturaDesktop = new JMenuItem("Cattura Desktop");
             JMenuItem esci = new JMenuItem("Esci");
@@ -60,48 +73,23 @@ public class SystemTrayMenu{
             p.add(catturaDesktop);
             p.add(esci);
             
-            final Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(getClass().getResource(
                     "/res/complete.wav")));
             
             catturaArea.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    
-                    p.setVisible(false);
-                    cp = new PartialScreen();
-                    try {
-                        s = new ScreenshotUploader(cp.getSelection(), ip);
-                        s.send(id, pass);
-                        trayIcon.displayMessage("Puush Caricato!", s.getLink(),
-                                TrayIcon.MessageType.INFO);
-                        stringSelection = new StringSelection(s.getLink());
-                        clpbrd.setContents(stringSelection, null);
-                    } catch (IOException | AWTException ex) {
+                    try {  
+                        sendPartialScreen();
+                    } catch (IOException ex) {
                         System.err.println(ex.toString());
                     }
-                    clip.start();
-                    clip.setFramePosition(0);
-                    clip.flush();
                 }
             });
             
             catturaDesktop.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    p.setVisible(false);
-                    try {
-                        c = new CompleteScreen();
-                        s = new ScreenshotUploader(c.getImg(), ip);
-                        s.send(id, pass);
-                        trayIcon.displayMessage("Puush Caricato!", s.getLink(),
-                                TrayIcon.MessageType.INFO);
-                        stringSelection = new StringSelection(s.getLink());
-                        clpbrd.setContents(stringSelection, null);
-                    } catch (IOException ex) {
-                        System.err.println(ex.toString());
-                    }
-                    clip.start();
-                    clip.setFramePosition(0);
-                    clip.flush();
+                    sendCompleteScreen();
                 }
             });
             
@@ -125,6 +113,42 @@ public class SystemTrayMenu{
             trayIcon.addMouseListener(mouseAdapter);
             st.add(trayIcon);
         }
+    }
+    
+    public void sendPartialScreen() throws IOException{
+        p.setVisible(false);
+        cp = new PartialScreen();
+        try {
+            s = new ScreenshotUploader(cp.getSelection(), ip);
+            s.send(id, pass);
+            trayIcon.displayMessage("Puush Caricato!", s.getLink(),
+                    TrayIcon.MessageType.INFO);
+            stringSelection = new StringSelection(s.getLink());
+            clpbrd.setContents(stringSelection, null);
+        } catch (AWTException ex) {
+            System.err.println(ex.toString());
+        }
+        clip.start();
+        clip.setFramePosition(0);
+        clip.flush(); 
+    }
+    
+    public void sendCompleteScreen(){
+        p.setVisible(false);
+        try {
+            c = new CompleteScreen();
+            s = new ScreenshotUploader(c.getImg(), ip);
+            s.send(id, pass);
+            trayIcon.displayMessage("Puush Caricato!", s.getLink(),
+                    TrayIcon.MessageType.INFO);
+            stringSelection = new StringSelection(s.getLink());
+            clpbrd.setContents(stringSelection, null);
+        } catch (IOException ex) {
+            System.err.println(ex.toString());
+        }
+        clip.start();
+        clip.setFramePosition(0);
+        clip.flush();     
     }
     
 }
