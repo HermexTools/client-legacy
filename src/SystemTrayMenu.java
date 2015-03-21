@@ -78,6 +78,7 @@ public class SystemTrayMenu {
 					}
 					clip.start();
 					clip.setFramePosition(0);
+					clip.flush();
 				}
 			});
 
@@ -97,6 +98,7 @@ public class SystemTrayMenu {
 					}
 					clip.start();
 					clip.setFramePosition(0);
+					clip.flush();
 				}
 			});
 
