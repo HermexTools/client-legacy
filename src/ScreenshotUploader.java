@@ -73,16 +73,12 @@ public class ScreenshotUploader {
 			this.link = stringIn.readLine();
 
 			dos.close();
-			os.close();
-			stringIn.close();
-			soc.close();
-
 		} else {
 			System.out.println("chiuso tutto");
-			os.close();
-			stringIn.close();
-			soc.close();
 		}
+		os.close();
+		stringIn.close();
+		soc.close();
 	}
 
 	public String getLink() {
