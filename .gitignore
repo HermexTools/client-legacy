@@ -41,9 +41,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-/ownPuush/dist/
-/ownPuush/nbproject/
-/ownPuush/build/
-/ownPuush/build.xml
-/ownPuush/config.properties
-/ownPuush/manifest.mf
+/dist/
+/nbproject/
+/build/
+/build.xml
+/config.properties
+/manifest.mf
