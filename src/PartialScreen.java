@@ -14,7 +14,6 @@ import java.awt.geom.Area;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -53,8 +52,6 @@ public class PartialScreen extends JPanel {
 	MouseAdapter mouseHandler = new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-			}
 		}
 
 		@Override
