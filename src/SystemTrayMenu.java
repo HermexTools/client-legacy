@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -36,15 +35,13 @@ public class SystemTrayMenu {
 	private Clip clip;
 
 	private String ip;
-	private String id;
 	private String pass;
 
-	public SystemTrayMenu(String ip, String id, String pass)
+	public SystemTrayMenu(String ip, String pass)
 			throws AWTException, IOException, UnsupportedAudioFileException,
 			LineUnavailableException {
 
 		this.ip = ip;
-		this.id = id;
 		this.pass = pass;
 
 		try {
@@ -128,7 +125,7 @@ public class SystemTrayMenu {
 
 				// Altrimenti invio
 				screenshotUploader = new ScreenshotUploader(partialScreen.getSelection(), ip);
-				screenshotUploader.send(id, pass);
+				screenshotUploader.send(pass);
 				trayIcon.displayMessage("Puush Caricato!", screenshotUploader.getLink(),
 						TrayIcon.MessageType.INFO);
 				stringSelection = new StringSelection(screenshotUploader.getLink());
@@ -148,7 +145,7 @@ public class SystemTrayMenu {
 		try {
 			completeScreen = new CompleteScreen();
 			screenshotUploader = new ScreenshotUploader(completeScreen.getImg(), ip);
-			screenshotUploader.send(id, pass);
+			screenshotUploader.send(pass);
 			trayIcon.displayMessage("Puush Caricato!", screenshotUploader.getLink(),
 					TrayIcon.MessageType.INFO);
 			stringSelection = new StringSelection(screenshotUploader.getLink());

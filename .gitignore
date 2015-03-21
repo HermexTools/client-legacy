@@ -36,6 +36,7 @@ local.properties
 dist/
 nbproject/
 build/
+store/
 build.xml
 config.properties
 manifest.mf

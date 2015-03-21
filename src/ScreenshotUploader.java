@@ -46,7 +46,7 @@ public class ScreenshotUploader {
 		this.outputArray.flush();
 	}
 
-	public void send(String id, String pass) throws IOException {
+	public void send(String pass) throws IOException {
 		byte[] bytes = outputArray.toByteArray();
 		outputArray.close();
 
@@ -56,8 +56,8 @@ public class ScreenshotUploader {
 
 		// send auth
 		System.out.println("Invio auth");
-		os.writeBytes(id + "-" + pass + "\n");
-		System.out.println("Inviato auth: " + id + "-" + pass);
+		os.writeBytes(pass + "\n");
+		System.out.println("Inviato auth: "+ pass);
 		this.link = stringIn.readLine();
 		// this.link = os.println();
 		System.out.println("link: " + link);
@@ -74,7 +74,7 @@ public class ScreenshotUploader {
 
 			dos.close();
 		} else {
-			System.out.println("chiuso tutto");
+			System.out.println("Chiuso");
 		}
 		os.close();
 		stringIn.close();

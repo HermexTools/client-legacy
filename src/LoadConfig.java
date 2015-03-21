@@ -12,7 +12,6 @@ import java.util.Properties;
 public class LoadConfig {
 
 	private String ip;
-	private String id;
 	private String pass;
 
 	public LoadConfig() throws IOException {
@@ -20,7 +19,6 @@ public class LoadConfig {
 
 		if (!new File("config.properties").exists()) {
 			prop.setProperty("server_ip", "localhost");
-			prop.setProperty("id", "id");
 			prop.setProperty("password", "pass");
 			prop.store(new FileOutputStream("config.properties"), null);
 		}
@@ -28,18 +26,13 @@ public class LoadConfig {
 		prop.load(inputStream);
 
 		this.ip = prop.getProperty("server_ip");
-		this.id = prop.getProperty("id");
 		this.pass = prop.getProperty("password");
 	}
 
 	public String getIp() {
 		return ip;
 	}
-
-	public String getId() {
-		return id;
-	}
-
+        
 	public String getPass() {
 		return pass;
 	}
