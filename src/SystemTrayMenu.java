@@ -23,7 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Sergio
  */
 public class SystemTrayMenu {
-	private ScreenshotUploader screenshotUploader;
+	private Uploader uploader;
 	private PartialScreen partialScreen;
 	private CompleteScreen completeScreen;
 	private Clipboard clpbrd;
@@ -124,14 +124,14 @@ public class SystemTrayMenu {
 			} else {
 
 				// Altrimenti invio
-				screenshotUploader = new ScreenshotUploader(
+				uploader = new Uploader(
 						partialScreen.getSelection(), ip);
-				screenshotUploader.send(pass);
+				uploader.send(pass);
 				new NotificationDialog("Screenshot Caricato!",
-						screenshotUploader.getLink());
+						uploader.getLink());
 
 				stringSelection = new StringSelection(
-						screenshotUploader.getLink());
+						uploader.getLink());
 				clpbrd.setContents(stringSelection, null);
 			}
 
@@ -146,12 +146,12 @@ public class SystemTrayMenu {
 	public void sendCompleteScreen() {
 		try {
 			completeScreen = new CompleteScreen();
-			screenshotUploader = new ScreenshotUploader(
+			uploader = new Uploader(
 					completeScreen.getImg(), ip);
-			screenshotUploader.send(pass);
+			uploader.send(pass);
 			trayIcon.displayMessage("Screenshot Caricato!",
-					screenshotUploader.getLink(), TrayIcon.MessageType.INFO);
-			stringSelection = new StringSelection(screenshotUploader.getLink());
+					uploader.getLink(), TrayIcon.MessageType.INFO);
+			stringSelection = new StringSelection(uploader.getLink());
 			clpbrd.setContents(stringSelection, null);
 		} catch (IOException ex) {
 			System.err.println(ex.toString());

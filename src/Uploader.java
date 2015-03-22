@@ -13,13 +13,13 @@ import java.net.Socket;
 
 import javax.imageio.ImageIO;
 
-public class ScreenshotUploader {
+public class Uploader {
 	private BufferedImage img;
         private byte[] bytes;
 	private Socket soc;
 	private String link;
 
-	public ScreenshotUploader(Rectangle r, String ip) throws IOException,
+	public Uploader(Rectangle r, String ip) throws IOException,
 			AWTException {
 		this.soc = new Socket(ip, 4030);
 		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -39,7 +39,7 @@ public class ScreenshotUploader {
                 outputArray.close();
 	}
 
-	public ScreenshotUploader(BufferedImage bi, String ip) throws IOException {
+	public Uploader(BufferedImage bi, String ip) throws IOException {
 		this.soc = new Socket(ip, 4030);
 		this.img = bi;
 
