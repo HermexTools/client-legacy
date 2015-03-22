@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 
 public class ScreenshotUploader {
 	private BufferedImage img;
-	private ByteArrayOutputStream outputArray;
+        private byte[] bytes;
 	private Socket soc;
 	private String link;
 
@@ -32,24 +32,26 @@ public class ScreenshotUploader {
 		this.img = new Robot().createScreenCapture(screenRect).getSubimage(r.x,
 				r.y, r.width, r.height);
 
-		this.outputArray = new ByteArrayOutputStream();
-		ImageIO.write(img, "jpg", this.outputArray);
-		this.outputArray.flush();
+		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
+		ImageIO.write(img, "jpg", outputArray);
+		outputArray.flush();
+                this.bytes = outputArray.toByteArray();
+                outputArray.close();
 	}
 
 	public ScreenshotUploader(BufferedImage bi, String ip) throws IOException {
 		this.soc = new Socket(ip, 4030);
 		this.img = bi;
 
-		this.outputArray = new ByteArrayOutputStream();
-		ImageIO.write(img, "jpg", this.outputArray);
-		this.outputArray.flush();
+		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
+		ImageIO.write(img, "jpg", outputArray);
+		outputArray.flush();
+                this.bytes = outputArray.toByteArray();
+                outputArray.close();
 	}
 
 	public void send(String pass) throws IOException {
-		byte[] bytes = outputArray.toByteArray();
-		outputArray.close();
-
+            
 		DataOutputStream os = new DataOutputStream(soc.getOutputStream());
 		BufferedReader stringIn = new BufferedReader(new InputStreamReader(
 				soc.getInputStream()));
@@ -73,6 +75,7 @@ public class ScreenshotUploader {
 			this.link = stringIn.readLine();
 
 			dos.close();
+                        bytes=null;
 		} else {
 			System.out.println("Chiuso");
 		}
