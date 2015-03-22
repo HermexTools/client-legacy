@@ -27,8 +27,8 @@ public class Uploader {
 	BufferedOutputStream bos = null;
 
 	// Per gli screen parziali
-	public Uploader(Rectangle r, String ip) throws IOException, AWTException {
-		this.soc = new Socket(ip, 4030);
+	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
+		this.soc = new Socket(ip, port);
 		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
 		for (GraphicsDevice gd : GraphicsEnvironment
 				.getLocalGraphicsEnvironment().getScreenDevices()) {
@@ -47,8 +47,8 @@ public class Uploader {
 	}
 
 	// Per gli screen completi
-	public Uploader(BufferedImage bi, String ip) throws IOException {
-		this.soc = new Socket(ip, 4030);
+	public Uploader(BufferedImage bi, String ip, int port) throws IOException {
+		this.soc = new Socket(ip, port);
 		this.img = bi;
 
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
@@ -59,9 +59,9 @@ public class Uploader {
 	}
 
 	// Per i file
-	public Uploader(String string, String ip) throws UnknownHostException,
+	public Uploader(String string, String ip, int port) throws UnknownHostException,
 			IOException {
-		this.soc = new Socket(ip, 4030);
+		this.soc = new Socket(ip, port);
 
 		int bufferSize = soc.getReceiveBufferSize();
 		this.bytes = new byte[bufferSize];

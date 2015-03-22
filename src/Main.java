@@ -18,7 +18,7 @@ public class Main {
 			UnsupportedAudioFileException, LineUnavailableException {
 
 		final LoadConfig l = new LoadConfig();
-		final SystemTrayMenu st = new SystemTrayMenu(l.getIp(), l.getPass());
+		final SystemTrayMenu st = new SystemTrayMenu(l.getIp(), l.getPass(),l.getPort());
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 
