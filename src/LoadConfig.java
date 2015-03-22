@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- *
- * @author Sergio
- */
 public class LoadConfig {
 
 	private String ip;
@@ -32,7 +28,7 @@ public class LoadConfig {
 	public String getIp() {
 		return ip;
 	}
-        
+
 	public String getPass() {
 		return pass;
 	}

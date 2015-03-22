@@ -18,10 +18,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-/**
- *
- * @author Sergio
- */
 public class SystemTrayMenu {
 	private Uploader uploader;
 	private PartialScreen partialScreen;
@@ -94,7 +90,11 @@ public class SystemTrayMenu {
 
 			caricaFile.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					sendFile();
+					try {
+						sendFile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				}
 			});
 
@@ -124,14 +124,12 @@ public class SystemTrayMenu {
 			} else {
 
 				// Altrimenti invio
-				uploader = new Uploader(
-						partialScreen.getSelection(), ip);
-				uploader.send(pass);
+				uploader = new Uploader(partialScreen.getSelection(), ip);
+				uploader.send(pass, "img");
 				new NotificationDialog("Screenshot Caricato!",
 						uploader.getLink());
 
-				stringSelection = new StringSelection(
-						uploader.getLink());
+				stringSelection = new StringSelection(uploader.getLink());
 				clpbrd.setContents(stringSelection, null);
 			}
 
@@ -146,11 +144,9 @@ public class SystemTrayMenu {
 	public void sendCompleteScreen() {
 		try {
 			completeScreen = new CompleteScreen();
-			uploader = new Uploader(
-					completeScreen.getImg(), ip);
-			uploader.send(pass);
-			trayIcon.displayMessage("Screenshot Caricato!",
-					uploader.getLink(), TrayIcon.MessageType.INFO);
+			uploader = new Uploader(completeScreen.getImg(), ip);
+			uploader.send(pass, "img");
+			new NotificationDialog("Screenshot Caricato!", uploader.getLink());
 			stringSelection = new StringSelection(uploader.getLink());
 			clpbrd.setContents(stringSelection, null);
 		} catch (IOException ex) {
@@ -161,8 +157,15 @@ public class SystemTrayMenu {
 		clip.flush();
 	}
 
-	public void sendFile() {
+	public void sendFile() throws IOException {
 		System.out.println("Not implemented yet.");
+
+		String fileName = "test.lol";
+		new Zipper(fileName).toZip();
+		uploader = new Uploader(fileName + ".zip", ip);
+
+		uploader.send(pass, "file");
+
 	}
 
 }
