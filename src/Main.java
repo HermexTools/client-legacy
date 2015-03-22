@@ -1,6 +1,5 @@
 import java.awt.AWTException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,9 +19,7 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
     
-    public static void main(String[] args) throws InterruptedException,
-            InvocationTargetException, AWTException, IOException,
-            UnsupportedAudioFileException, LineUnavailableException {
+    public static void main(String[] args) throws IOException, AWTException, UnsupportedAudioFileException, LineUnavailableException {
         
         final LoadConfig l = new LoadConfig();
         final SystemTrayMenu st = new SystemTrayMenu(l.getIp(), l.getPass());
