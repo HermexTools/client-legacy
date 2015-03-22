@@ -58,11 +58,16 @@ public class SystemTrayMenu {
             trayIcon.setImageAutoSize(true);
             
             popupMenu = new PopupMenu();
-            MenuItem catturaArea = new MenuItem("Cattura area");
-            MenuItem catturaDesktop = new MenuItem("Cattura Desktop");
+            MenuItem catturaArea = new MenuItem("Cattura Area (ALT+1)");
+            MenuItem catturaDesktop = new MenuItem("Cattura Desktop (ALT+2)");
+            MenuItem caricaFile = new MenuItem("Carica File");
             MenuItem esci = new MenuItem("Esci");
+            
             popupMenu.add(catturaArea);
             popupMenu.add(catturaDesktop);
+            popupMenu.addSeparator();
+            popupMenu.add(caricaFile);
+            popupMenu.addSeparator();
             popupMenu.add(esci);
             
             clip = AudioSystem.getClip();
