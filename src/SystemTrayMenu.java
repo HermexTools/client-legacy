@@ -91,6 +91,12 @@ public class SystemTrayMenu {
                 }
             });
             
+            caricaFile.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    sendFile();
+                }
+            });
+            
             esci.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     SystemTray.getSystemTray().remove(trayIcon);
@@ -147,6 +153,10 @@ public class SystemTrayMenu {
         clip.start();
         clip.setFramePosition(0);
         clip.flush();
+    }
+    
+    public void sendFile(){
+        System.out.println("Not implemented yet.");        
     }
     
 }
