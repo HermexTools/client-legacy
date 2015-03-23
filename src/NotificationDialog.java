@@ -1,4 +1,3 @@
-
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,13 +24,13 @@ public class NotificationDialog {
 	public NotificationDialog(String header, final String message) {
 
 		final JDialog dialogFrame = new JDialog();
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-                } catch (ClassNotFoundException | InstantiationException
-                        | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                    System.err.println(ex.toString());
-                }
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException ex) {
+			System.err.println(ex.toString());
+		}
 
 		dialogFrame.setSize(200, 50);
 		dialogFrame.setLayout(new GridBagLayout());
@@ -45,9 +44,9 @@ public class NotificationDialog {
 		constraints.insets = new Insets(5, 5, 5, 5);
 
 		JLabel headingLabel = new JLabel(header);
-                Font f = headingLabel.getFont();
-                f= new Font(f.getFontName(), Font.BOLD, f.getSize());
-                headingLabel.setFont(f);
+		Font f = headingLabel.getFont();
+		f = new Font(f.getFontName(), Font.BOLD, f.getSize());
+		headingLabel.setFont(f);
 		headingLabel.setOpaque(false);
 		dialogFrame.add(headingLabel, constraints);
 		dialogFrame.setUndecorated(true);
@@ -72,7 +71,8 @@ public class NotificationDialog {
 
 		JLabel messageLabel = new JLabel(message);
 		dialogFrame.add(messageLabel, constraints);
-                dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
+		dialogFrame
+				.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
 		dialogFrame.setVisible(true);
 
 		// Per il osizionamento in basso a destra
@@ -80,8 +80,10 @@ public class NotificationDialog {
 		// altezza taskbar
 		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(
 				dialogFrame.getGraphicsConfiguration());
-		dialogFrame.setLocation(scrSize.width-5 - dialogFrame.getWidth(),
-				scrSize.height-5 - toolHeight.bottom - dialogFrame.getHeight());
+		dialogFrame.setLocation(
+				scrSize.width - 5 - dialogFrame.getWidth(),
+				scrSize.height - 5 - toolHeight.bottom
+						- dialogFrame.getHeight());
 
 		xButton.addActionListener(new ActionListener() {
 			@Override
@@ -105,11 +107,11 @@ public class NotificationDialog {
 			@Override
 			public void run() {
 				try {
-                                        Thread.sleep(3000);
-                                        for(float i=1.00f;i>=0;i-=0.01f){
-                                            dialogFrame.setOpacity(i);
-                                            Thread.sleep(15);
-                                        }
+					Thread.sleep(3000);
+					for (float i = 1.00f; i >= 0; i -= 0.01f) {
+						dialogFrame.setOpacity(i);
+						Thread.sleep(15);
+					}
 					dialogFrame.dispose();
 				} catch (InterruptedException e) {
 					e.printStackTrace();

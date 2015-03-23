@@ -4,13 +4,11 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -20,24 +18,19 @@ import javax.imageio.ImageIO;
 public class Uploader {
 	private BufferedImage img;
 	private byte[] bytes;
-	private Socket soc;
+	private Socket socket;
 	private String link;
-	InputStream is = null;
-	FileOutputStream fos = null;
-	BufferedOutputStream bos = null;
+	long length;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
-		this.soc = new Socket(ip, port);
+		this.socket = new Socket(ip, port);
 		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
-		for (GraphicsDevice gd : GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getScreenDevices()) {
-			screenRect = screenRect.union(gd.getDefaultConfiguration()
-					.getBounds());
+		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 		}
 
-		this.img = new Robot().createScreenCapture(screenRect).getSubimage(r.x,
-				r.y, r.width, r.height);
+		this.img = new Robot().createScreenCapture(screenRect).getSubimage(r.x, r.y, r.width, r.height);
 
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
 		ImageIO.write(img, "png", outputArray);
@@ -48,7 +41,7 @@ public class Uploader {
 
 	// Per gli screen completi
 	public Uploader(BufferedImage bi, String ip, int port) throws IOException {
-		this.soc = new Socket(ip, port);
+		this.socket = new Socket(ip, port);
 		this.img = bi;
 
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
@@ -59,79 +52,75 @@ public class Uploader {
 	}
 
 	// Per i file
-	public Uploader(String string, String ip, int port) throws UnknownHostException,
-			IOException {
-		this.soc = new Socket(ip, port);
+	public Uploader(String fileName, String ip, int port) throws UnknownHostException, IOException {
+		this.socket = new Socket(ip, port);
 
-		int bufferSize = soc.getReceiveBufferSize();
-		this.bytes = new byte[bufferSize];
+		FileInputStream fis = new FileInputStream(fileName);
+		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		byte[] buf = new byte[1024];
+		try {
+			for (int readNum; (readNum = fis.read(buf)) != -1;) {
+				bos.write(buf, 0, readNum);
+			}
+		} catch (IOException ex) {
+			System.err.println(ex.toString());
+		}
+
+		outputArray.flush();
+		this.bytes = bos.toByteArray();
+		outputArray.close();
 
 	}
 
 	public void send(String pass, String type) throws IOException {
 
-		DataOutputStream os = new DataOutputStream(soc.getOutputStream());
-		BufferedReader stringIn = new BufferedReader(new InputStreamReader(
-				soc.getInputStream()));
+		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 		// send auth
-		System.out.println("Invio auth");
-		os.writeBytes(pass + "\n");
-		System.out.println("Inviato auth: " + pass);
+		System.out.println("Sending auth");
+		dos.writeBytes(pass + "\n");
+		System.out.println("Auth sent: " + pass);
 		this.link = stringIn.readLine();
 		// this.link = os.println();
 		System.out.println("Auth reply: " + link);
 		if (this.link.equals("OK")) {
 
 			System.out.println("Sending type: " + type);
-			os.writeBytes(type + "\n");
+			dos.writeBytes(type + "\n");
 
 			// Controllo e aspetto che il server abbia ricevuto il type corretto
 			if (stringIn.readLine().equals(type)) {
 
+				System.out.println("Il server riceve un: " + type);
+
 				switch (type) {
 
+				// image transfer
 				case "img":
 
-					// image transfer
-					System.out.println("Trasferendo immagine...");
-					DataOutputStream dos = new DataOutputStream(
-							soc.getOutputStream());
+					System.out.println("Uploading image...");
 
 					dos.writeInt(bytes.length);
 					dos.write(bytes, 0, bytes.length);
-					// dos.close();
+					dos.flush();
 
 					break;
+
+				// file transfer
 				case "file":
 
-					// Parte del receiver per server
-					/*
-					 * is = soc.getInputStream(); int count; while ((count =
-					 * is.read(bytes)) > 0) { bos.write(bytes, 0, count); }
-					 */
+					System.out.println("Uploading file...");
 
-					/*
-					 * long length = file.length(); if (length >
-					 * Integer.MAX_VALUE) {
-					 * System.out.println("File is too large."); } byte[] bytes
-					 * = new byte[(int) length]; FileInputStream fis = new
-					 * FileInputStream(file); BufferedInputStream bis = new
-					 * BufferedInputStream(fis); BufferedOutputStream out = new
-					 * BufferedOutputStream(socket.getOutputStream());
-					 * 
-					 * int count;
-					 * 
-					 * while ((count = bis.read(bytes)) > 0) { out.write(bytes,
-					 * 0, count); }
-					 * 
-					 * out.flush(); out.close(); fis.close(); bis.close();
-					 */
-					// bos.flush();
-					// bos.close();
-					// is.close();
+					dos.writeInt(bytes.length);
+					dos.write(bytes, 0, bytes.length);
+					dos.flush();
 
 					break;
+
+				// default case, hmm
 				default:
 
 					break;
@@ -139,20 +128,20 @@ public class Uploader {
 
 				// return link
 				this.link = stringIn.readLine();
+				System.out.println("Returned link: " + link);
 
 				bytes = null;
 			} else {
-				System.out
-						.println("Il server non ha interpretato la tipologia file");
+				System.out.println("The server had a bad interpretation of the fileType");
 			}
 
 		} else {
-			System.out.println("Chiuso");
+			System.out.println("Closed");
 		}
 
-		os.close();
+		dos.close();
 		stringIn.close();
-		soc.close();
+		socket.close();
 	}
 
 	public String getLink() {
