@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,7 +21,7 @@ public class Uploader {
 	private byte[] bytes;
 	private Socket socket;
 	private String link;
-	long length;
+	File aaa;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -59,10 +60,11 @@ public class Uploader {
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
 		byte[] buf = new byte[1024];
 		try {
-			for (int readNum; (readNum = fis.read(buf)) != -1;) {
-				bos.write(buf, 0, readNum);
+			for (int readLength; (readLength = fis.read(buf)) != -1;) {
+				bos.write(buf, 0, readLength);
 			}
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
