@@ -27,7 +27,6 @@ public class Uploader {
 	private SocketChannel socketChannel;
 	private String link;
 	private String fileName;
-	private String ip;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -71,7 +70,6 @@ public class Uploader {
 
 		// this.socket = new Socket(ip, port);
 		this.fileName = fileName;
-		this.ip = ip;
 	}
 
 	public void send(String pass, String type) throws IOException {
@@ -80,6 +78,8 @@ public class Uploader {
 		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socketChannel.socket().getInputStream()));
 
 		try {
+			socketChannel.socket().setSoTimeout(10000);
+
 			// send auth
 			System.out.println("Sending auth");
 			dos.writeBytes(pass + "\n");
