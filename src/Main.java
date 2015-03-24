@@ -14,11 +14,10 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException, AWTException,
-			UnsupportedAudioFileException, LineUnavailableException {
+	public static void main(String[] args) throws IOException, AWTException, UnsupportedAudioFileException,
+			LineUnavailableException {
 
-		final LoadConfig l = new LoadConfig();
-		final SystemTrayMenu st = new SystemTrayMenu(l.getIp(), l.getPass(),l.getPort());
+		final SystemTrayMenu st = new SystemTrayMenu();
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 
@@ -30,8 +29,7 @@ public class Main {
 					altPressed = true;
 				}
 
-				if ((altPressed == true)
-						&& nke.getKeyCode() == NativeKeyEvent.VC_1) {
+				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_1) {
 					System.out.println("Alt_l + 1 premuti");
 
 					try {
@@ -42,16 +40,14 @@ public class Main {
 
 				}
 
-				if ((altPressed == true)
-						&& nke.getKeyCode() == NativeKeyEvent.VC_2) {
+				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
 					System.out.println("Alt_l + 2 premuti");
 
 					st.sendCompleteScreen();
 
 				}
 
-				if ((altPressed == true)
-						&& nke.getKeyCode() == NativeKeyEvent.VC_3) {
+				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_3) {
 					System.out.println("Alt_l + 3 premuti");
 
 					try {
@@ -85,8 +81,7 @@ public class Main {
 
 		GlobalScreen.addNativeKeyListener(gkl);
 
-		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage()
-				.getName());
+		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 		logger.setLevel(Level.OFF);
 		Handler[] handlers = Logger.getLogger("").getHandlers();
 		for (int i = 0; i < handlers.length; i++) {

@@ -8,11 +8,17 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SocketChannel;
 
 import javax.imageio.ImageIO;
 
@@ -21,7 +27,9 @@ public class Uploader {
 	private byte[] bytes;
 	private Socket socket;
 	private String link;
-	File aaa;
+	private String fileName;
+	private String ip;
+	private int filePort;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -53,27 +61,11 @@ public class Uploader {
 	}
 
 	// Per i file
-	public Uploader(String fileName, String ip, int port) throws UnknownHostException, IOException {
+	public Uploader(String fileName, String ip, int port, int filePort) throws UnknownHostException, IOException {
 		this.socket = new Socket(ip, port);
-
-		FileInputStream fis = new FileInputStream(fileName);
-		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-		byte[] buf = new byte[1024];
-		try {
-			for (int readLength; (readLength = fis.read(buf)) != -1;) {
-				bos.write(buf, 0, readLength);
-			}
-		} catch (IOException ex) {
-			System.err.println(ex.toString());
-		}
-
-		outputArray.flush();
-		this.bytes = bos.toByteArray();
-		outputArray.close();
-
+		this.fileName = fileName;
+		this.ip = ip;
+		this.filePort = filePort;
 	}
 
 	public void send(String pass, String type) throws IOException {
@@ -114,11 +106,8 @@ public class Uploader {
 				// file transfer
 				case "file":
 
-					System.out.println("Uploading file...");
-
-					dos.writeInt(bytes.length);
-					dos.write(bytes, 0, bytes.length);
-					dos.flush();
+					SocketChannel socketChannel = createChannel(ip, filePort);
+					sendFile(fileName, socketChannel);
 
 					break;
 
@@ -144,6 +133,47 @@ public class Uploader {
 		dos.close();
 		stringIn.close();
 		socket.close();
+	}
+
+	public SocketChannel createChannel(String ip, int filePort) {
+
+		SocketChannel socketChannel = null;
+		try {
+			socketChannel = SocketChannel.open();
+			SocketAddress socketAddress = new InetSocketAddress(ip, filePort);
+			socketChannel.connect(socketAddress);
+			System.out.println("Connected, now sending the file...");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return socketChannel;
+	}
+
+	public void sendFile(String fileName, SocketChannel socketChannel) {
+		RandomAccessFile aFile = null;
+		try {
+			File file = new File(fileName);
+			aFile = new RandomAccessFile(file, "r");
+			FileChannel inChannel = aFile.getChannel();
+			ByteBuffer buffer = ByteBuffer.allocate(1024);
+			while (inChannel.read(buffer) > 0) {
+				buffer.flip();
+				socketChannel.write(buffer);
+				buffer.clear();
+			}
+			Thread.sleep(1000);
+			System.out.println("End of file reached..");
+			socketChannel.close();
+			aFile.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public String getLink() {
