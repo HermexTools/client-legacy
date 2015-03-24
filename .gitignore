@@ -40,4 +40,4 @@ store/
 build.xml
 config.properties
 manifest.mf
-config.properties
+client.properties

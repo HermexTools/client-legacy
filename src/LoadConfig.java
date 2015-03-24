@@ -15,7 +15,7 @@ public class LoadConfig {
 	public LoadConfig() throws IOException {
 		Properties prop = new Properties();
 
-		if (!new File("config.properties").exists()) {
+		if (!new File("client.properties").exists()) {
 			prop.setProperty("server_ip", "localhost");
 			prop.setProperty("port", "4030");
 			prop.setProperty("fileport", "4031");
