@@ -1,4 +1,5 @@
 import java.awt.AWTException;
+import java.awt.Desktop;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -9,6 +10,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
@@ -29,6 +32,7 @@ public class SystemTrayMenu {
 	private SystemTray systemTray;
 	private PopupMenu popupMenu;
 	private Clip clip;
+        private MenuItem[] uploads;
 
 	private String ip;
 	private String pass;
@@ -48,6 +52,11 @@ public class SystemTrayMenu {
 		this.ip = loadConfig.getIp();
 		this.pass = loadConfig.getPass();
 		this.port = loadConfig.getPort();
+                this.uploads=new MenuItem[5];
+                
+                for(int i=0;i<uploads.length;i++){
+                    uploads[i]=new MenuItem();
+                }
 
 		if (SystemTray.isSupported()) {
 			clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -61,7 +70,10 @@ public class SystemTrayMenu {
 			MenuItem catturaDesktop = new MenuItem("Cattura Desktop (ALT+2)");
 			MenuItem caricaFile = new MenuItem("Carica File (ALT+3)");
 			MenuItem esci = new MenuItem("Esci");
-
+                        
+                        popupMenu.add("Upload Recenti");
+                        popupMenu.addSeparator();
+                        popupMenu.addSeparator();
 			popupMenu.add(catturaArea);
 			popupMenu.add(catturaDesktop);
 			popupMenu.addSeparator();
@@ -126,7 +138,7 @@ public class SystemTrayMenu {
 				uploader = new Uploader(partialScreen.getSelection(), ip, port);
 				uploader.send(pass, "img");
 				new NotificationDialog("Screenshot Caricato!", uploader.getLink());
-
+                                history(uploader.getLink());
 				stringSelection = new StringSelection(uploader.getLink());
 				clpbrd.setContents(stringSelection, null);
 			}
@@ -145,6 +157,7 @@ public class SystemTrayMenu {
 			uploader = new Uploader(completeScreen.getImg(), ip, port);
 			uploader.send(pass, "img");
 			new NotificationDialog("Screenshot Caricato!", uploader.getLink());
+                        history(uploader.getLink());
 			stringSelection = new StringSelection(uploader.getLink());
 			clpbrd.setContents(stringSelection, null);
 		} catch (IOException ex) {
@@ -163,7 +176,8 @@ public class SystemTrayMenu {
 
 				uploader = new Uploader(new Zipper(selFile.getSelectedFile()).toZip(), ip, port);
 				uploader.send(pass, "file");
-				new NotificationDialog("Screenshot Caricato!", uploader.getLink());
+				new NotificationDialog("File Caricato!", uploader.getLink());
+                                history(uploader.getLink());
 				stringSelection = new StringSelection(uploader.getLink());
 				clpbrd.setContents(stringSelection, null);
 			}
@@ -174,4 +188,22 @@ public class SystemTrayMenu {
 		clip.setFramePosition(0);
 		clip.flush();
 	}
+        private void history(String link){
+                popupMenu.remove(uploads[uploads.length-1]);
+                
+                for(int i=uploads.length-1;i>0;i--){
+                    uploads[i]=uploads[i-1];
+                }
+                uploads[0]=new MenuItem(link);
+                uploads[0].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						Desktop.getDesktop().browse(new URI(e.getActionCommand()));
+					} catch (URISyntaxException | IOException  ex) {
+						System.err.println(ex.toString());
+                                        }
+				}
+			});
+                popupMenu.insert(uploads[0],2);
+        }
 }
