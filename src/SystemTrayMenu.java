@@ -33,7 +33,6 @@ public class SystemTrayMenu {
 	private String ip;
 	private String pass;
 	private int port;
-	private int filePort;
 
 	public SystemTrayMenu() throws AWTException, IOException, UnsupportedAudioFileException, LineUnavailableException {
 		try {
@@ -49,7 +48,6 @@ public class SystemTrayMenu {
 		this.ip = loadConfig.getIp();
 		this.pass = loadConfig.getPass();
 		this.port = loadConfig.getPort();
-		this.filePort = loadConfig.getFilePort();
 
 		if (SystemTray.isSupported()) {
 			clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -163,7 +161,7 @@ public class SystemTrayMenu {
 			JFileChooser selFile = new JFileChooser();
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-				uploader = new Uploader(new Zipper(selFile.getSelectedFile()).toZip(), ip, port, filePort);
+				uploader = new Uploader(new Zipper(selFile.getSelectedFile()).toZip(), ip, port);
 				uploader.send(pass, "file");
 				new NotificationDialog("Screenshot Caricato!", uploader.getLink());
 				stringSelection = new StringSelection(uploader.getLink());

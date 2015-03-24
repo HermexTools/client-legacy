@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -25,15 +24,17 @@ import javax.imageio.ImageIO;
 public class Uploader {
 	private BufferedImage img;
 	private byte[] bytes;
-	private Socket socket;
+	private SocketChannel socketChannel;
 	private String link;
 	private String fileName;
 	private String ip;
-	private int filePort;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
-		this.socket = new Socket(ip, port);
+
+		SocketChannel socketChannel = createChannel(ip, port);
+		this.socketChannel = socketChannel;
+
 		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
 		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
@@ -50,7 +51,9 @@ public class Uploader {
 
 	// Per gli screen completi
 	public Uploader(BufferedImage bi, String ip, int port) throws IOException {
-		this.socket = new Socket(ip, port);
+
+		SocketChannel socketChannel = createChannel(ip, port);
+		this.socketChannel = socketChannel;
 		this.img = bi;
 
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
@@ -61,17 +64,20 @@ public class Uploader {
 	}
 
 	// Per i file
-	public Uploader(String fileName, String ip, int port, int filePort) throws UnknownHostException, IOException {
-		this.socket = new Socket(ip, port);
+	public Uploader(String fileName, String ip, int port) throws UnknownHostException, IOException {
+
+		SocketChannel socketChannel = createChannel(ip, port);
+		this.socketChannel = socketChannel;
+
+		// this.socket = new Socket(ip, port);
 		this.fileName = fileName;
 		this.ip = ip;
-		this.filePort = filePort;
 	}
 
 	public void send(String pass, String type) throws IOException {
 
-		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		DataOutputStream dos = new DataOutputStream(socketChannel.socket().getOutputStream());
+		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socketChannel.socket().getInputStream()));
 
 		// send auth
 		System.out.println("Sending auth");
@@ -106,7 +112,8 @@ public class Uploader {
 				// file transfer
 				case "file":
 
-					SocketChannel socketChannel = createChannel(ip, filePort);
+					// SocketChannel socketChannel = createChannel(ip,
+					// filePort);
 					sendFile(fileName, socketChannel);
 
 					break;
@@ -132,15 +139,15 @@ public class Uploader {
 
 		dos.close();
 		stringIn.close();
-		socket.close();
+		socketChannel.close();
 	}
 
-	public SocketChannel createChannel(String ip, int filePort) {
+	public SocketChannel createChannel(String ip, int port) {
 
 		SocketChannel socketChannel = null;
 		try {
 			socketChannel = SocketChannel.open();
-			SocketAddress socketAddress = new InetSocketAddress(ip, filePort);
+			SocketAddress socketAddress = new InetSocketAddress(ip, port);
 			socketChannel.connect(socketAddress);
 			System.out.println("Connected, now sending the file...");
 
