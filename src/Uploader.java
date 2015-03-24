@@ -79,67 +79,73 @@ public class Uploader {
 		DataOutputStream dos = new DataOutputStream(socketChannel.socket().getOutputStream());
 		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socketChannel.socket().getInputStream()));
 
-		// send auth
-		System.out.println("Sending auth");
-		dos.writeBytes(pass + "\n");
-		System.out.println("Auth sent: " + pass);
-		this.link = stringIn.readLine();
-		// this.link = os.println();
-		System.out.println("Auth reply: " + link);
-		if (this.link.equals("OK")) {
+		try {
+			// send auth
+			System.out.println("Sending auth");
+			dos.writeBytes(pass + "\n");
+			System.out.println("Auth sent: " + pass);
+			this.link = stringIn.readLine();
+			// this.link = os.println();
+			System.out.println("Auth reply: " + link);
+			if (this.link.equals("OK")) {
 
-			System.out.println("Sending type: " + type);
-			dos.writeBytes(type + "\n");
+				System.out.println("Sending type: " + type);
+				dos.writeBytes(type + "\n");
 
-			// Controllo e aspetto che il server abbia ricevuto il type corretto
-			if (stringIn.readLine().equals(type)) {
+				// Controllo e aspetto che il server abbia ricevuto il type
+				// corretto
+				if (stringIn.readLine().equals(type)) {
 
-				System.out.println("Il server riceve un: " + type);
+					System.out.println("Il server riceve un: " + type);
 
-				switch (type) {
+					switch (type) {
 
-				// image transfer
-				case "img":
+					// image transfer
+					case "img":
 
-					System.out.println("Uploading image...");
+						System.out.println("Uploading image...");
 
-					dos.writeInt(bytes.length);
-					dos.write(bytes, 0, bytes.length);
-					dos.flush();
+						dos.writeInt(bytes.length);
+						dos.write(bytes, 0, bytes.length);
+						dos.flush();
 
-					break;
+						break;
 
-				// file transfer
-				case "file":
+					// file transfer
+					case "file":
 
-					// SocketChannel socketChannel = createChannel(ip,
-					// filePort);
-					sendFile(fileName, socketChannel);
+						// SocketChannel socketChannel = createChannel(ip,
+						// filePort);
+						sendFile(fileName);
 
-					break;
+						break;
 
-				// default case, hmm
-				default:
+					// default case, hmm
+					default:
 
-					break;
+						break;
+					}
+
+					// return link
+					System.out.println("Waiting link...");
+					this.link = stringIn.readLine();
+					System.out.println("Returned link: " + link);
+
+					bytes = null;
+				} else {
+					System.out.println("The server had a bad interpretation of the fileType");
 				}
 
-				// return link
-				this.link = stringIn.readLine();
-				System.out.println("Returned link: " + link);
-
-				bytes = null;
 			} else {
-				System.out.println("The server had a bad interpretation of the fileType");
+				System.out.println("Closed");
 			}
 
-		} else {
-			System.out.println("Closed");
+			dos.close();
+			stringIn.close();
+			socketChannel.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		dos.close();
-		stringIn.close();
-		socketChannel.close();
 	}
 
 	public SocketChannel createChannel(String ip, int port) {
@@ -157,7 +163,7 @@ public class Uploader {
 		return socketChannel;
 	}
 
-	public void sendFile(String fileName, SocketChannel socketChannel) {
+	public void sendFile(String fileName) {
 		RandomAccessFile aFile = null;
 		try {
 			File file = new File(fileName);
@@ -171,8 +177,10 @@ public class Uploader {
 			}
 			Thread.sleep(1000);
 			System.out.println("End of file reached..");
-			socketChannel.close();
+			// socketChannel.close();
 			aFile.close();
+			System.out.println("File closed.");
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
