@@ -6,10 +6,15 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -27,7 +32,6 @@ public class SystemTrayMenu {
 	private PartialScreen partialScreen;
 	private CompleteScreen completeScreen;
 	private Clipboard clpbrd;
-	private StringSelection stringSelection;
 	private TrayIcon trayIcon;
 	private SystemTray systemTray;
 	private PopupMenu popupMenu;
@@ -69,6 +73,7 @@ public class SystemTrayMenu {
 			MenuItem catturaArea = new MenuItem("Cattura Area (ALT+1)");
 			MenuItem catturaDesktop = new MenuItem("Cattura Desktop (ALT+2)");
 			MenuItem caricaFile = new MenuItem("Carica File (ALT+3)");
+                        MenuItem clipboard = new MenuItem("Carica Clipboard (ALT+4)");
 			MenuItem esci = new MenuItem("Esci");
 
 			popupMenu.add("Upload Recenti");
@@ -78,6 +83,7 @@ public class SystemTrayMenu {
 			popupMenu.add(catturaDesktop);
 			popupMenu.addSeparator();
 			popupMenu.add(caricaFile);
+                        popupMenu.add(clipboard);
 			popupMenu.addSeparator();
 			popupMenu.add(esci);
 
@@ -110,6 +116,11 @@ public class SystemTrayMenu {
 					}
 				}
 			});
+                        clipboard.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					sendClipboard();
+				}
+			});
 
 			esci.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -139,8 +150,7 @@ public class SystemTrayMenu {
 				uploader.send(pass, "img");
 				new NotificationDialog("Screenshot Caricato!", uploader.getLink());
 				history(uploader.getLink());
-				stringSelection = new StringSelection(uploader.getLink());
-				clpbrd.setContents(stringSelection, null);
+				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 			}
 
 		} catch (AWTException ex) {
@@ -158,8 +168,7 @@ public class SystemTrayMenu {
 			uploader.send(pass, "img");
 			new NotificationDialog("Screenshot Caricato!", uploader.getLink());
 			history(uploader.getLink());
-			stringSelection = new StringSelection(uploader.getLink());
-			clpbrd.setContents(stringSelection, null);
+			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		}
@@ -173,13 +182,12 @@ public class SystemTrayMenu {
 		try {
 			JFileChooser selFile = new JFileChooser();
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-
 				uploader = new Uploader(new Zipper(selFile.getSelectedFile()).toZip(), ip, port);
 				uploader.send(pass, "file");
 				new NotificationDialog("File Caricato!", uploader.getLink());
 				history(uploader.getLink());
-				stringSelection = new StringSelection(uploader.getLink());
-				clpbrd.setContents(stringSelection, null);
+				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+                                new File(selFile.getSelectedFile().getName().split("\\.")[0]+".zip").delete();
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.toString());
@@ -207,4 +215,29 @@ public class SystemTrayMenu {
 		});
 		popupMenu.insert(uploads[0], 2);
 	}
+        
+        public void sendClipboard(){
+            Transferable clipboardContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+            if (clipboardContents == null) {
+                new NotificationDialog("Clipboard Vuoto :( ", "");
+            }
+            else
+                try {
+                    
+                    if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                        PrintWriter out = new PrintWriter("clipboard.txt");
+                        out.println((String) clipboardContents.getTransferData(DataFlavor.stringFlavor));
+                        uploader = new Uploader(new Zipper(new File("clipboard.txt")).toZip(), ip, port);
+			uploader.send(pass, "file");
+                        new NotificationDialog("File Caricato!", uploader.getLink());
+			history(uploader.getLink());
+			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+                        new File("clipboard.txt").delete();
+                        new File("clipboard.zip").delete();
+                    }
+                }
+                catch (UnsupportedFlavorException | IOException ex) {
+                    System.err.println(ex.toString());
+                }
+        }
 }
