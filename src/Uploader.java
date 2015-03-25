@@ -15,7 +15,6 @@ import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
 
@@ -27,6 +26,8 @@ public class Uploader {
 	private SocketChannel socketChannel;
 	private String link;
 	private String fileName;
+
+	DataOutputStream dos;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -74,7 +75,7 @@ public class Uploader {
 
 	public void send(String pass, String type) throws IOException {
 
-		DataOutputStream dos = new DataOutputStream(socketChannel.socket().getOutputStream());
+		dos = new DataOutputStream(socketChannel.socket().getOutputStream());
 		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socketChannel.socket().getInputStream()));
 
 		try {
@@ -114,8 +115,6 @@ public class Uploader {
 					// file transfer
 					case "file":
 
-						// SocketChannel socketChannel = createChannel(ip,
-						// filePort);
 						sendFile(fileName);
 
 						break;
@@ -169,15 +168,19 @@ public class Uploader {
 			File file = new File(fileName);
 			aFile = new RandomAccessFile(file, "r");
 			FileChannel inChannel = aFile.getChannel();
-			ByteBuffer buffer = ByteBuffer.allocate(1024);
-			while (inChannel.read(buffer) > 0) {
-				buffer.flip();
-				socketChannel.write(buffer);
-				buffer.clear();
+
+			long bytesSent = 0, fileLength = file.length();
+			System.out.println("File length: " + fileLength);
+			dos.writeBytes(fileLength + "\n");
+
+			// send the file
+			while (bytesSent < fileLength) {
+				bytesSent += inChannel.transferTo(bytesSent, fileLength - bytesSent, socketChannel);
 			}
+			inChannel.close();
+
 			Thread.sleep(1000);
 			System.out.println("End of file reached..");
-			// socketChannel.close();
 			aFile.close();
 			System.out.println("File closed.");
 
