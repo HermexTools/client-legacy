@@ -4,13 +4,12 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -26,8 +25,8 @@ public class Uploader {
 	private SocketChannel socketChannel;
 	private String link;
 	private String fileName;
-
-	DataOutputStream dos;
+	private DataOutputStream dos;
+	private DataInputStream dis;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -68,34 +67,31 @@ public class Uploader {
 
 		SocketChannel socketChannel = createChannel(ip, port);
 		this.socketChannel = socketChannel;
-
-		// this.socket = new Socket(ip, port);
 		this.fileName = fileName;
 	}
 
 	public void send(String pass, String type) throws IOException {
 
 		dos = new DataOutputStream(socketChannel.socket().getOutputStream());
-		BufferedReader stringIn = new BufferedReader(new InputStreamReader(socketChannel.socket().getInputStream()));
+		dis = new DataInputStream(socketChannel.socket().getInputStream());
 
 		try {
-			socketChannel.socket().setSoTimeout(10000);
+			// socketChannel.socket().setSoTimeout(10000);
 
 			// send auth
 			System.out.println("Sending auth");
-			dos.writeBytes(pass + "\n");
+			dos.writeUTF(pass);
 			System.out.println("Auth sent: " + pass);
-			this.link = stringIn.readLine();
-			// this.link = os.println();
+			this.link = dis.readUTF();
 			System.out.println("Auth reply: " + link);
 			if (this.link.equals("OK")) {
 
 				System.out.println("Sending type: " + type);
-				dos.writeBytes(type + "\n");
+				dos.writeUTF(type);
 
 				// Controllo e aspetto che il server abbia ricevuto il type
 				// corretto
-				if (stringIn.readLine().equals(type)) {
+				if (dis.readUTF().equals(type)) {
 
 					System.out.println("Il server riceve un: " + type);
 
@@ -127,7 +123,7 @@ public class Uploader {
 
 					// return link
 					System.out.println("Waiting link...");
-					this.link = stringIn.readLine();
+					this.link = dis.readUTF();
 					System.out.println("Returned link: " + link);
 
 					bytes = null;
@@ -140,7 +136,7 @@ public class Uploader {
 			}
 
 			dos.close();
-			stringIn.close();
+			dis.close();
 			socketChannel.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -171,7 +167,7 @@ public class Uploader {
 
 			long bytesSent = 0, fileLength = file.length();
 			System.out.println("File length: " + fileLength);
-			dos.writeBytes(fileLength + "\n");
+			dos.writeLong(fileLength);
 
 			// send the file
 			while (bytesSent < fileLength) {
