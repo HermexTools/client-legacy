@@ -207,26 +207,22 @@ public class SystemTrayMenu {
 	}
 
 	public void sendClipboard() {
-		Transferable clipboardContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-		if (clipboardContents == null) {
-			new NotificationDialog("Clipboard Vuoto :( ", "");
-		} else
-			try {
-
-				if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-					PrintWriter out = new PrintWriter("clipboard.txt");
-					out.println((String) clipboardContents.getTransferData(DataFlavor.stringFlavor));
-					out.close();
-					uploader = new Uploader(new File("clipboard.txt").getName(), ip, port);
-					uploader.send(pass, "txt");
-					new NotificationDialog("File Caricato!", uploader.getLink());
-					history(uploader.getLink());
-					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-					new File("clipboard.txt").delete();
-					suono.run();
-				}
-			} catch (UnsupportedFlavorException | IOException ex) {
-				System.err.println(ex.toString());
-			}
+		try {
+                    String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+                    File f = new File("clipboard.txt");
+                    PrintWriter out = new PrintWriter("clipboard.txt");
+                    out.println(clipboard);
+                    out.close();
+                    uploader = new Uploader(f.getName(), ip, port);
+                    uploader.send(pass, "txt");
+                    new NotificationDialog("Clipboard Caricato!", uploader.getLink());
+                    history(uploader.getLink());
+                    clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+                    f.delete();
+                    suono.run();
+            } catch (UnsupportedFlavorException | IOException ex) {
+                    System.err.println(ex.toString());
+                    new NotificationDialog("Errore!", "Impossibile completare l'operazione");
+            }
 	}
 }
