@@ -21,7 +21,7 @@ public class Main {
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 
-			Boolean altPressed = false;
+			boolean altPressed = false;
 
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {

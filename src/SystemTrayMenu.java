@@ -17,10 +17,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
@@ -35,8 +40,8 @@ public class SystemTrayMenu {
 	private TrayIcon trayIcon;
 	private SystemTray systemTray;
 	private PopupMenu popupMenu;
-	private Clip clip;
 	private MenuItem[] uploads;
+	private final Sound suono;
 
 	private String ip;
 	private String pass;
@@ -52,12 +57,13 @@ public class SystemTrayMenu {
 		}
 
 		final LoadConfig loadConfig = new LoadConfig();
+		suono = new Sound();
 
 		this.ip = loadConfig.getIp();
 		this.pass = loadConfig.getPass();
 		this.port = loadConfig.getPort();
 		this.uploads = new MenuItem[5];
-
+		
 		for (int i = 0; i < uploads.length; i++) {
 			uploads[i] = new MenuItem();
 		}
@@ -73,7 +79,7 @@ public class SystemTrayMenu {
 			MenuItem catturaArea = new MenuItem("Cattura Area (ALT+1)");
 			MenuItem catturaDesktop = new MenuItem("Cattura Desktop (ALT+2)");
 			MenuItem caricaFile = new MenuItem("Carica File (ALT+3)");
-                        MenuItem clipboard = new MenuItem("Carica Clipboard (ALT+4)");
+			MenuItem clipboard = new MenuItem("Carica Clipboard (ALT+4)");
 			MenuItem esci = new MenuItem("Esci");
 
 			popupMenu.add("Upload Recenti");
@@ -83,12 +89,9 @@ public class SystemTrayMenu {
 			popupMenu.add(catturaDesktop);
 			popupMenu.addSeparator();
 			popupMenu.add(caricaFile);
-                        popupMenu.add(clipboard);
+			popupMenu.add(clipboard);
 			popupMenu.addSeparator();
 			popupMenu.add(esci);
-
-			clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(getClass().getResource("/res/complete.wav")));
 
 			// Gestione voci menu
 			catturaArea.addActionListener(new ActionListener() {
@@ -116,7 +119,7 @@ public class SystemTrayMenu {
 					}
 				}
 			});
-                        clipboard.addActionListener(new ActionListener() {
+			clipboard.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					sendClipboard();
 				}
@@ -156,9 +159,7 @@ public class SystemTrayMenu {
 		} catch (AWTException ex) {
 			System.err.println(ex.toString());
 		}
-		clip.start();
-		clip.setFramePosition(0);
-		clip.flush();
+		suono.run();
 	}
 
 	public void sendCompleteScreen() {
@@ -172,9 +173,7 @@ public class SystemTrayMenu {
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		}
-		clip.start();
-		clip.setFramePosition(0);
-		clip.flush();
+		suono.run();
 	}
 
 	public void sendFile() throws IOException {
@@ -187,14 +186,12 @@ public class SystemTrayMenu {
 				new NotificationDialog("File Caricato!", uploader.getLink());
 				history(uploader.getLink());
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-                                new File(selFile.getSelectedFile().getName().split("\\.")[0]+".zip").delete();
+				new File(selFile.getSelectedFile().getName().split("\\.")[0] + ".zip").delete();
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.toString());
 		}
-		clip.start();
-		clip.setFramePosition(0);
-		clip.flush();
+		suono.run();
 	}
 
 	private void history(String link) {
@@ -215,29 +212,27 @@ public class SystemTrayMenu {
 		});
 		popupMenu.insert(uploads[0], 2);
 	}
-        
-        public void sendClipboard(){
-            Transferable clipboardContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-            if (clipboardContents == null) {
-                new NotificationDialog("Clipboard Vuoto :( ", "");
-            }
-            else
-                try {
-                    
-                    if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                        PrintWriter out = new PrintWriter("clipboard.txt");
-                        out.println((String) clipboardContents.getTransferData(DataFlavor.stringFlavor));
-                        uploader = new Uploader(new Zipper(new File("clipboard.txt")).toZip(), ip, port);
-			uploader.send(pass, "file");
-                        new NotificationDialog("File Caricato!", uploader.getLink());
-			history(uploader.getLink());
-			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-                        new File("clipboard.txt").delete();
-                        new File("clipboard.zip").delete();
-                    }
-                }
-                catch (UnsupportedFlavorException | IOException ex) {
-                    System.err.println(ex.toString());
-                }
-        }
+
+	public void sendClipboard() {
+		Transferable clipboardContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+		if (clipboardContents == null) {
+			new NotificationDialog("Clipboard Vuoto :( ", "");
+		} else
+			try {
+
+				if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+					PrintWriter out = new PrintWriter("clipboard.txt");
+					out.println((String) clipboardContents.getTransferData(DataFlavor.stringFlavor));
+					uploader = new Uploader(new Zipper(new File("clipboard.txt")).toZip(), ip, port);
+					uploader.send(pass, "file");
+					new NotificationDialog("File Caricato!", uploader.getLink());
+					history(uploader.getLink());
+					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+					new File("clipboard.txt").delete();
+					new File("clipboard.zip").delete();
+				}
+			} catch (UnsupportedFlavorException | IOException ex) {
+				System.err.println(ex.toString());
+			}
+	}
 }
