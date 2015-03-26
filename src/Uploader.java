@@ -108,8 +108,9 @@ public class Uploader {
 
 						break;
 
-					// file transfer
+					// file or txt transfer
 					case "file":
+					case "txt":
 
 						sendFile(fileName);
 

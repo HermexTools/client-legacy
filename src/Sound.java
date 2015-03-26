@@ -1,4 +1,5 @@
 import java.net.URL;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -15,20 +16,20 @@ public class Sound extends Thread {
 	public void run() {
 		AudioInputStream audioInputStream = null;
 
-		try{
+		try {
 			audioInputStream = AudioSystem.getAudioInputStream(clickUrl);
 
 			AudioFormat format = audioInputStream.getFormat();
 			DataLine.Info info = new DataLine.Info(Clip.class, format);
 			Clip clip = null;
 			clip = (Clip) AudioSystem.getLine(info);
+			if (clip.isRunning()) {
+				clip.close();
+			}
 			clip.open(audioInputStream);
 			clip.start();
-			clip.drain();
-			clip.close();
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

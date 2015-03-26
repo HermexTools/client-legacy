@@ -17,15 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Locale;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
@@ -63,7 +56,7 @@ public class SystemTrayMenu {
 		this.pass = loadConfig.getPass();
 		this.port = loadConfig.getPort();
 		this.uploads = new MenuItem[5];
-		
+
 		for (int i = 0; i < uploads.length; i++) {
 			uploads[i] = new MenuItem();
 		}
@@ -154,12 +147,12 @@ public class SystemTrayMenu {
 				new NotificationDialog("Screenshot Caricato!", uploader.getLink());
 				history(uploader.getLink());
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+				suono.run();
 			}
 
 		} catch (AWTException ex) {
 			System.err.println(ex.toString());
 		}
-		suono.run();
 	}
 
 	public void sendCompleteScreen() {
@@ -170,10 +163,10 @@ public class SystemTrayMenu {
 			new NotificationDialog("Screenshot Caricato!", uploader.getLink());
 			history(uploader.getLink());
 			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+			suono.run();
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		}
-		suono.run();
 	}
 
 	public void sendFile() throws IOException {
@@ -187,11 +180,11 @@ public class SystemTrayMenu {
 				history(uploader.getLink());
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 				new File(selFile.getSelectedFile().getName().split("\\.")[0] + ".zip").delete();
+				suono.run();
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.toString());
 		}
-		suono.run();
 	}
 
 	private void history(String link) {
@@ -223,13 +216,14 @@ public class SystemTrayMenu {
 				if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 					PrintWriter out = new PrintWriter("clipboard.txt");
 					out.println((String) clipboardContents.getTransferData(DataFlavor.stringFlavor));
-					uploader = new Uploader(new Zipper(new File("clipboard.txt")).toZip(), ip, port);
-					uploader.send(pass, "file");
+					out.close();
+					uploader = new Uploader(new File("clipboard.txt").getName(), ip, port);
+					uploader.send(pass, "txt");
 					new NotificationDialog("File Caricato!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 					new File("clipboard.txt").delete();
-					new File("clipboard.zip").delete();
+					suono.run();
 				}
 			} catch (UnsupportedFlavorException | IOException ex) {
 				System.err.println(ex.toString());

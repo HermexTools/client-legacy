@@ -37,14 +37,12 @@ public class Main {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
 					System.out.println("Alt_l + 2 premuti");
 
 					st.sendCompleteScreen();
-
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_3) {
@@ -55,7 +53,12 @@ public class Main {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				}
 
+				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_4) {
+					System.out.println("Alt_l + 4 premuti");
+
+					st.sendClipboard();
 				}
 			}
 
