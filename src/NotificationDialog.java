@@ -23,8 +23,8 @@ public class NotificationDialog {
 	private String header;
 	private String message;
 	private final JDialog dialogFrame;
-	JLabel headingLabel;
-	JLabel messageLabel;
+	private JLabel headingLabel;
+	private JLabel messageLabel;
 
 	public NotificationDialog() {
 
@@ -106,6 +106,8 @@ public class NotificationDialog {
 	}
 
 	public void show(String header, String message) {
+		this.header = header;
+		this.message = message;
 		headingLabel.setText(header);
 		messageLabel.setText(message);
 
