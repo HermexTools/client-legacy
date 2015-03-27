@@ -71,9 +71,9 @@ public class ProgressDialog {
 		progressBar.setMaximum(100);
 		progressBar.setMinimum(0);
 		Dimension dim = new Dimension();
-		dim.width = 100;
+		dim.width = 130;
 		dim.height = 20;
-		progressBar.setPreferredSize(dim);
+		progressBar.setMinimumSize(dim);
 		progressBar.setStringPainted(true);
 		progressBar.setBorderPainted(true);
 		dialogFrame.add(progressBar, constraints);
