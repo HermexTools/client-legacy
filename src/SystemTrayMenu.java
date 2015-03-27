@@ -142,11 +142,14 @@ public class SystemTrayMenu {
 
 				// Altrimenti invio
 				uploader = new Uploader(partialScreen.getSelection(), ip, port);
-				uploader.send(pass, "img");
-				new NotificationDialog("Screenshot Caricato!", uploader.getLink());
-				history(uploader.getLink());
-				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-				suono.run();
+				boolean res = false;
+				res = uploader.send(pass, "img");
+				if (res) {
+					new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
+					history(uploader.getLink());
+					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+					suono.run();
+				}
 			}
 
 		} catch (AWTException ex) {
@@ -158,11 +161,14 @@ public class SystemTrayMenu {
 		try {
 			completeScreen = new CompleteScreen();
 			uploader = new Uploader(completeScreen.getImg(), ip, port);
-			uploader.send(pass, "img");
-			new NotificationDialog("Screenshot Caricato!", uploader.getLink());
-			history(uploader.getLink());
-			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-			suono.run();
+			boolean res = false;
+			res = uploader.send(pass, "img");
+			if (res) {
+				new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
+				history(uploader.getLink());
+				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+				suono.run();
+			}
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		}
@@ -174,12 +180,15 @@ public class SystemTrayMenu {
 			JFileChooser selFile = new JFileChooser();
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				uploader = new Uploader(new Zipper(selFile.getSelectedFile()).toZip(), ip, port);
-				uploader.send(pass, "file");
-				new NotificationDialog("File Caricato!", uploader.getLink());
-				history(uploader.getLink());
-				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-				new File(selFile.getSelectedFile().getName().split("\\.")[0] + ".zip").delete();
-				suono.run();
+				boolean res = false;
+				res = uploader.send(pass, "file");
+				if (res) {
+					new NotificationDialog().show("File Caricato!", uploader.getLink());
+					history(uploader.getLink());
+					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+					new File(selFile.getSelectedFile().getName().split("\\.")[0] + ".zip").delete();
+					suono.run();
+				}
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.toString());
@@ -215,14 +224,14 @@ public class SystemTrayMenu {
 			out.close();
 			uploader = new Uploader(f.getName(), ip, port);
 			uploader.send(pass, "txt");
-			new NotificationDialog("Clipboard Caricato!", uploader.getLink());
+			new NotificationDialog().show("Clipboard Caricato!", uploader.getLink());
 			history(uploader.getLink());
 			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 			f.delete();
 			suono.run();
 		} catch (UnsupportedFlavorException | IOException ex) {
 			System.err.println(ex.toString());
-			new NotificationDialog("Errore!", "Impossibile completare l'operazione");
+			new NotificationDialog().show("Errore!", "Impossibile completare l'operazione");
 		}
 	}
 }

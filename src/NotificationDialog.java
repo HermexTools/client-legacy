@@ -20,15 +20,20 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class NotificationDialog {
+	private String header;
+	private String message;
+	private final JDialog dialogFrame;
+	JLabel headingLabel;
+	JLabel messageLabel;
 
-	public NotificationDialog(String header, final String message) {
+	public NotificationDialog() {
 
-		final JDialog dialogFrame = new JDialog();
+		dialogFrame = new JDialog();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException ex) {
 			System.err.println(ex.toString());
 		}
 
@@ -43,7 +48,7 @@ public class NotificationDialog {
 		constraints.weighty = 1.0;
 		constraints.insets = new Insets(5, 5, 5, 5);
 
-		JLabel headingLabel = new JLabel(header);
+		headingLabel = new JLabel();
 		Font f = headingLabel.getFont();
 		f = new Font(f.getFontName(), Font.BOLD, f.getSize());
 		headingLabel.setFont(f);
@@ -69,21 +74,16 @@ public class NotificationDialog {
 		constraints.weighty = 1.0;
 		constraints.gridwidth = 2;
 
-		JLabel messageLabel = new JLabel(message);
+		messageLabel = new JLabel();
 		dialogFrame.add(messageLabel, constraints);
-		dialogFrame
-				.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
-		dialogFrame.setVisible(true);
+		dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
 
 		// Per il osizionamento in basso a destra
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// altezza taskbar
-		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(
-				dialogFrame.getGraphicsConfiguration());
-		dialogFrame.setLocation(
-				scrSize.width - 5 - dialogFrame.getWidth(),
-				scrSize.height - 5 - toolHeight.bottom
-						- dialogFrame.getHeight());
+		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(dialogFrame.getGraphicsConfiguration());
+		dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(), scrSize.height - 5 - toolHeight.bottom
+				- dialogFrame.getHeight());
 
 		xButton.addActionListener(new ActionListener() {
 			@Override
@@ -103,6 +103,14 @@ public class NotificationDialog {
 			}
 		});
 
+	}
+
+	public void show(String header, String message) {
+		headingLabel.setText(header);
+		messageLabel.setText(message);
+
+		dialogFrame.setVisible(true);
+
 		new Thread() {
 			@Override
 			public void run() {
@@ -118,6 +126,13 @@ public class NotificationDialog {
 				}
 			};
 		}.start();
+
+	}
+
+	public void wrongPassword() {
+		this.header = "Wrong password";
+		this.message = "Correct the password server!";
+		new NotificationDialog().show(header, message);
 	}
 
 }

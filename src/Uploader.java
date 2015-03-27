@@ -28,6 +28,7 @@ public class Uploader {
 	private DataOutputStream dos;
 	private DataInputStream dis;
 	private ProgressDialog progressDialog;
+	private NotificationDialog notificationDialog;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -72,7 +73,7 @@ public class Uploader {
 		this.fileName = fileName;
 	}
 
-	public void send(String pass, String type) throws IOException {
+	public boolean send(String pass, String type) throws IOException {
 
 		dos = new DataOutputStream(socketChannel.socket().getOutputStream());
 		dis = new DataInputStream(socketChannel.socket().getInputStream());
@@ -133,18 +134,25 @@ public class Uploader {
 					bytes = null;
 				} else {
 					System.out.println("The server had a bad interpretation of the fileType");
+					return false;
 				}
 
 			} else {
-				System.out.println("Closed");
+				System.out.println("Wrong password, closed");
+				new NotificationDialog().wrongPassword();
+				return false;
 			}
 
 			dos.close();
 			dis.close();
 			socketChannel.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
+
+		return true;
 	}
 
 	public SocketChannel createChannel(String ip, int port) {
