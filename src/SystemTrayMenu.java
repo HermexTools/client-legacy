@@ -8,7 +8,6 @@ import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -208,21 +207,22 @@ public class SystemTrayMenu {
 
 	public void sendClipboard() {
 		try {
-                    String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-                    File f = new File("clipboard.txt");
-                    PrintWriter out = new PrintWriter("clipboard.txt");
-                    out.println(clipboard);
-                    out.close();
-                    uploader = new Uploader(f.getName(), ip, port);
-                    uploader.send(pass, "txt");
-                    new NotificationDialog("Clipboard Caricato!", uploader.getLink());
-                    history(uploader.getLink());
-                    clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-                    f.delete();
-                    suono.run();
-            } catch (UnsupportedFlavorException | IOException ex) {
-                    System.err.println(ex.toString());
-                    new NotificationDialog("Errore!", "Impossibile completare l'operazione");
-            }
+			String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
+					.getData(DataFlavor.stringFlavor);
+			File f = new File("clipboard.txt");
+			PrintWriter out = new PrintWriter("clipboard.txt");
+			out.println(clipboard);
+			out.close();
+			uploader = new Uploader(f.getName(), ip, port);
+			uploader.send(pass, "txt");
+			new NotificationDialog("Clipboard Caricato!", uploader.getLink());
+			history(uploader.getLink());
+			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+			f.delete();
+			suono.run();
+		} catch (UnsupportedFlavorException | IOException ex) {
+			System.err.println(ex.toString());
+			new NotificationDialog("Errore!", "Impossibile completare l'operazione");
+		}
 	}
 }

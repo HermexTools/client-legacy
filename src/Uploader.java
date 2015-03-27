@@ -53,6 +53,7 @@ public class Uploader {
 
 		SocketChannel socketChannel = createChannel(ip, port);
 		this.socketChannel = socketChannel;
+		bi.setRGB(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		this.img = bi;
 
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
@@ -173,6 +174,7 @@ public class Uploader {
 			// send the file
 			while (bytesSent < fileLength) {
 				bytesSent += inChannel.transferTo(bytesSent, fileLength - bytesSent, socketChannel);
+				System.out.println("Sent: " + 100 * bytesSent / fileLength + "%");
 			}
 			inChannel.close();
 
