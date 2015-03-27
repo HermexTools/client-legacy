@@ -28,7 +28,6 @@ public class Uploader {
 	private DataOutputStream dos;
 	private DataInputStream dis;
 	private ProgressDialog progressDialog;
-	private NotificationDialog notificationDialog;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
