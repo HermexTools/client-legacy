@@ -27,6 +27,7 @@ public class Uploader {
 	private String fileName;
 	private DataOutputStream dos;
 	private DataInputStream dis;
+	private ProgressDialog progressDialog;
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r, String ip, int port) throws IOException, AWTException {
@@ -114,7 +115,7 @@ public class Uploader {
 					case "txt":
 
 						sendFile(fileName);
-
+						progressDialog.setWait();
 						break;
 
 					// default case, hmm
@@ -127,7 +128,8 @@ public class Uploader {
 					System.out.println("Waiting link...");
 					this.link = dis.readUTF();
 					System.out.println("Returned link: " + link);
-
+					if (type.equals("file"))
+						progressDialog.close();
 					bytes = null;
 				} else {
 					System.out.println("The server had a bad interpretation of the fileType");
@@ -170,12 +172,22 @@ public class Uploader {
 			long bytesSent = 0, fileLength = file.length();
 			System.out.println("File length: " + fileLength);
 			dos.writeLong(fileLength);
+			progressDialog = new ProgressDialog();
 
 			// send the file
 			while (bytesSent < fileLength) {
 				bytesSent += inChannel.transferTo(bytesSent, fileLength - bytesSent, socketChannel);
-				System.out.println("Sent: " + 100 * bytesSent / fileLength + "%");
+
+				// To secure overflow
+				try {
+					System.out.println("Sent: " + 100 * bytesSent / fileLength + "%");
+					progressDialog.set((int) (100 * bytesSent / fileLength));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 			}
+
 			inChannel.close();
 
 			Thread.sleep(1000);

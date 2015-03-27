@@ -18,6 +18,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class ProgressDialog {
 	private final JDialog dialogFrame;
 	private JProgressBar progressBar;
+	private JLabel headingLabel;
 
 	public ProgressDialog() {
 
@@ -41,7 +42,7 @@ public class ProgressDialog {
 		constraints.weighty = 1.0;
 		constraints.insets = new Insets(5, 5, 5, 5);
 
-		JLabel headingLabel = new JLabel("Caricamento...");
+		headingLabel = new JLabel("Caricamento...");
 		Font f = headingLabel.getFont();
 		f = new Font(f.getFontName(), Font.BOLD, f.getSize());
 		headingLabel.setFont(f);
@@ -121,8 +122,12 @@ public class ProgressDialog {
 		progressBar.setString(n + "");
 	}
 
-	public static void main(String[] args) {
-		new ProgressDialog();
+	public void setWait() {
+
+	}
+
+	public void close() {
+		dialogFrame.dispose();
 	}
 
 }
