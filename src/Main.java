@@ -41,7 +41,6 @@ public class Main {
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
 					System.out.println("Alt_l + 2 premuti");
-
 					st.sendCompleteScreen();
 				}
 

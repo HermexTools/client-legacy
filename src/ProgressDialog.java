@@ -16,8 +16,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class ProgressDialog {
-        private final JDialog dialogFrame;
-        private JProgressBar pg;
+	private final JDialog dialogFrame;
+	private JProgressBar progressBar;
 
 	public ProgressDialog() {
 
@@ -25,7 +25,8 @@ public class ProgressDialog {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException ex) {
 			System.err.println(ex.toString());
 		}
 
@@ -59,28 +60,34 @@ public class ProgressDialog {
 		xButton.setFocusable(false);
 		dialogFrame.add(xButton, constraints);
 
-		// Messaggio
+		// Progress bar
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.weightx = 1.0;
 		constraints.weighty = 1.0;
 		constraints.gridwidth = 2;
 
-		pg = new JProgressBar();
-                pg.setMaximum(100);
-                pg.setMinimum(0);
-                pg.setStringPainted(true);
-		dialogFrame.add(pg, constraints);
-                
+		progressBar = new JProgressBar();
+		progressBar.setMaximum(100);
+		progressBar.setMinimum(0);
+		Dimension dim = new Dimension();
+		dim.width = 100;
+		dim.height = 20;
+		progressBar.setPreferredSize(dim);
+		progressBar.setStringPainted(true);
+		progressBar.setBorderPainted(true);
+		dialogFrame.add(progressBar, constraints);
+
 		dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
 		dialogFrame.setVisible(true);
 
-		// Per il osizionamento in basso a destra
+		// Per il posizionamento in basso a destra
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// altezza taskbar
 		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(dialogFrame.getGraphicsConfiguration());
-		dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(),scrSize.height - 5 - toolHeight.bottom - dialogFrame.getHeight());
-                
+		dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(), scrSize.height - 5 - toolHeight.bottom
+				- dialogFrame.getHeight());
+
 		xButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -89,9 +96,9 @@ public class ProgressDialog {
 		});
 
 	}
-        
-        public void destroy(){
-            new Thread() {
+
+	public void destroy() {
+		new Thread() {
 			@Override
 			public void run() {
 				try {
@@ -106,13 +113,16 @@ public class ProgressDialog {
 				}
 			};
 		}.start();
-            
-        }
-        
-        public void set(int n){
-            pg.setValue(n);
-            pg.setString(n+"");
-        }
-        
+
+	}
+
+	public void set(int n) {
+		progressBar.setValue(n);
+		progressBar.setString(n + "");
+	}
+
+	public static void main(String[] args) {
+		new ProgressDialog();
+	}
 
 }
