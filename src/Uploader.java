@@ -54,7 +54,6 @@ public class Uploader {
 
 		SocketChannel socketChannel = createChannel(ip, port);
 		this.socketChannel = socketChannel;
-		bi.setRGB(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		this.img = bi;
 
 		ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
