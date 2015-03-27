@@ -179,7 +179,7 @@ public class Uploader {
 			long bytesSent = 0, fileLength = file.length();
 			System.out.println("File length: " + fileLength);
 			dos.writeLong(fileLength);
-			progressDialog = new ProgressDialog();
+			progressDialog = new ProgressDialog(this);
 
 			// send the file
 			while (bytesSent < fileLength) {
@@ -194,7 +194,7 @@ public class Uploader {
 				}
 
 			}
-
+			progressDialog.setWait();
 			inChannel.close();
 
 			Thread.sleep(1000);
@@ -214,6 +214,16 @@ public class Uploader {
 
 	public String getLink() {
 		return link;
+	}
+
+	public void stopUpload() {
+		try {
+			dos.close();
+			dis.close();
+			socketChannel.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

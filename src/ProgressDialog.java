@@ -19,8 +19,10 @@ public class ProgressDialog {
 	private final JDialog dialogFrame;
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
+	private Uploader callerUploader;
 
-	public ProgressDialog() {
+	public ProgressDialog(Uploader callerUploader) {
+		this.callerUploader = callerUploader;
 
 		dialogFrame = new JDialog();
 		try {
@@ -93,6 +95,7 @@ public class ProgressDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogFrame.dispose();
+				stoppedUploaderClose();
 			}
 		});
 
@@ -123,11 +126,15 @@ public class ProgressDialog {
 	}
 
 	public void setWait() {
-
+		headingLabel.setText("Waiting link...");
 	}
 
 	public void close() {
 		dialogFrame.dispose();
+	}
+
+	public void stoppedUploaderClose() {
+		callerUploader.stopUpload();
 	}
 
 }
