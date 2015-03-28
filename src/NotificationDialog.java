@@ -20,8 +20,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class NotificationDialog {
-	private String header;
-	private String message;
 	private final JDialog dialogFrame;
 	private JLabel headingLabel;
 	private JLabel messageLabel;
@@ -96,7 +94,7 @@ public class NotificationDialog {
 		dialogFrame.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				try {
-					Desktop.getDesktop().browse(new URI(message));
+					Desktop.getDesktop().browse(new URI(messageLabel.getText()));
 				} catch (IOException | URISyntaxException e) {
 					e.printStackTrace();
 				}
@@ -106,8 +104,6 @@ public class NotificationDialog {
 	}
 
 	public void show(String header, String message) {
-		this.header = header;
-		this.message = message;
 		headingLabel.setText(header);
 		messageLabel.setText(message);
 
@@ -132,9 +128,7 @@ public class NotificationDialog {
 	}
 
 	public void wrongPassword() {
-		this.header = "Wrong password";
-		this.message = "Correct the password server!";
-		show(header, message);
+		show("Wrong password", "Correct the password server!");
 	}
 
 }

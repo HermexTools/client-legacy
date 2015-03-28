@@ -20,7 +20,6 @@ public class ProgressDialog {
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
 	private Uploader callerUploader;
-	private String header;
 
 	public ProgressDialog() {
 
@@ -130,8 +129,7 @@ public class ProgressDialog {
 	}
 
 	public void setMessage(String headingLabel) {
-		this.header = headingLabel;
-		this.headingLabel.setText(header);
+		this.headingLabel.setText(headingLabel);
 		dialogFrame.setVisible(true);
 	}
 
