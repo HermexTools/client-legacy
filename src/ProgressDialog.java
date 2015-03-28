@@ -80,16 +80,6 @@ public class ProgressDialog {
 		progressBar.setBorderPainted(true);
 		dialogFrame.add(progressBar, constraints);
 
-		dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
-		// dialogFrame.setVisible(true);
-
-		// Per il posizionamento in basso a destra
-		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// altezza taskbar
-		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(dialogFrame.getGraphicsConfiguration());
-		dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(), scrSize.height - 5 - toolHeight.bottom
-				- dialogFrame.getHeight());
-
 		xButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -97,7 +87,15 @@ public class ProgressDialog {
 				stoppedUploaderClose();
 			}
 		});
+	}
 
+	private void autoPosition() {
+		// Per il posizionamento in basso a destra
+		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
+		// altezza taskbar
+		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(dialogFrame.getGraphicsConfiguration());
+		dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(), scrSize.height - 5 - toolHeight.bottom
+				- dialogFrame.getHeight());
 	}
 
 	public void destroy() {
@@ -130,6 +128,8 @@ public class ProgressDialog {
 
 	public void setMessage(String headingLabel) {
 		this.headingLabel.setText(headingLabel);
+		autoPosition();
+		dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
 		dialogFrame.setVisible(true);
 	}
 
