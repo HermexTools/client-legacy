@@ -1,11 +1,7 @@
-import java.awt.AWTException;
-import java.io.IOException;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -14,10 +10,10 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException, AWTException, UnsupportedAudioFileException,
-			LineUnavailableException {
-
-		final SystemTrayMenu st = new SystemTrayMenu();
+	public static void main(String[] args){
+                
+                LoadConfig config = new LoadConfig();
+		SystemTrayMenu st = new SystemTrayMenu(config.getIp(),config.getPass(),config.getPort());
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 
@@ -32,26 +28,19 @@ public class Main {
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_1) {
 					System.out.println("Alt_l + 1 premuti");
 
-					try {
-						st.sendPartialScreen();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+                                        st.sendPartialScreen();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
 					System.out.println("Alt_l + 2 premuti");
+                                        
 					st.sendCompleteScreen();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_3) {
 					System.out.println("Alt_l + 3 premuti");
-
-					try {
-						st.sendFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+                                        
+                                        st.sendFile();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_4) {

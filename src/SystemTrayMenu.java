@@ -18,8 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -39,21 +37,21 @@ public class SystemTrayMenu {
 	private String pass;
 	private int port;
 
-	public SystemTrayMenu() throws AWTException, IOException, UnsupportedAudioFileException, LineUnavailableException {
+	public SystemTrayMenu(String ip,String pswr, int port){
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException ex) {
-			System.err.println(ex.toString());
+			ex.printStackTrace();
 		}
 
-		final LoadConfig loadConfig = new LoadConfig();
-		suono = new Sound();
+		
 
-		this.ip = loadConfig.getIp();
-		this.pass = loadConfig.getPass();
-		this.port = loadConfig.getPort();
+		this.ip = ip;
+		this.pass = pswr;
+		this.port = port;
+                this.suono = new Sound();
 		this.uploads = new MenuItem[5];
 
 		for (int i = 0; i < uploads.length; i++) {
@@ -61,120 +59,105 @@ public class SystemTrayMenu {
 		}
 
 		if (SystemTray.isSupported()) {
-			clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
-			systemTray = SystemTray.getSystemTray();
-
-			trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icona.jpg")), "ownPuush");
-			trayIcon.setImageAutoSize(true);
-
-			popupMenu = new PopupMenu();
-			MenuItem catturaArea = new MenuItem("Cattura Area (ALT+1)");
-			MenuItem catturaDesktop = new MenuItem("Cattura Desktop (ALT+2)");
-			MenuItem caricaFile = new MenuItem("Carica File (ALT+3)");
-			MenuItem clipboard = new MenuItem("Carica Clipboard (ALT+4)");
-			MenuItem esci = new MenuItem("Esci");
-
-			popupMenu.add("Upload Recenti");
-			popupMenu.addSeparator();
-			popupMenu.addSeparator();
-			popupMenu.add(catturaArea);
-			popupMenu.add(catturaDesktop);
-			popupMenu.addSeparator();
-			popupMenu.add(caricaFile);
-			popupMenu.add(clipboard);
-			popupMenu.addSeparator();
-			popupMenu.add(esci);
-
-			// Gestione voci menu
-			catturaArea.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					try {
-						sendPartialScreen();
-					} catch (IOException ex) {
-						System.err.println(ex.toString());
-					}
-				}
-			});
-
-			catturaDesktop.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					sendCompleteScreen();
-				}
-			});
-
-			caricaFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					try {
-						sendFile();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-			clipboard.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					sendClipboard();
-				}
-			});
-
-			esci.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					SystemTray.getSystemTray().remove(trayIcon);
-					System.exit(0);
-				}
-			});
-
-			trayIcon.setPopupMenu(popupMenu);
-			systemTray.add(trayIcon);
+                        try {
+                                clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+                                systemTray = SystemTray.getSystemTray();
+                                
+                                trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icona.jpg")), "ownPuush");
+                                trayIcon.setImageAutoSize(true);
+                                
+                                popupMenu = new PopupMenu();
+                                MenuItem catturaArea = new MenuItem("Cattura Area (ALT+1)");
+                                MenuItem catturaDesktop = new MenuItem("Cattura Desktop (ALT+2)");
+                                MenuItem caricaFile = new MenuItem("Carica File (ALT+3)");
+                                MenuItem clipboard = new MenuItem("Carica Clipboard (ALT+4)");
+                                MenuItem esci = new MenuItem("Esci");
+                                
+                                popupMenu.add("Upload Recenti");
+                                popupMenu.addSeparator();
+                                popupMenu.addSeparator();
+                                popupMenu.add(catturaArea);
+                                popupMenu.add(catturaDesktop);
+                                popupMenu.addSeparator();
+                                popupMenu.add(caricaFile);
+                                popupMenu.add(clipboard);
+                                popupMenu.addSeparator();
+                                popupMenu.add(esci);
+                                
+                                // Gestione voci menu
+                                catturaArea.addActionListener(new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                sendPartialScreen();
+                                        }
+                                });
+                                
+                                catturaDesktop.addActionListener(new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                sendCompleteScreen();
+                                        }
+                                });
+                                
+                                caricaFile.addActionListener(new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                sendFile();
+                                        }
+                                });
+                                clipboard.addActionListener(new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                sendClipboard();
+                                        }
+                                });
+                                
+                                esci.addActionListener(new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                SystemTray.getSystemTray().remove(trayIcon);
+                                                System.exit(0);
+                                        }
+                                });
+                                
+                                trayIcon.setPopupMenu(popupMenu);
+                                systemTray.add(trayIcon);
+                        } catch (IOException | AWTException ex) {
+                                ex.printStackTrace();
+                        }
 		}
 	}
 
-	public void sendPartialScreen() throws IOException {
+	public void sendPartialScreen(){
 		partialScreen = new PartialScreen();
-		try {
-
-			// Se lo screenshot è più piccolo di 5px in h|w
-			if (partialScreen.getSelection().width <= 5 || partialScreen.getSelection().height <= 5) {
-
-				// Annullo
-				trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
-			} else {
-
-				// Altrimenti invio
-				uploader = new Uploader(partialScreen.getSelection(), ip, port);
-				boolean res = false;
-				res = uploader.send(pass, "img");
-				if (res) {
-					new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
-					history(uploader.getLink());
-					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-					suono.run();
-				}
-			}
-
-		} catch (AWTException ex) {
-			System.err.println(ex.toString());
-		}
+                if (partialScreen.getSelection().width <= 5 || partialScreen.getSelection().height <= 5) {
+                        
+                        // Annullo
+                        trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
+                } else {
+                        
+                        // Altrimenti invio
+                        uploader = new Uploader(partialScreen.getSelection(), ip, port);
+                        boolean res;
+                        res = uploader.send(pass, "img");
+                        if (res) {
+                                new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
+                                history(uploader.getLink());
+                                clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+                                suono.run();
+                        }
+                }
 	}
 
 	public void sendCompleteScreen() {
-		try {
-			completeScreen = new CompleteScreen();
-			uploader = new Uploader(completeScreen.getImg(), ip, port);
-			boolean res = false;
-			res = uploader.send(pass, "img");
-			if (res) {
-				new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
-				history(uploader.getLink());
-				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-				suono.run();
-			}
-		} catch (IOException ex) {
-			System.err.println(ex.toString());
-		}
+                completeScreen = new CompleteScreen();
+                uploader = new Uploader(completeScreen.getImg(), ip, port);
+                boolean res = false;
+                res = uploader.send(pass, "img");
+                if (res) {
+                        new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
+                        history(uploader.getLink());
+                        clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+                        suono.run();
+                }
 	}
 
-	public void sendFile() throws IOException {
+	public void sendFile(){
 
 		try {
 			JFileChooser selFile = new JFileChooser();
@@ -191,7 +174,7 @@ public class SystemTrayMenu {
 				}
 			}
 		} catch (Exception ex) {
-			System.err.println(ex.toString());
+			ex.printStackTrace();
 		}
 	}
 
@@ -207,7 +190,7 @@ public class SystemTrayMenu {
 				try {
 					Desktop.getDesktop().browse(new URI(e.getActionCommand()));
 				} catch (URISyntaxException | IOException ex) {
-					System.err.println(ex.toString());
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -230,7 +213,7 @@ public class SystemTrayMenu {
 			f.delete();
 			suono.run();
 		} catch (UnsupportedFlavorException | IOException ex) {
-			System.err.println(ex.toString());
+			ex.printStackTrace();
 			new NotificationDialog().show("Errore!", "Impossibile completare l'operazione");
 		}
 	}

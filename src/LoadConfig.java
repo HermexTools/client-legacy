@@ -11,21 +11,25 @@ public class LoadConfig {
 	private String pass;
 	private int port;
 
-	public LoadConfig() throws IOException {
-		Properties prop = new Properties();
-
-		if (!new File("client.properties").exists()) {
-			prop.setProperty("server_ip", "localhost");
-			prop.setProperty("port", "4030");
-			prop.setProperty("password", "pass");
-			prop.store(new FileOutputStream("client.properties"), null);
-		}
-		InputStream inputStream = new FileInputStream("client.properties");
-		prop.load(inputStream);
-
-		this.ip = prop.getProperty("server_ip");
-		this.pass = prop.getProperty("password");
-		this.port = Integer.parseInt(prop.getProperty("port"));
+	public LoadConfig(){
+                try {
+                        Properties prop = new Properties();
+                        
+                        if (!new File("client.properties").exists()) {
+                                prop.setProperty("server_ip", "localhost");
+                                prop.setProperty("port", "4030");
+                                prop.setProperty("password", "pass");
+                                prop.store(new FileOutputStream("client.properties"), null);
+                        }
+                        InputStream inputStream = new FileInputStream("client.properties");
+                        prop.load(inputStream);
+                        
+                        this.ip = prop.getProperty("server_ip");
+                        this.pass = prop.getProperty("password");
+                        this.port = Integer.parseInt(prop.getProperty("port"));
+                } catch (IOException ex) {
+                        ex.printStackTrace();
+                }
 
 	}
 

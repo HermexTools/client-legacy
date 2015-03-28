@@ -27,15 +27,42 @@ public class PartialScreen extends JPanel {
 	private JDialog frame;
 
 	public PartialScreen() {
+                MouseAdapter mouseHandler = new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                        }
+                        
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                                fromClickPoint = e.getPoint();
+                                selectionBounds = null;
+                        }
+                        
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                                toClickPoint = e.getPoint();
+                                frame.dispose();
+                        }
+                        
+                        @Override
+                        public void mouseDragged(MouseEvent e) {
+                                Point dragPoint = e.getPoint();
+                                int x = Math.min(fromClickPoint.x, dragPoint.x);
+                                int y = Math.min(fromClickPoint.y, dragPoint.y);
+                                int width = Math.max(fromClickPoint.x - dragPoint.x, dragPoint.x - fromClickPoint.x);
+                                int height = Math.max(fromClickPoint.y - dragPoint.y, dragPoint.y - fromClickPoint.y);
+                                selectionBounds = new Rectangle(x, y, width, height);
+                                repaint();
+                        }
+                };
+                
 		setOpaque(false);
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
-		}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException| UnsupportedLookAndFeelException ex) {}
 
 		frame = new JDialog();
 		frame.setModal(true);
@@ -52,35 +79,6 @@ public class PartialScreen extends JPanel {
 		frame.setVisible(true);
 	}
 
-	MouseAdapter mouseHandler = new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			fromClickPoint = e.getPoint();
-			selectionBounds = null;
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			toClickPoint = e.getPoint();
-			frame.dispose();
-		}
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			Point dragPoint = e.getPoint();
-			int x = Math.min(fromClickPoint.x, dragPoint.x);
-			int y = Math.min(fromClickPoint.y, dragPoint.y);
-			int width = Math.max(fromClickPoint.x - dragPoint.x, dragPoint.x - fromClickPoint.x);
-			int height = Math.max(fromClickPoint.y - dragPoint.y, dragPoint.y - fromClickPoint.y);
-			selectionBounds = new Rectangle(x, y, width, height);
-			repaint();
-		}
-	};
-
 	public Rectangle getVirtualBounds() {
 		Rectangle bounds = new Rectangle(0, 0, 0, 0);
 
@@ -92,30 +90,30 @@ public class PartialScreen extends JPanel {
 		return bounds;
 	}
 
-	public Rectangle getSelection() {
-		if (fromClickPoint.x + fromClickPoint.y < toClickPoint.x + toClickPoint.y)
-			return new Rectangle(fromClickPoint.x + 1, fromClickPoint.y + 1, toClickPoint.x - fromClickPoint.x - 1,
-					toClickPoint.y - fromClickPoint.y - 1);
-		else
-			return new Rectangle(toClickPoint.x + 1, toClickPoint.y + 1, fromClickPoint.x - toClickPoint.x - 1,
-					fromClickPoint.y - toClickPoint.y - 1);
-	}
+        public Rectangle getSelection() {
+                if (fromClickPoint.x + fromClickPoint.y < toClickPoint.x + toClickPoint.y)
+                        return new Rectangle(fromClickPoint.x + 1, fromClickPoint.y + 1, toClickPoint.x - fromClickPoint.x - 1,
+                                toClickPoint.y - fromClickPoint.y - 1);
+                else
+                        return new Rectangle(toClickPoint.x + 1, toClickPoint.y + 1, fromClickPoint.x - toClickPoint.x - 1,
+                                fromClickPoint.y - toClickPoint.y - 1);
+        }
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setColor(new Color(255, 255, 255, 128));
-
-		Area fill = new Area(new Rectangle(new Point(0, 0), getSize()));
-		if (selectionBounds != null) {
-			fill.subtract(new Area(selectionBounds));
-		}
-		g2d.fill(fill);
-		if (selectionBounds != null) {
-			g2d.setColor(Color.RED);
-			g2d.draw(selectionBounds);
-		}
-		g2d.dispose();
-	}
+        @Override
+        protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setColor(new Color(255, 255, 255, 128));
+                
+                Area fill = new Area(new Rectangle(new Point(0, 0), getSize()));
+                if (selectionBounds != null) {
+                        fill.subtract(new Area(selectionBounds));
+                }
+                g2d.fill(fill);
+                if (selectionBounds != null) {
+                        g2d.setColor(Color.RED);
+                        g2d.draw(selectionBounds);
+                }
+                g2d.dispose();
+        }
 }

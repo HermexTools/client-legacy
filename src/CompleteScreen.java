@@ -11,14 +11,12 @@ public class CompleteScreen {
 	public CompleteScreen() {
 		try {
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
-			for (GraphicsDevice gd : GraphicsEnvironment
-					.getLocalGraphicsEnvironment().getScreenDevices()) {
-				screenRect = screenRect.union(gd.getDefaultConfiguration()
-						.getBounds());
+			for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+				screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 			}
 			this.img = new Robot().createScreenCapture(screenRect);
 		} catch (AWTException ex) {
-			System.err.println(ex.toString());
+			ex.printStackTrace();
 		}
 	}
 
