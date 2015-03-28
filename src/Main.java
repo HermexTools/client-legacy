@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args){
                 
                 LoadConfig config = new LoadConfig();
-		SystemTrayMenu st = new SystemTrayMenu(config.getIp(),config.getPass(),config.getPort());
+		final SystemTrayMenu st = new SystemTrayMenu(config.getIp(),config.getPass(),config.getPort());
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 

@@ -63,7 +63,7 @@ public class SystemTrayMenu {
                                 clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                                 systemTray = SystemTray.getSystemTray();
                                 
-                                trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icona.jpg")), "ownPuush");
+                                trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icon.png")), "ownPuush");
                                 trayIcon.setImageAutoSize(true);
                                 
                                 popupMenu = new PopupMenu();
