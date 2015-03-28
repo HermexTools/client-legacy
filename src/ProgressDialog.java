@@ -16,13 +16,13 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class ProgressDialog {
-	private final JDialog dialogFrame;
+	private JDialog dialogFrame;
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
 	private Uploader callerUploader;
+	private String header;
 
-	public ProgressDialog(Uploader callerUploader) {
-		this.callerUploader = callerUploader;
+	public ProgressDialog() {
 
 		dialogFrame = new JDialog();
 		try {
@@ -44,7 +44,7 @@ public class ProgressDialog {
 		constraints.weighty = 1.0;
 		constraints.insets = new Insets(5, 5, 5, 5);
 
-		headingLabel = new JLabel("Caricamento...");
+		headingLabel = new JLabel();
 		Font f = headingLabel.getFont();
 		f = new Font(f.getFontName(), Font.BOLD, f.getSize());
 		headingLabel.setFont(f);
@@ -82,7 +82,7 @@ public class ProgressDialog {
 		dialogFrame.add(progressBar, constraints);
 
 		dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
-		dialogFrame.setVisible(true);
+		// dialogFrame.setVisible(true);
 
 		// Per il posizionamento in basso a destra
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -120,9 +120,19 @@ public class ProgressDialog {
 
 	}
 
+	public void setUploader(Uploader callerUploader) {
+		this.callerUploader = callerUploader;
+	}
+
 	public void set(int n) {
 		progressBar.setValue(n);
 		progressBar.setString(n + "");
+	}
+
+	public void setMessage(String headingLabel) {
+		this.header = headingLabel;
+		this.headingLabel.setText(header);
+		dialogFrame.setVisible(true);
 	}
 
 	public void setWait() {
@@ -134,7 +144,11 @@ public class ProgressDialog {
 	}
 
 	public void stoppedUploaderClose() {
-		callerUploader.stopUpload();
+		try {
+			callerUploader.stopUpload();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

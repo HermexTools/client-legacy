@@ -173,12 +173,23 @@ public class Uploader {
 		try {
 			File file = new File(fileName);
 			aFile = new RandomAccessFile(file, "r");
-			FileChannel inChannel = aFile.getChannel();
+			final FileChannel inChannel = aFile.getChannel();
 
 			long bytesSent = 0, fileLength = file.length();
 			System.out.println("File length: " + fileLength);
 			dos.writeLong(fileLength);
-			progressDialog = new ProgressDialog(this);
+			progressDialog = new ProgressDialog();
+			progressDialog.setUploader(this);
+			progressDialog.setMessage("Caricando...");
+
+			/*
+			 * new Thread() {
+			 * 
+			 * @Override public void run() { while (true) try {
+			 * Thread.sleep(1000); System.out.println("CHECK: " +
+			 * inChannel.position()); } catch (Exception e) {
+			 * e.printStackTrace(); } }; }.start();
+			 */
 
 			// send the file
 			while (bytesSent < fileLength) {

@@ -134,7 +134,7 @@ public class NotificationDialog {
 	public void wrongPassword() {
 		this.header = "Wrong password";
 		this.message = "Correct the password server!";
-		new NotificationDialog().show(header, message);
+		show(header, message);
 	}
 
 }
