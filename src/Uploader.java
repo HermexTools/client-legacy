@@ -24,7 +24,7 @@ public class Uploader {
 	private byte[] bytes;
 	private SocketChannel socketChannel;
 	private String link;
-	private String fileName;
+	private String filePath;
 	private DataOutputStream dos;
 	private DataInputStream dis;
 	private ProgressDialog progressDialog;
@@ -64,11 +64,11 @@ public class Uploader {
 	}
 
 	// Per i file
-	public Uploader(String fileName, String ip, int port) throws UnknownHostException, IOException {
+	public Uploader(String filePath, String ip, int port) throws UnknownHostException, IOException {
 
 		SocketChannel socketChannel = createChannel(ip, port);
 		this.socketChannel = socketChannel;
-		this.fileName = fileName;
+		this.filePath = filePath;
 	}
 
 	public boolean send(String pass, String type) throws IOException {
@@ -80,11 +80,11 @@ public class Uploader {
 			// socketChannel.socket().setSoTimeout(10000);
 
 			// send auth
-			System.out.println("Sending auth");
+			System.out.println("[Uploader] Sending auth");
 			dos.writeUTF(pass);
-			System.out.println("Auth sent: " + pass);
+			System.out.println("[Uploader] Auth sent: " + pass);
 			this.link = dis.readUTF();
-			System.out.println("Auth reply: " + link);
+			System.out.println("[Uploader] Auth reply: " + link);
 			if (this.link.equals("OK")) {
 
 				System.out.println("Sending type: " + type);
@@ -101,7 +101,7 @@ public class Uploader {
 					// image transfer
 					case "img":
 
-						System.out.println("Uploading image...");
+						System.out.println("[Uploader] Uploading image...");
 
 						dos.writeInt(bytes.length);
 						dos.write(bytes, 0, bytes.length);
@@ -113,7 +113,7 @@ public class Uploader {
 					case "file":
 					case "txt":
 
-						sendFile(fileName);
+						sendFile(filePath);
 						progressDialog.setWait();
 						break;
 
@@ -124,19 +124,19 @@ public class Uploader {
 					}
 
 					// return link
-					System.out.println("Waiting link...");
+					System.out.println("[Uploader] Waiting link...");
 					this.link = dis.readUTF();
-					System.out.println("Returned link: " + link);
+					System.out.println("[Uploader] Returned link: " + link);
 					if (type.equals("file"))
 						progressDialog.close();
 					bytes = null;
 				} else {
-					System.out.println("The server had a bad interpretation of the fileType");
+					System.out.println("[Uploader] The server had a bad interpretation of the fileType");
 					return false;
 				}
 
 			} else {
-				System.out.println("Wrong password, closed");
+				System.out.println("[Uploader] Wrong password, closed");
 				new NotificationDialog().wrongPassword();
 				return false;
 			}
@@ -160,7 +160,7 @@ public class Uploader {
 			socketChannel = SocketChannel.open();
 			SocketAddress socketAddress = new InetSocketAddress(ip, port);
 			socketChannel.connect(socketAddress);
-			System.out.println("Connected, now sending the file...");
+			System.out.println("[Uploader] Connected, now sending the file...");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -176,20 +176,11 @@ public class Uploader {
 			final FileChannel inChannel = aFile.getChannel();
 
 			long bytesSent = 0, fileLength = file.length();
-			System.out.println("File length: " + fileLength);
+			System.out.println("[Uploader] File length: " + fileLength);
 			dos.writeLong(fileLength);
 			progressDialog = new ProgressDialog();
 			progressDialog.setUploader(this);
 			progressDialog.setMessage("Caricando...");
-
-			/*
-			 * new Thread() {
-			 * 
-			 * @Override public void run() { while (true) try {
-			 * Thread.sleep(1000); System.out.println("CHECK: " +
-			 * inChannel.position()); } catch (Exception e) {
-			 * e.printStackTrace(); } }; }.start();
-			 */
 
 			// send the file
 			while (bytesSent < fileLength) {
@@ -197,7 +188,7 @@ public class Uploader {
 
 				// To secure overflow
 				try {
-					System.out.println("Sent: " + 100 * bytesSent / fileLength + "%");
+					System.out.println("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
 					progressDialog.set((int) (100 * bytesSent / fileLength));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -208,9 +199,9 @@ public class Uploader {
 			inChannel.close();
 
 			Thread.sleep(1000);
-			System.out.println("End of file reached..");
+			System.out.println("[Uploader] End of file reached..");
 			aFile.close();
-			System.out.println("File closed.");
+			System.out.println("[Uploader] File closed.");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

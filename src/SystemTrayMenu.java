@@ -186,7 +186,7 @@ public class SystemTrayMenu {
 					new NotificationDialog().show("File Caricato!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-					new File(selFile.getSelectedFile().getName().split("\\.")[0] + ".zip").delete();
+					new File(selFile.getSelectedFile().getName() + ".zip").delete();
 					suono.run();
 				}
 			}
@@ -222,7 +222,7 @@ public class SystemTrayMenu {
 			PrintWriter out = new PrintWriter("clipboard.txt");
 			out.println(clipboard);
 			out.close();
-			uploader = new Uploader(f.getName(), ip, port);
+			uploader = new Uploader(f.getPath(), ip, port);
 			uploader.send(pass, "txt");
 			new NotificationDialog().show("Clipboard Caricato!", uploader.getLink());
 			history(uploader.getLink());
