@@ -14,6 +14,6 @@ Actually simply run one time to generate the `client.properties`: a config file.
 ## How to configure
 Open and edit the `client.properties` file, then launch the client again.
 It contains:
-*`server_ip`: the address where there is the server, you can use a domain (example.com) or an ip.
-*`password`: the password of the server that will be used during the authentication check.
-*`port`: the port where there is the running server.
+* `server_ip`: the address where there is the server, you can use a domain (example.com) or an ip.
+* `password`: the password of the server that will be used during the authentication check.
+* `port`: the port where there is the running server.
