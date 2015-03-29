@@ -19,4 +19,5 @@ It contains:
 * `password`: the password of the server that will be used during the authentication check.
 * `port`: the port where there is the running server.
 
+
 >Disclaimer: this is a project in early development stage. Since that it may change at any time.
