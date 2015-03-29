@@ -6,7 +6,7 @@ KSUploader is a instant sharing tool. Inspired by Puush and ScreenCloud, with th
 * the clipboard
 obtaining immediatly the direct sharing URL.
 
-Since that this project is open source and java written, feel free to fork, give suggestions or make pull requests.
+Since this project is open source and java written, feel free to fork, give suggestions or make pull requests.
 
 ### How to install
 Actually simply run it one time to generate the `client.properties`: a config file.
