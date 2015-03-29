@@ -2,7 +2,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -10,10 +9,10 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
 
-	public static void main(String[] args){
-                
-                LoadConfig config = new LoadConfig();
-		final SystemTrayMenu st = new SystemTrayMenu(config.getIp(),config.getPass(),config.getPort());
+	public static void main(String[] args) {
+
+		LoadConfig config = new LoadConfig();
+		final SystemTrayMenu st = new SystemTrayMenu(config.getIp(), config.getPass(), config.getPort());
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 
@@ -24,23 +23,27 @@ public class Main {
 				if (nke.getKeyCode() == NativeKeyEvent.VC_ALT_L) {
 					altPressed = true;
 				}
+			}
+
+			@Override
+			public void nativeKeyReleased(NativeKeyEvent nke) {
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_1) {
 					System.out.println("Alt_l + 1 premuti");
 
-                                        st.sendPartialScreen();
+					st.sendPartialScreen();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
 					System.out.println("Alt_l + 2 premuti");
-                                        
+
 					st.sendCompleteScreen();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_3) {
 					System.out.println("Alt_l + 3 premuti");
-                                        
-                                        st.sendFile();
+
+					st.sendFile();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_4) {
@@ -48,10 +51,7 @@ public class Main {
 
 					st.sendClipboard();
 				}
-			}
 
-			@Override
-			public void nativeKeyReleased(NativeKeyEvent nke) {
 				if (nke.getKeyCode() == NativeKeyEvent.VC_ALT_L) {
 					altPressed = false;
 				}
