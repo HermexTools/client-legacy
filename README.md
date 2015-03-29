@@ -9,7 +9,7 @@ obtaining immediatly the direct sharing URL.
 Since that this project is open source and java written, feel free to fork, give suggestions or make pull requests.
 
 ### How to install
-Actually simply run one time to generate the `client.properties`: a config file.
+Actually simply run it one time to generate the `client.properties`: a config file.
 To run the client you can use: `java -jar KSUploader_client.jar`
 
 ### How to configure
@@ -18,3 +18,5 @@ It contains:
 * `server_ip`: the address where there is the server, you can use a domain (example.com) or an ip.
 * `password`: the password of the server that will be used during the authentication check.
 * `port`: the port where there is the running server.
+
+>Disclaimer: this is a project in early development stage. Since that it may change at any time.
