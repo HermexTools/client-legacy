@@ -168,14 +168,14 @@ public class SystemTrayMenu {
 	class Task extends SwingWorker<Void, Void> {
 		@Override
 		public Void doInBackground() {
-			uploader = new Uploader(new Zipper(selFile.getSelectedFile()).toZip(), ip, port);
+			uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip(), ip, port);
 			boolean res = false;
 			res = uploader.send(pass, "file");
 			if (res) {
 				new NotificationDialog().show("File Caricato!", uploader.getLink());
 				history(uploader.getLink());
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-				new File(new Environment().getTempDir() + "/" + selFile.getSelectedFile().getName() + ".zip").delete();
+				new File(new Environment().getTempDir() + "/KStemp.zip").delete();
 				suono.run();
 			}
 			return null;
@@ -186,6 +186,8 @@ public class SystemTrayMenu {
 
 		try {
 			selFile = new JFileChooser();
+            selFile.setMultiSelectionEnabled(true);
+            selFile.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				new Task().execute();
 			}
