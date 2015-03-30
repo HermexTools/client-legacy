@@ -1,3 +1,4 @@
+package it.ksuploader.utils;
 import java.net.URL;
 
 import javax.sound.sampled.AudioFormat;

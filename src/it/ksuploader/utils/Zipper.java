@@ -1,3 +1,7 @@
+package it.ksuploader.utils;
+
+import it.ksuploader.dialogs.ProgressDialog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,7 +28,8 @@ public class Zipper {
 				// Stream di input
 				fis = new FileInputStream(file);
 				// Stream di output file
-				FileOutputStream fos = new FileOutputStream(file.getName() + ".zip");
+				FileOutputStream fos = new FileOutputStream(new Environment().getTempDir() + "/" + file.getName()
+						+ ".zip");
 				// Stream di output zip
 				ZipOutputStream zos = new ZipOutputStream(fos);
 				ZipEntry zipEntry = new ZipEntry(file.getName());
@@ -60,7 +65,7 @@ public class Zipper {
 		}
 
 		System.out.println("[Zipper] Zipping finished: " + file.getName() + ".zip");
-		return file.getName() + ".zip";
+		return new Environment().getTempDir() + "/" + file.getName() + ".zip";
 	}
 
 }

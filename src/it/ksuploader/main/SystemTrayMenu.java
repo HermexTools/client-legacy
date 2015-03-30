@@ -1,3 +1,10 @@
+package it.ksuploader.main;
+
+import it.ksuploader.dialogs.NotificationDialog;
+import it.ksuploader.utils.Environment;
+import it.ksuploader.utils.Sound;
+import it.ksuploader.utils.Zipper;
+
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.MenuItem;
@@ -168,7 +175,7 @@ public class SystemTrayMenu {
 				new NotificationDialog().show("File Caricato!", uploader.getLink());
 				history(uploader.getLink());
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-				new File(selFile.getSelectedFile().getName() + ".zip").delete();
+				new File(new Environment().getTempDir() + "/" + selFile.getSelectedFile().getName() + ".zip").delete();
 				suono.run();
 			}
 			return null;

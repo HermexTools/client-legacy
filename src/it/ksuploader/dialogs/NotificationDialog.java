@@ -1,3 +1,4 @@
+package it.ksuploader.dialogs;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;

@@ -1,3 +1,6 @@
+package it.ksuploader.main;
+import it.ksuploader.utils.LoadConfig;
+
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;

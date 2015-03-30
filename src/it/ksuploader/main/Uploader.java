@@ -1,3 +1,7 @@
+package it.ksuploader.main;
+import it.ksuploader.dialogs.NotificationDialog;
+import it.ksuploader.dialogs.ProgressDialog;
+
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;

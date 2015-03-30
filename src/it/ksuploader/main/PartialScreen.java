@@ -1,3 +1,4 @@
+package it.ksuploader.main;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 import java.awt.BorderLayout;

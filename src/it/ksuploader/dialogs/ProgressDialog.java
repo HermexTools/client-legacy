@@ -1,3 +1,6 @@
+package it.ksuploader.dialogs;
+import it.ksuploader.main.Uploader;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;

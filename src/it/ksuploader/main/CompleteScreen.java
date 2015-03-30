@@ -1,3 +1,4 @@
+package it.ksuploader.main;
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
