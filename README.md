@@ -3,8 +3,9 @@ KSUploader is a instant sharing tool. Inspired by Puush and ScreenCloud, with th
 * a partial screen
 * a complete desktop screen
 * a file (that will be zipped)
+* an entire file set (that will be zipped)
 * the clipboard
-obtaining immediatly the direct sharing URL.
+obtaining immediately the direct sharing URL.
 
 Since this project is open source and java written, feel free to fork, give suggestions or make pull requests.
 
@@ -15,7 +16,7 @@ To run the client you can use: `java -jar KSUploader_client.jar`
 ### How to configure
 Open and edit the `client.properties` file, then launch the client again.
 It contains:
-* `server_ip`: the address where there is the server, you can use a domain (example.com) or an ip.
+* `server_addr`: the address where there is the server, you can use a domain (example.com) or an ip.
 * `password`: the password of the server that will be used during the authentication check.
 * `port`: the port where there is the running server.
 
