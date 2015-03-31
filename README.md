@@ -18,7 +18,7 @@ To run the client you can use: `java -jar KSUploader_client.jar`
 ### How to configure
 Open and edit the `client.properties` file, then launch the client again.
 It contains:
-* `server_addr`: the address where there is the server, you can use a domain (example.com) or an ip.
+* `server_address`: the address where there is the server, you can use a domain (example.com) or an ip.
 * `password`: the password of the server that will be used during the authentication check.
 * `port`: the port where there is the running server.
 * `ftp_enabled`: set this "true" or "false" to enable o disable the FTP feature, if on "true" the socket config will be ignored.
