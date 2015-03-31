@@ -2,6 +2,7 @@ package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.utils.Environment;
+import it.ksuploader.utils.LoadConfig;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
 
@@ -31,19 +32,22 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class SystemTrayMenu {
-	private Uploader uploader;
-	private PartialScreen partialScreen;
-	private CompleteScreen completeScreen;
+	private LoadConfig config = new LoadConfig();
 	private Clipboard clpbrd;
-	private TrayIcon trayIcon;
-	private SystemTray systemTray;
-	private PopupMenu popupMenu;
-	private MenuItem[] uploads;
-	private final Sound suono;
-	private JFileChooser selFile;
+	private CompleteScreen completeScreen;
+	private FtpUploader ftpUploader;
 	private String ip;
+	private PartialScreen partialScreen;
 	private String pass;
+	private PopupMenu popupMenu;
 	private int port;
+	private JFileChooser selFile;
+	private final Sound suono;
+	private SystemTray systemTray;
+	private TrayIcon trayIcon;
+	private Uploader uploader;
+
+	private MenuItem[] uploads;
 
 	public SystemTrayMenu(String ip, String pswr, int port) {
 		try {
@@ -69,7 +73,7 @@ public class SystemTrayMenu {
 				clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 				systemTray = SystemTray.getSystemTray();
 
-				trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icon.png")), "ownPuush");
+				trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icon.png")), "KSUploader");
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
@@ -132,6 +136,7 @@ public class SystemTrayMenu {
 	public void sendPartialScreen() {
 		partialScreen = new PartialScreen();
 
+		// Nel caso in cui lo screen fosse annullato o 5x5
 		if (partialScreen.getSelection() == null || partialScreen.getSelection().width <= 5
 				|| partialScreen.getSelection().height <= 5) {
 
@@ -139,9 +144,47 @@ public class SystemTrayMenu {
 			trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
 		} else {
 
-			// Altrimenti invio
-			uploader = new Uploader(partialScreen.getSelection(), ip, port);
-			boolean res;
+			if (config.getFtpEnabled()) {
+				ftpUploader = new FtpUploader(partialScreen.getSelection());
+				boolean res = false;
+				res = ftpUploader.send("img");
+				if (res) {
+					new NotificationDialog().show("Screenshot Caricato!", ftpUploader.getLink());
+					history(ftpUploader.getLink());
+					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
+					suono.run();
+				}
+			} else {
+				// Altrimenti invio
+				uploader = new Uploader(partialScreen.getSelection(), ip, port);
+				boolean res;
+				res = uploader.send(pass, "img");
+				if (res) {
+					new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
+					history(uploader.getLink());
+					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+					suono.run();
+				}
+			}
+
+		}
+	}
+
+	public void sendCompleteScreen() {
+		completeScreen = new CompleteScreen();
+		boolean res = false;
+		if (config.getFtpEnabled()) {
+			ftpUploader = new FtpUploader(completeScreen.getImg());
+			res = ftpUploader.send("img");
+			if (res) {
+				new NotificationDialog().show("Screenshot Caricato!", ftpUploader.getLink());
+				history(ftpUploader.getLink());
+				clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
+				suono.run();
+			}
+		} else {
+
+			uploader = new Uploader(completeScreen.getImg(), ip, port);
 			res = uploader.send(pass, "img");
 			if (res) {
 				new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
@@ -149,35 +192,42 @@ public class SystemTrayMenu {
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 				suono.run();
 			}
-		}
-	}
 
-	public void sendCompleteScreen() {
-		completeScreen = new CompleteScreen();
-		uploader = new Uploader(completeScreen.getImg(), ip, port);
-		boolean res = false;
-		res = uploader.send(pass, "img");
-		if (res) {
-			new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
-			history(uploader.getLink());
-			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-			suono.run();
 		}
+
 	}
 
 	class Task extends SwingWorker<Void, Void> {
 		@Override
 		public Void doInBackground() {
-			uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip(), ip, port);
+
 			boolean res = false;
-			res = uploader.send(pass, "file");
-			if (res) {
-				new NotificationDialog().show("File Caricato!", uploader.getLink());
-				history(uploader.getLink());
-				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-				new File(new Environment().getTempDir() + "/KStemp.zip").delete();
-				suono.run();
+			if (config.getFtpEnabled()) {
+
+				ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
+				res = ftpUploader.send("file");
+				if (res) {
+					new NotificationDialog().show("File Caricato!", ftpUploader.getLink());
+					history(ftpUploader.getLink());
+					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
+					new File(new Environment().getTempDir() + "/KStemp.zip").delete();
+					suono.run();
+				}
+
+			} else {
+
+				uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip(), ip, port);
+				res = uploader.send(pass, "file");
+				if (res) {
+					new NotificationDialog().show("File Caricato!", uploader.getLink());
+					history(uploader.getLink());
+					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+					new File(new Environment().getTempDir() + "/KStemp.zip").delete();
+					suono.run();
+				}
+
 			}
+
 			return null;
 		}
 	}
@@ -186,8 +236,8 @@ public class SystemTrayMenu {
 
 		try {
 			selFile = new JFileChooser();
-            selFile.setMultiSelectionEnabled(true);
-            selFile.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			selFile.setMultiSelectionEnabled(true);
+			selFile.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				new Task().execute();
 			}
@@ -216,20 +266,43 @@ public class SystemTrayMenu {
 	}
 
 	public void sendClipboard() {
+		boolean res = false;
 		try {
+
 			String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getData(DataFlavor.stringFlavor);
-			File f = new File("clipboard.txt");
-			PrintWriter out = new PrintWriter("clipboard.txt");
+			String fileName = System.currentTimeMillis() / 1000 + "" + ((int) (Math.random() * 999));
+			File f = new File(new Environment().getTempDir() + "/" + fileName + ".txt");
+			System.out.println(f.getPath().toString());
+			PrintWriter out = new PrintWriter(new Environment().getTempDir() + "/" + fileName + ".txt");
 			out.println(clipboard);
 			out.close();
-			uploader = new Uploader(f.getPath(), ip, port);
-			uploader.send(pass, "txt");
-			new NotificationDialog().show("Clipboard Caricato!", uploader.getLink());
-			history(uploader.getLink());
-			clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-			f.delete();
-			suono.run();
+
+			if (config.getFtpEnabled()) {
+
+				ftpUploader = new FtpUploader(f.getPath());
+				res = ftpUploader.send("txt");
+				if (res) {
+					new NotificationDialog().show("Clipboard Caricata!", ftpUploader.getLink());
+					history(ftpUploader.getLink());
+					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
+					f.delete();
+					suono.run();
+				}
+
+			} else {
+
+				uploader = new Uploader(f.getPath(), ip, port);
+				res = uploader.send(pass, "txt");
+				if (res) {
+					new NotificationDialog().show("Clipboard Caricata!", uploader.getLink());
+					history(uploader.getLink());
+					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+					f.delete();
+					suono.run();
+				}
+			}
+
 		} catch (UnsupportedFlavorException | IOException ex) {
 			ex.printStackTrace();
 			new NotificationDialog().show("Errore!", "Impossibile completare l'operazione");
