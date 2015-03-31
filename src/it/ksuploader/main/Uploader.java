@@ -1,4 +1,5 @@
 package it.ksuploader.main;
+
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.ProgressDialog;
 
@@ -135,8 +136,7 @@ public class Uploader {
 					System.out.println("[Uploader] Waiting link...");
 					this.link = dis.readUTF();
 					System.out.println("[Uploader] Returned link: " + link);
-					if (type.equals("file"))
-						progressDialog.close();
+					progressDialog.close();
 					bytes = null;
 				} else {
 					System.out.println("[Uploader] The server had a bad interpretation of the fileType");
@@ -231,9 +231,5 @@ public class Uploader {
 		}
 		return socketChannel;
 	}
-    
-    public void destroyProgessNotification(){
-        progressDialog.close();
-    }
 
 }

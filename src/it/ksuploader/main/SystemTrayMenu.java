@@ -2,7 +2,6 @@ package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.utils.Environment;
-import it.ksuploader.utils.LoadConfig;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
 
@@ -61,7 +60,7 @@ public class SystemTrayMenu {
 		this.ip = ip;
 		this.pass = pswr;
 		this.port = port;
-        this.ftpEnabled = ftp;
+		this.ftpEnabled = ftp;
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
 
@@ -296,7 +295,6 @@ public class SystemTrayMenu {
 				uploader = new Uploader(f.getPath(), ip, port);
 				res = uploader.send(pass, "txt");
 				if (res) {
-                    uploader.destroyProgessNotification();
 					new NotificationDialog().show("Clipboard Caricata!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
