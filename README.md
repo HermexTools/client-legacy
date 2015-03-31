@@ -6,6 +6,7 @@ KSUploader is a instant sharing tool. Inspired by Puush and ScreenCloud, with th
 * an entire file set (that will be zipped)
 * the clipboard
 obtaining immediately the direct sharing URL.
+
 You can host all files in your server (via dedicated socket [server application](https://github.com/KSUploader/KSUploader-server)) or web hosting space (via FTP).
 
 Since this project is open source and java written, feel free to fork, give suggestions or make pull requests.
