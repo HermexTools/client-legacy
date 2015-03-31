@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		LoadConfig config = new LoadConfig();
-		final SystemTrayMenu st = new SystemTrayMenu(config.getIp(), config.getPass(), config.getPort());
+		final SystemTrayMenu st = new SystemTrayMenu(config.getIp(), config.getPass(), config.getPort(),config.getFtpEnabled());
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 

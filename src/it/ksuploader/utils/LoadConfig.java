@@ -40,7 +40,7 @@ public class LoadConfig {
 			InputStream inputStream = new FileInputStream("client.properties");
 			prop.load(inputStream);
 
-			this.ip = prop.getProperty("server_addr");
+			this.ip = prop.getProperty("server_address");
 			this.pass = prop.getProperty("password");
 			this.ftpEnabled = Boolean.valueOf(prop.getProperty("ftp_enabled"));
 			this.port = Integer.parseInt(prop.getProperty("port"));

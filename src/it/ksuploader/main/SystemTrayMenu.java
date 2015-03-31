@@ -32,7 +32,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class SystemTrayMenu {
-	private LoadConfig config = new LoadConfig();
+	private boolean ftpEnabled;
 	private Clipboard clpbrd;
 	private CompleteScreen completeScreen;
 	private FtpUploader ftpUploader;
@@ -49,7 +49,7 @@ public class SystemTrayMenu {
 
 	private MenuItem[] uploads;
 
-	public SystemTrayMenu(String ip, String pswr, int port) {
+	public SystemTrayMenu(String ip, String pswr, int port, boolean ftp) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -61,6 +61,7 @@ public class SystemTrayMenu {
 		this.ip = ip;
 		this.pass = pswr;
 		this.port = port;
+        this.ftpEnabled = ftp;
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
 
@@ -144,7 +145,7 @@ public class SystemTrayMenu {
 			trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
 		} else {
 
-			if (config.getFtpEnabled()) {
+			if (this.ftpEnabled) {
 				ftpUploader = new FtpUploader(partialScreen.getSelection());
 				boolean res = false;
 				res = ftpUploader.send("img");
@@ -173,7 +174,7 @@ public class SystemTrayMenu {
 	public void sendCompleteScreen() {
 		completeScreen = new CompleteScreen();
 		boolean res = false;
-		if (config.getFtpEnabled()) {
+		if (this.ftpEnabled) {
 			ftpUploader = new FtpUploader(completeScreen.getImg());
 			res = ftpUploader.send("img");
 			if (res) {
@@ -202,7 +203,7 @@ public class SystemTrayMenu {
 		public Void doInBackground() {
 
 			boolean res = false;
-			if (config.getFtpEnabled()) {
+			if (ftpEnabled) {
 
 				ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
 				res = ftpUploader.send("file");
@@ -278,7 +279,7 @@ public class SystemTrayMenu {
 			out.println(clipboard);
 			out.close();
 
-			if (config.getFtpEnabled()) {
+			if (this.ftpEnabled) {
 
 				ftpUploader = new FtpUploader(f.getPath());
 				res = ftpUploader.send("txt");
@@ -295,6 +296,7 @@ public class SystemTrayMenu {
 				uploader = new Uploader(f.getPath(), ip, port);
 				res = uploader.send(pass, "txt");
 				if (res) {
+                    uploader.destroyProgessNotification();
 					new NotificationDialog().show("Clipboard Caricata!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);

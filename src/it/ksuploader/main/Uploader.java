@@ -231,5 +231,9 @@ public class Uploader {
 		}
 		return socketChannel;
 	}
+    
+    public void destroyProgessNotification(){
+        progressDialog.close();
+    }
 
 }
