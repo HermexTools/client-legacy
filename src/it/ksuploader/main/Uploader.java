@@ -3,6 +3,10 @@ package it.ksuploader.main;
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.ProgressDialog;
 
+import it.ksuploader.utils.Environment;
+
+
+
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -23,7 +27,9 @@ import java.nio.channels.SocketChannel;
 import javax.imageio.ImageIO;
 
 public class Uploader {
+	private final static int configPort = Main.config.getPort();
 	private final static String configPass = Main.config.getPass();
+	private final static String configAddr = Main.config.getIp();
 	private BufferedImage img;
 	private byte[] bytes;
 	private SocketChannel socketChannel;
@@ -34,9 +40,9 @@ public class Uploader {
 	private ProgressDialog progressDialog;
 
 	// Per gli screen parziali
-	public Uploader(Rectangle r, String ip, int port) {
+	public Uploader(Rectangle r) {
 		try {
-			SocketChannel socketChannel = createChannel(ip, port);
+			SocketChannel socketChannel = createChannel(configAddr, configPort);
 			this.socketChannel = socketChannel;
 
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -57,10 +63,10 @@ public class Uploader {
 	}
 
 	// Per gli screen completi
-	public Uploader(BufferedImage bi, String ip, int port) {
+	public Uploader(BufferedImage bi) {
 
 		try {
-			SocketChannel socketChannel = createChannel(ip, port);
+			SocketChannel socketChannel = createChannel(configAddr, configPort);
 			this.socketChannel = socketChannel;
 			this.img = bi;
 
@@ -75,9 +81,9 @@ public class Uploader {
 	}
 
 	// Per i file
-	public Uploader(String filePath, String ip, int port) {
+	public Uploader(String filePath) {
 
-		SocketChannel socketChannel = createChannel(ip, port);
+		SocketChannel socketChannel = createChannel(configAddr, configPort);
 		this.socketChannel = socketChannel;
 		this.filePath = filePath;
 	}
@@ -214,6 +220,7 @@ public class Uploader {
 			dos.close();
 			dis.close();
 			socketChannel.close();
+			new File(new Environment().getTempDir() + "/KStemp.zip").delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
