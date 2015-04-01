@@ -187,7 +187,7 @@ public class SettingsDialog extends JDialog {
         this.ftpAddr.setText(Main.config.getFtpAddr());
         this.ftpDir.setText(Main.config.getFtpDir());
         this.ftpEnabled.setSelected(Main.config.getFtpEnabled());
-        this.ftpPassw.setText(Main.config.getPass());
+        this.ftpPassw.setText(Main.config.getFtpPass());
         this.ftpPort.setText(Main.config.getFtpPort()+"");
         this.ftpUser.setText(Main.config.getFtpUser());
         this.ftpWeburl.setText(Main.config.getFtpWebUrl());
