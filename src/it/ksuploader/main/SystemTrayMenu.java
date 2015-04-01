@@ -49,7 +49,7 @@ public class SystemTrayMenu {
 
 	private Environment so;
 	private NotificationDialog notification;
-    private SettingsDialog configPanel;
+	private SettingsDialog configPanel;
 	private MenuItem[] uploads;
 
 	public SystemTrayMenu() {
@@ -61,7 +61,7 @@ public class SystemTrayMenu {
 			ex.printStackTrace();
 		}
 		this.notification = new NotificationDialog();
-        this.configPanel = new SettingsDialog();
+		this.configPanel = new SettingsDialog();
 		this.so = new Environment();
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
@@ -83,7 +83,7 @@ public class SystemTrayMenu {
 				MenuItem catturaDesktop = new MenuItem("Capture Desktop (ALT+2)");
 				MenuItem caricaFile = new MenuItem("Upload File (ALT+3)");
 				MenuItem clipboard = new MenuItem("Upload Clipboard (ALT+4)");
-                MenuItem settings = new MenuItem("Settings");
+				MenuItem settings = new MenuItem("Settings");
 				MenuItem esci = new MenuItem("Esci");
 
 				popupMenu.add("Upload Recenti");
@@ -95,8 +95,8 @@ public class SystemTrayMenu {
 				popupMenu.add(caricaFile);
 				popupMenu.add(clipboard);
 				popupMenu.addSeparator();
-                popupMenu.add(settings);
-                popupMenu.addSeparator();
+				popupMenu.add(settings);
+				popupMenu.addSeparator();
 				popupMenu.add(esci);
 
 				// Gestione voci menu
@@ -122,8 +122,8 @@ public class SystemTrayMenu {
 						sendClipboard();
 					}
 				});
-                
-                settings.addActionListener(new ActionListener() {
+
+				settings.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						configPanel.setVisible(true);
 					}
@@ -179,6 +179,7 @@ public class SystemTrayMenu {
 			}
 
 		}
+
 	}
 
 	public void sendCompleteScreen() {
