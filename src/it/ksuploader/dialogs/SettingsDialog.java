@@ -2,6 +2,7 @@ package it.ksuploader.dialogs;
 
 import it.ksuploader.main.Main;
 import it.ksuploader.utils.LoadConfig;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,37 +53,39 @@ public class SettingsDialog extends JDialog {
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
-                
-                okButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        Main.config.storeNewConfig(ftpWeburl.getText(),ftpDir.getText(),ftpPort.getText(),ftpPassw.getText(),ftpUser.getText(),ftpAddr.getText(),ftpEnabled.isSelected()+"",srvPassw.getText(),srvPort.getText(),srvAddr.getText());
-                        Main.config=new LoadConfig();
-                        setVisible(false);
-                    }
-                });
+
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
+								ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
+								srvPassw.getText(), srvPort.getText(), srvAddr.getText());
+						Main.config = new LoadConfig();
+						setVisible(false);
+					}
+				});
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
-                
-                cancelButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        setVisible(false);
-                    }
-                });
+
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						setVisible(false);
+					}
+				});
 			}
 		}
 
 		ftpEnabled = new JCheckBox("FTP Enabled?");
 		ftpEnabled.setBounds(6, 7, 191, 23);
-        
-        ftpEnabled.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                update();
-            }
-        });
-        
+
+		ftpEnabled.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				update();
+			}
+		});
+
 		getContentPane().add(ftpEnabled);
 		{
 			JPanel panel = new JPanel();
@@ -180,49 +183,49 @@ public class SettingsDialog extends JDialog {
 
 		saveEnabled = new JCheckBox("Save a local copy of images");
 		saveEnabled.setBounds(232, 7, 215, 23);
-		getContentPane().add(saveEnabled);
+		// getContentPane().add(saveEnabled);
 	}
-    
-    public void loadCurrentConfig(){
-        this.ftpAddr.setText(Main.config.getFtpAddr());
-        this.ftpDir.setText(Main.config.getFtpDir());
-        this.ftpEnabled.setSelected(Main.config.getFtpEnabled());
-        this.ftpPassw.setText(Main.config.getFtpPass());
-        this.ftpPort.setText(Main.config.getFtpPort()+"");
-        this.ftpUser.setText(Main.config.getFtpUser());
-        this.ftpWeburl.setText(Main.config.getFtpWebUrl());
-        this.srvAddr.setText(Main.config.getIp());
-        this.srvPassw.setText(Main.config.getPass());
-        this.srvPort.setText(Main.config.getPort()+"");
-        
-        update();
-    }
-    
-    private void update(){
-        if(!this.ftpEnabled.isSelected()){
-            this.ftpAddr.setEnabled(false);
-            this.ftpDir.setEnabled(false);
-            this.ftpPassw.setEnabled(false);
-            this.ftpPort.setEnabled(false);
-            this.ftpUser.setEnabled(false);
-            this.ftpWeburl.setEnabled(false);
-            
-            this.srvAddr.setEnabled(true);
-            this.srvPassw.setEnabled(true);
-            this.srvPort.setEnabled(true);
-            
-        } else {
-            this.ftpAddr.setEnabled(true);
-            this.ftpDir.setEnabled(true);
-            this.ftpPassw.setEnabled(true);
-            this.ftpPort.setEnabled(true);
-            this.ftpUser.setEnabled(true);
-            this.ftpWeburl.setEnabled(true);
-            
-            this.srvAddr.setEnabled(false);
-            this.srvPassw.setEnabled(false);
-            this.srvPort.setEnabled(false);
-        }        
-    }
+
+	public void loadCurrentConfig() {
+		this.ftpAddr.setText(Main.config.getFtpAddr());
+		this.ftpDir.setText(Main.config.getFtpDir());
+		this.ftpEnabled.setSelected(Main.config.getFtpEnabled());
+		this.ftpPassw.setText(Main.config.getFtpPass());
+		this.ftpPort.setText(Main.config.getFtpPort() + "");
+		this.ftpUser.setText(Main.config.getFtpUser());
+		this.ftpWeburl.setText(Main.config.getFtpWebUrl());
+		this.srvAddr.setText(Main.config.getIp());
+		this.srvPassw.setText(Main.config.getPass());
+		this.srvPort.setText(Main.config.getPort() + "");
+
+		update();
+	}
+
+	private void update() {
+		if (!this.ftpEnabled.isSelected()) {
+			this.ftpAddr.setEnabled(false);
+			this.ftpDir.setEnabled(false);
+			this.ftpPassw.setEnabled(false);
+			this.ftpPort.setEnabled(false);
+			this.ftpUser.setEnabled(false);
+			this.ftpWeburl.setEnabled(false);
+
+			this.srvAddr.setEnabled(true);
+			this.srvPassw.setEnabled(true);
+			this.srvPort.setEnabled(true);
+
+		} else {
+			this.ftpAddr.setEnabled(true);
+			this.ftpDir.setEnabled(true);
+			this.ftpPassw.setEnabled(true);
+			this.ftpPort.setEnabled(true);
+			this.ftpUser.setEnabled(true);
+			this.ftpWeburl.setEnabled(true);
+
+			this.srvAddr.setEnabled(false);
+			this.srvPassw.setEnabled(false);
+			this.srvPort.setEnabled(false);
+		}
+	}
 
 }

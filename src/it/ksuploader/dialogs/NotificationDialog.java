@@ -1,4 +1,5 @@
 package it.ksuploader.dialogs;
+
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -106,9 +107,11 @@ public class NotificationDialog {
 	}
 
 	public void show(String header, String message) {
-        dialogFrame.setVisible(true);
+		dialogFrame.setFocusableWindowState(false);
+		dialogFrame.setVisible(true);
 		headingLabel.setText(header);
 		messageLabel.setText(message);
+		dialogFrame.setAlwaysOnTop(true);
 
 		if (message.length() > 30) {
 			int width = (message.length() * 6);
@@ -120,7 +123,7 @@ public class NotificationDialog {
 		}
 
 		autoPosition();
-        
+
 		new Thread() {
 			@Override
 			public void run() {
@@ -131,7 +134,7 @@ public class NotificationDialog {
 						Thread.sleep(15);
 					}
 					dialogFrame.setVisible(false);
-                    dialogFrame.setOpacity(1.00f);
+					dialogFrame.setOpacity(1.00f);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
