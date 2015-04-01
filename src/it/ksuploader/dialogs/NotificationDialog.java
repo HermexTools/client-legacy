@@ -120,7 +120,7 @@ public class NotificationDialog {
 		}
 
 		autoPosition();
-
+        
 		new Thread() {
 			@Override
 			public void run() {
@@ -131,6 +131,7 @@ public class NotificationDialog {
 						Thread.sleep(15);
 					}
 					dialogFrame.setVisible(false);
+                    dialogFrame.setOpacity(1.00f);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

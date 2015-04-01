@@ -1,5 +1,4 @@
 package it.ksuploader.main;
-
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 import java.awt.BorderLayout;
@@ -106,7 +105,6 @@ public class PartialScreen extends JPanel implements NativeKeyListener {
 	}
 
 	public Rectangle getSelection() {
-		GlobalScreen.removeNativeKeyListener(this);
 		if (fromClickPoint != null)
 			if (fromClickPoint.x + fromClickPoint.y < toClickPoint.x + toClickPoint.y)
 				return new Rectangle(fromClickPoint.x + 1, fromClickPoint.y + 1, toClickPoint.x - fromClickPoint.x - 1,
@@ -145,7 +143,6 @@ public class PartialScreen extends JPanel implements NativeKeyListener {
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 			System.out.println("Escape pressed");
-			GlobalScreen.removeNativeKeyListener(this);
 			frame.dispose();
 		}
 	}
