@@ -12,7 +12,7 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
-	public final static LoadConfig config = new LoadConfig();
+	public static LoadConfig config = new LoadConfig();
 
 	public static void main(String[] args) {
 

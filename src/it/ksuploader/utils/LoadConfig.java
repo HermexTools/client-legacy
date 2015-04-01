@@ -19,10 +19,12 @@ public class LoadConfig {
 	private int ftpPort;
 	private String ftpDir;
 	private String ftpWebUrl;
+    
+    private Properties prop;
 
 	public LoadConfig() {
 		try {
-			Properties prop = new Properties();
+			this.prop = new Properties();
 
 			if (!new File("client.properties").exists()) {
 				prop.setProperty("ftp_weburl", "http://mydomain.com");
@@ -50,11 +52,31 @@ public class LoadConfig {
 			this.ftpPort = Integer.parseInt(prop.getProperty("ftp_port"));
 			this.ftpDir = prop.getProperty("ftp_directory");
 			this.ftpWebUrl = prop.getProperty("ftp_weburl");
+            
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 
 	}
+    
+    public void storeNewConfig(String ftpWeburl, String ftpDir, String ftport, String ftpPass, String ftpUser, String ftpAddr, String ftpEnabled, String srvPass, String srvPort, String srvAddr){
+        try {
+            prop.setProperty("ftp_weburl", ftpWeburl);
+            prop.setProperty("ftp_directory", ftpDir);
+            prop.setProperty("ftp_port", ftport);
+            prop.setProperty("ftp_password", ftpPass);
+            prop.setProperty("ftp_user", ftpUser);
+            prop.setProperty("ftp_address", ftpAddr);
+            prop.setProperty("ftp_enabled", ftpEnabled);
+            prop.setProperty("password", srvPass);
+            prop.setProperty("port", srvPort);
+            prop.setProperty("server_address", srvAddr);
+            prop.store(new FileOutputStream("client.properties"), null);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+    }
 
 	public boolean getFtpEnabled() {
 		return ftpEnabled;

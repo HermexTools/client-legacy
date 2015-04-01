@@ -125,6 +125,7 @@ public class SystemTrayMenu {
 
 				settings.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+                        configPanel.loadCurrentConfig();
 						configPanel.setVisible(true);
 					}
 				});
