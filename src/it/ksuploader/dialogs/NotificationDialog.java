@@ -106,6 +106,7 @@ public class NotificationDialog {
 	}
 
 	public void show(String header, String message) {
+        dialogFrame.setVisible(true);
 		headingLabel.setText(header);
 		messageLabel.setText(message);
 
@@ -119,7 +120,6 @@ public class NotificationDialog {
 		}
 
 		autoPosition();
-		dialogFrame.setVisible(true);
 
 		new Thread() {
 			@Override
@@ -130,7 +130,7 @@ public class NotificationDialog {
 						dialogFrame.setOpacity(i);
 						Thread.sleep(15);
 					}
-					dialogFrame.dispose();
+					dialogFrame.setVisible(false);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
