@@ -15,6 +15,7 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -40,7 +41,7 @@ public class FtpUploader {
 
 			BufferedImage img = new Robot().createScreenCapture(screenRect).getSubimage(r.x, r.y, r.width, r.height);
 
-			String fileName = System.currentTimeMillis() / 1000 + "" + ((int) (Math.random() * 999));
+			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
 
@@ -58,7 +59,7 @@ public class FtpUploader {
 
 			BufferedImage img = bi;
 
-			String fileName = System.currentTimeMillis() / 1000 + "" + ((int) (Math.random() * 999));
+			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
 

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -220,8 +221,9 @@ public class SystemTrayMenu {
 			} else {
 
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-					uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip());   
-				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")|| selFile.getSelectedFiles().length == 1) {
+					uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip());
+				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
+						|| selFile.getSelectedFiles().length == 1) {
 					uploader = new Uploader(selFile.getSelectedFiles()[0].getPath());
 				}
 				res = uploader.send("file");
@@ -278,9 +280,9 @@ public class SystemTrayMenu {
 
 			String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getData(DataFlavor.stringFlavor);
-			String fileName = System.currentTimeMillis() / 1000 + "" + ((int) (Math.random() * 999));
+			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File f = new File(so.getTempDir() + "/" + fileName + ".txt");
-			System.out.println(f.getPath().toString());
+			System.out.println(f.getPath());
 			PrintWriter out = new PrintWriter(so.getTempDir() + "/" + fileName + ".txt");
 			out.println(clipboard);
 			out.close();
