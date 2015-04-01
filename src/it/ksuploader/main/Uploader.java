@@ -2,6 +2,7 @@ package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.ProgressDialog;
+import it.ksuploader.utils.Environment;
 
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
@@ -213,6 +214,7 @@ public class Uploader {
 			dos.close();
 			dis.close();
 			socketChannel.close();
+            new File(new Environment().getTempDir() + "/KStemp.zip").delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
