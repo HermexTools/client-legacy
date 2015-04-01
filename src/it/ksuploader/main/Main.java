@@ -1,4 +1,5 @@
 package it.ksuploader.main;
+
 import it.ksuploader.utils.LoadConfig;
 
 import java.util.logging.Handler;
@@ -11,11 +12,11 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
+	public final static LoadConfig config = new LoadConfig();
 
 	public static void main(String[] args) {
 
-		LoadConfig config = new LoadConfig();
-		final SystemTrayMenu st = new SystemTrayMenu(config.getIp(), config.getPass(), config.getPort(),config.getFtpEnabled());
+		final SystemTrayMenu st = new SystemTrayMenu();
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 

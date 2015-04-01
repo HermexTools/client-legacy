@@ -1,7 +1,6 @@
 package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
-import it.ksuploader.utils.LoadConfig;
 import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
 import it.sauronsoftware.ftp4j.FTPDataTransferException;
@@ -20,10 +19,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class FtpUploader {
-	private FTPClient ftpClient;
+	private static FTPClient ftpClient;
 	private String link;
 	private String filePath;
-	private LoadConfig config = new LoadConfig();
+	private final static String configFtpAddr = Main.config.getFtpAddr();
+	private final static String configFtpUser = Main.config.getFtpUser();
+	private final static String configFtpPass = Main.config.getFtpPass();
+	private final static int configFtpPort = Main.config.getFtpPort();
+	private final static String configFtpDir = Main.config.getFtpDir();
+	private final static String configFtpWebUrl = Main.config.getFtpWebUrl();
 
 	// Per gli screen parziali
 	public FtpUploader(Rectangle r) {
@@ -75,13 +79,13 @@ public class FtpUploader {
 		ftpClient = new FTPClient();
 
 		try {
-			ftpClient.connect(config.getFtpAddr(), config.getFtpPort());
+			ftpClient.connect(configFtpAddr, configFtpPort);
 			System.out.println("[FtpUploader] Connected to the ftp server");
-			ftpClient.login(config.getFtpUser(), config.getFtpPass());
-			ftpClient.changeDirectory(config.getFtpDir());
+			ftpClient.login(configFtpUser, configFtpPass);
+			ftpClient.changeDirectory(configFtpDir);
 			ftpClient.upload(new File(filePath));
 			System.out.println("[FtpUploader] File uploaded");
-			this.link = config.getFtpWebUrl() + "/" + new File(filePath).getName();
+			this.link = configFtpWebUrl + "/" + new File(filePath).getName();
 			System.out.println("[FtpUploader] Returning url: " + this.link);
 			ftpClient.disconnect(true);
 			System.out.println("[FtpUploader] Disconnected");

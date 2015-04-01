@@ -31,24 +31,24 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class SystemTrayMenu {
-	private boolean ftpEnabled;
+
+	private final static String configAddr = Main.config.getIp();
+	private final static int configPort = Main.config.getPort();
+	private final static boolean configFtpEnabled = Main.config.getFtpEnabled();
+
 	private Clipboard clpbrd;
 	private CompleteScreen completeScreen;
 	private FtpUploader ftpUploader;
-	private String ip;
 	private PartialScreen partialScreen;
-	private String pass;
 	private PopupMenu popupMenu;
-	private int port;
-	private JFileChooser selFile;
+	private static JFileChooser selFile;
 	private final Sound suono;
-	private SystemTray systemTray;
+	private static SystemTray systemTray;
 	private TrayIcon trayIcon;
 	private Uploader uploader;
-
 	private MenuItem[] uploads;
 
-	public SystemTrayMenu(String ip, String pswr, int port, boolean ftp) {
+	public SystemTrayMenu() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -57,10 +57,6 @@ public class SystemTrayMenu {
 			ex.printStackTrace();
 		}
 
-		this.ip = ip;
-		this.pass = pswr;
-		this.port = port;
-		this.ftpEnabled = ftp;
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
 
@@ -144,7 +140,7 @@ public class SystemTrayMenu {
 			trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
 		} else {
 
-			if (this.ftpEnabled) {
+			if (configFtpEnabled) {
 				ftpUploader = new FtpUploader(partialScreen.getSelection());
 				boolean res = false;
 				res = ftpUploader.send("img");
@@ -156,9 +152,9 @@ public class SystemTrayMenu {
 				}
 			} else {
 				// Altrimenti invio
-				uploader = new Uploader(partialScreen.getSelection(), ip, port);
+				uploader = new Uploader(partialScreen.getSelection(), configAddr, configPort);
 				boolean res;
-				res = uploader.send(pass, "img");
+				res = uploader.send("img");
 				if (res) {
 					new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
 					history(uploader.getLink());
@@ -173,7 +169,7 @@ public class SystemTrayMenu {
 	public void sendCompleteScreen() {
 		completeScreen = new CompleteScreen();
 		boolean res = false;
-		if (this.ftpEnabled) {
+		if (configFtpEnabled) {
 			ftpUploader = new FtpUploader(completeScreen.getImg());
 			res = ftpUploader.send("img");
 			if (res) {
@@ -184,8 +180,8 @@ public class SystemTrayMenu {
 			}
 		} else {
 
-			uploader = new Uploader(completeScreen.getImg(), ip, port);
-			res = uploader.send(pass, "img");
+			uploader = new Uploader(completeScreen.getImg(), configAddr, configPort);
+			res = uploader.send("img");
 			if (res) {
 				new NotificationDialog().show("Screenshot Caricato!", uploader.getLink());
 				history(uploader.getLink());
@@ -202,7 +198,7 @@ public class SystemTrayMenu {
 		public Void doInBackground() {
 
 			boolean res = false;
-			if (ftpEnabled) {
+			if (configFtpEnabled) {
 
 				ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
 				res = ftpUploader.send("file");
@@ -216,8 +212,8 @@ public class SystemTrayMenu {
 
 			} else {
 
-				uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip(), ip, port);
-				res = uploader.send(pass, "file");
+				uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip(), configAddr, configPort);
+				res = uploader.send("file");
 				if (res) {
 					new NotificationDialog().show("File Caricato!", uploader.getLink());
 					history(uploader.getLink());
@@ -278,7 +274,7 @@ public class SystemTrayMenu {
 			out.println(clipboard);
 			out.close();
 
-			if (this.ftpEnabled) {
+			if (configFtpEnabled) {
 
 				ftpUploader = new FtpUploader(f.getPath());
 				res = ftpUploader.send("txt");
@@ -292,8 +288,8 @@ public class SystemTrayMenu {
 
 			} else {
 
-				uploader = new Uploader(f.getPath(), ip, port);
-				res = uploader.send(pass, "txt");
+				uploader = new Uploader(f.getPath(), configAddr, configPort);
+				res = uploader.send("txt");
 				if (res) {
 					new NotificationDialog().show("Clipboard Caricata!", uploader.getLink());
 					history(uploader.getLink());

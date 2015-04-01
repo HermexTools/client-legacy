@@ -23,6 +23,7 @@ import java.nio.channels.SocketChannel;
 import javax.imageio.ImageIO;
 
 public class Uploader {
+	private final static String configPass = Main.config.getPass();
 	private BufferedImage img;
 	private byte[] bytes;
 	private SocketChannel socketChannel;
@@ -81,7 +82,7 @@ public class Uploader {
 		this.filePath = filePath;
 	}
 
-	public boolean send(String pass, String type) {
+	public boolean send(String type) {
 		try {
 			dos = new DataOutputStream(socketChannel.socket().getOutputStream());
 			dis = new DataInputStream(socketChannel.socket().getInputStream());
@@ -90,8 +91,8 @@ public class Uploader {
 
 			// send auth
 			System.out.println("[Uploader] Sending auth");
-			dos.writeUTF(pass);
-			System.out.println("[Uploader] Auth sent: " + pass);
+			dos.writeUTF(configPass);
+			System.out.println("[Uploader] Auth sent: " + configPass);
 			this.link = dis.readUTF();
 			System.out.println("[Uploader] Auth reply: " + link);
 			if (this.link.equals("OK")) {
