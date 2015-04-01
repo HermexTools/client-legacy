@@ -71,7 +71,7 @@ public class PartialScreen extends JPanel implements NativeKeyListener {
 		setOpaque(false);
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
-
+        
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
