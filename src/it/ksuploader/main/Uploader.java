@@ -36,6 +36,7 @@ public class Uploader {
 	private DataOutputStream dos;
 	private DataInputStream dis;
 	private ProgressDialog progressDialog;
+    private static NotificationDialog dialog = new NotificationDialog();
 
 	// Per gli screen parziali
 	public Uploader(Rectangle r) {
@@ -103,50 +104,75 @@ public class Uploader {
 			System.out.println("[Uploader] Auth sent: " + Main.config.getPass());
 			this.link = dis.readUTF();
 			System.out.println("[Uploader] Auth reply: " + link);
+            
 			if (this.link.equals("OK")) {
 
 				System.out.println("Sending type: " + type);
 				dos.writeUTF(type);
-
+                String srvResponse;
 				// Controllo e aspetto che il server abbia ricevuto il type
 				// corretto
-				if (dis.readUTF().equals(type)) {
+                if (dis.readUTF().equals(type)) {
+                    
+                    System.out.println("Il server riceve un: " + type);
+                    
 
-					System.out.println("Il server riceve un: " + type);
-
-					switch (type) {
-
-					// image transfer
-					case "img":
-
-						System.out.println("[Uploader] Uploading image...");
-
-						dos.writeInt(bytes.length);
-						dos.write(bytes, 0, bytes.length);
-						dos.flush();
-
-						break;
-
-					// file or txt transfer
-					case "file":
-					case "txt":
-
-						sendFile(filePath);
-						progressDialog.setWait();
-						break;
-
-					// default case, hmm
-					default:
-						// TODO
-						break;
-					}
-
-					// return link
-                    System.out.println("[Uploader] Waiting link...");
-                    this.link = dis.readUTF();
-                    System.out.println("[Uploader] Returned link: " + link);
-                    if (type.equals("file") || type.equals("txt"))
-                        progressDialog.close();
+                        
+                        switch (type) {
+                            
+                            // image transfer
+                            case "img":
+                                
+                                System.out.println("[Uploader] Uploading image...");
+                                
+                                dos.writeInt(bytes.length);
+                                
+                                srvResponse = dis.readUTF();
+                                if(srvResponse.equals("START_TRANSFER")){
+                                    dos.write(bytes, 0, bytes.length);
+                                    dos.flush();
+                                } else if(srvResponse.equals("SERVER_FULL")){
+                                    System.out.println("[Uploader] Server Full");
+                                    dialog.serverFull();
+                                }
+                                
+                                break;
+                                
+                                // file or txt transfer
+                            case "file":
+                            case "txt":
+                                
+                                File file = new File(filePath);
+                                long fileLength = file.length();
+                                System.out.println("[Uploader] File length: " + fileLength);
+                                dos.writeLong(fileLength);
+                                srvResponse = dis.readUTF();
+                                if(srvResponse.equals("START_TRANSFER")){
+                                    sendFile(file,fileLength);
+                                }else if(srvResponse.equals("FILE_TOO_LARGE")){
+                                    System.out.println("[Uploader] File too large");
+                                    dialog.fileTooLarge();
+                                    
+                                } else if(srvResponse.equals("SERVER_FULL")){
+                                    System.out.println("[Uploader] Server Full");
+                                    dialog.serverFull();
+                                }
+                                
+                                progressDialog.setWait();
+                                break;
+                                
+                                // default case, hmm
+                            default:
+                                // TODO
+                                break;
+                        }
+                        
+                        // return link
+                        System.out.println("[Uploader] Waiting link...");
+                        this.link = dis.readUTF();
+                        System.out.println("[Uploader] Returned link: " + link);
+                        if (type.equals("file") || type.equals("txt"))
+                            progressDialog.close();
                     bytes = null;
 				} else {
 					System.out.println("[Uploader] The server had a bad interpretation of the fileType");
@@ -155,7 +181,7 @@ public class Uploader {
 
 			} else {
 				System.out.println("[Uploader] Wrong password, closed");
-				new NotificationDialog().wrongPassword();
+				dialog.wrongPassword();
 				return false;
 			}
 
@@ -171,16 +197,15 @@ public class Uploader {
 		return true;
 	}
 
-	public void sendFile(String fileName) {
+	public void sendFile(File file, long fileLength) {
 		RandomAccessFile aFile = null;
 		try {
-			File file = new File(fileName);
+			
 			aFile = new RandomAccessFile(file, "r");
 			final FileChannel inChannel = aFile.getChannel();
 
-			long bytesSent = 0, fileLength = file.length();
-			System.out.println("[Uploader] File length: " + fileLength);
-			dos.writeLong(fileLength);
+			long bytesSent = 0; 
+
 			progressDialog = new ProgressDialog();
 			progressDialog.setUploader(this);
 			progressDialog.setMessage("Caricando...");

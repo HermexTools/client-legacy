@@ -151,8 +151,8 @@ public class NotificationDialog {
         show("Server full!", ":(");
     }
     
-    public void fileTooLarge(String max){
-        show("Server: file too large!", max);
+    public void fileTooLarge(){
+        show("Server: file too large!", "This file exceeds the maximum size allowed");
     }
 
 }

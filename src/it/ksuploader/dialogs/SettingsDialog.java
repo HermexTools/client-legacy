@@ -75,6 +75,7 @@ public class SettingsDialog extends JDialog {
 				buttonPane.add(cancelButton);
 
 				cancelButton.addActionListener(new ActionListener() {
+                    @Override
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
@@ -86,6 +87,7 @@ public class SettingsDialog extends JDialog {
 		ftpEnabled.setBounds(6, 7, 191, 23);
 
 		ftpEnabled.addActionListener(new ActionListener() {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				update();
 			}
@@ -189,6 +191,7 @@ public class SettingsDialog extends JDialog {
 		saveEnabled = new JCheckBox("Save a local copy of images");
 		saveEnabled.setBounds(232, 7, 215, 23);
 		saveEnabled.addActionListener(new ActionListener() {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				if (saveEnabled.isSelected()) {
 					saveDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
