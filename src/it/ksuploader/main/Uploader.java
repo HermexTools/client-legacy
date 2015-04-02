@@ -137,12 +137,12 @@ public class Uploader {
 					}
 
 					// return link
-					System.out.println("[Uploader] Waiting link...");
-					this.link = dis.readUTF();
-					System.out.println("[Uploader] Returned link: " + link);
-					if (type.equals("file") || type.equals("txt"))
-						progressDialog.close();
-					bytes = null;
+                    System.out.println("[Uploader] Waiting link...");
+                    this.link = dis.readUTF();
+                    System.out.println("[Uploader] Returned link: " + link);
+                    if (type.equals("file") || type.equals("txt"))
+                        progressDialog.close();
+                    bytes = null;
 				} else {
 					System.out.println("[Uploader] The server had a bad interpretation of the fileType");
 					return false;

@@ -150,5 +150,9 @@ public class NotificationDialog {
     public void serverFull(){
         show("Server full!", ":(");
     }
+    
+    public void fileTooLarge(String max){
+        show("Server: file too large!", max);
+    }
 
 }
