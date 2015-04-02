@@ -12,6 +12,9 @@ public class LoadConfig {
 	private String ip;
 	private String pass;
 	private int port;
+    private boolean saveEnabled;
+    private String saveDir;
+    
 	private boolean ftpEnabled;
 	private String ftpAddr;
 	private String ftpUser;
@@ -37,6 +40,8 @@ public class LoadConfig {
 				prop.setProperty("password", "pass");
 				prop.setProperty("port", "4030");
 				prop.setProperty("server_address", "localhost");
+                prop.setProperty("save_enabled", "false");
+                prop.setProperty("save_dir", ".");
 				prop.store(new FileOutputStream("client.properties"), null);
 			}
 			InputStream inputStream = new FileInputStream("client.properties");
@@ -52,6 +57,8 @@ public class LoadConfig {
 			this.ftpPort = Integer.parseInt(prop.getProperty("ftp_port"));
 			this.ftpDir = prop.getProperty("ftp_directory");
 			this.ftpWebUrl = prop.getProperty("ftp_weburl");
+            this.saveEnabled = Boolean.valueOf(prop.getProperty("save_enabled"));
+            this.saveDir = prop.getProperty("save_dir");
             
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -59,7 +66,7 @@ public class LoadConfig {
 
 	}
     
-    public void storeNewConfig(String ftpWeburl, String ftpDir, String ftport, String ftpPass, String ftpUser, String ftpAddr, String ftpEnabled, String srvPass, String srvPort, String srvAddr){
+    public void storeNewConfig(String ftpWeburl, String ftpDir, String ftport, String ftpPass, String ftpUser, String ftpAddr, String ftpEnabled, String srvPass, String srvPort, String srvAddr, String saveEnabled, String saveDir){
         try {
             prop.setProperty("ftp_weburl", ftpWeburl);
             prop.setProperty("ftp_directory", ftpDir);
@@ -71,6 +78,8 @@ public class LoadConfig {
             prop.setProperty("password", srvPass);
             prop.setProperty("port", srvPort);
             prop.setProperty("server_address", srvAddr);
+            prop.setProperty("save_enabled", saveEnabled);
+            prop.setProperty("save_dir", saveDir);
             prop.store(new FileOutputStream("client.properties"), null);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -117,5 +126,15 @@ public class LoadConfig {
 	public int getPort() {
 		return port;
 	}
+
+    public boolean isSaveEnabled() {
+        return saveEnabled;
+    }
+
+    public String getSaveDir() {
+        return saveDir;
+    }
+    
+    
 
 }

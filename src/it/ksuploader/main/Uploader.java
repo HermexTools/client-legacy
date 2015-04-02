@@ -23,6 +23,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -54,6 +55,8 @@ public class Uploader {
 			outputArray.flush();
 			this.bytes = outputArray.toByteArray();
 			outputArray.close();
+            if(Main.config.isSaveEnabled())
+                ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
 		} catch (AWTException | IOException ex) {
 			ex.printStackTrace();
 		}
@@ -72,6 +75,8 @@ public class Uploader {
 			outputArray.flush();
 			this.bytes = outputArray.toByteArray();
 			outputArray.close();
+            if(Main.config.isSaveEnabled())
+                ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

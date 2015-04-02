@@ -6,10 +6,12 @@ import it.ksuploader.utils.LoadConfig;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -29,6 +31,7 @@ public class SettingsDialog extends JDialog {
 	private final JTextField srvPort;
 	private final JCheckBox ftpEnabled;
 	private final JCheckBox saveEnabled;
+    private JFileChooser saveDir; 
 
 	public SettingsDialog() {
 
@@ -42,6 +45,7 @@ public class SettingsDialog extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Settings");
 		setBounds(100, 100, 480, 300);
+        setResizable(false);
 		getContentPane().setLayout(null);
 		{
 			JPanel buttonPane = new JPanel();
@@ -58,7 +62,7 @@ public class SettingsDialog extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
 								ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
-								srvPassw.getText(), srvPort.getText(), srvAddr.getText());
+								srvPassw.getText(), srvPort.getText(), srvAddr.getText(), saveEnabled.isSelected()+"",saveDir.getSelectedFile().getPath());
 						Main.config = new LoadConfig();
 						setVisible(false);
 					}
@@ -183,7 +187,18 @@ public class SettingsDialog extends JDialog {
 
 		saveEnabled = new JCheckBox("Save a local copy of images");
 		saveEnabled.setBounds(232, 7, 215, 23);
-		// getContentPane().add(saveEnabled);
+        saveEnabled.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                if(saveEnabled.isSelected()){
+                    saveDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    if (saveDir.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
+                        saveDir.setSelectedFile(new File("."));
+                } else {
+                    saveDir.setSelectedFile(new File("."));
+                }
+			}
+		});
+		getContentPane().add(saveEnabled);
 	}
 
 	public void loadCurrentConfig() {
@@ -197,6 +212,9 @@ public class SettingsDialog extends JDialog {
 		this.srvAddr.setText(Main.config.getIp());
 		this.srvPassw.setText(Main.config.getPass());
 		this.srvPort.setText(Main.config.getPort() + "");
+        this.saveEnabled.setSelected(Main.config.isSaveEnabled());
+        this.saveDir = new JFileChooser();
+        this.saveDir.setSelectedFile(new File(Main.config.getSaveDir()));
 
 		update();
 	}

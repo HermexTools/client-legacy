@@ -38,6 +38,8 @@ public class FtpUploader {
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
+            if(Main.config.isSaveEnabled())
+                ImageIO.write(img, "png", toWrite);
 
 			this.filePath = toWrite.getPath();
 
@@ -56,7 +58,9 @@ public class FtpUploader {
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
-
+            if(Main.config.isSaveEnabled())
+                ImageIO.write(img, "png", toWrite);
+            
 			this.filePath = toWrite.getPath();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -80,7 +84,7 @@ public class FtpUploader {
 			ftpClient.changeDirectory(Main.config.getFtpDir());
 			ftpClient.upload(new File(filePath));
 			System.out.println("[FtpUploader] File uploaded");
-			this.link = Main.config.getFtpWebUrl() + "/" + new File(filePath).getName();
+			this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
 			System.out.println("[FtpUploader] Returning url: " + this.link);
 			ftpClient.disconnect(true);
 			System.out.println("[FtpUploader] Disconnected");
