@@ -23,12 +23,6 @@ public class FtpUploader {
 	private static FTPClient ftpClient;
 	private String link;
 	private String filePath;
-	private final static String configFtpAddr = Main.config.getFtpAddr();
-	private final static String configFtpUser = Main.config.getFtpUser();
-	private final static String configFtpPass = Main.config.getFtpPass();
-	private final static int configFtpPort = Main.config.getFtpPort();
-	private final static String configFtpDir = Main.config.getFtpDir();
-	private final static String configFtpWebUrl = Main.config.getFtpWebUrl();
 
 	// Per gli screen parziali
 	public FtpUploader(Rectangle r) {
@@ -80,13 +74,13 @@ public class FtpUploader {
 		ftpClient = new FTPClient();
 
 		try {
-			ftpClient.connect(configFtpAddr, configFtpPort);
+			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
 			System.out.println("[FtpUploader] Connected to the ftp server");
-			ftpClient.login(configFtpUser, configFtpPass);
-			ftpClient.changeDirectory(configFtpDir);
+			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
+			ftpClient.changeDirectory(Main.config.getFtpDir());
 			ftpClient.upload(new File(filePath));
 			System.out.println("[FtpUploader] File uploaded");
-			this.link = configFtpWebUrl + "/" + new File(filePath).getName();
+			this.link = Main.config.getFtpWebUrl() + "/" + new File(filePath).getName();
 			System.out.println("[FtpUploader] Returning url: " + this.link);
 			ftpClient.disconnect(true);
 			System.out.println("[FtpUploader] Disconnected");

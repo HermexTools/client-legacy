@@ -27,9 +27,6 @@ import java.nio.channels.SocketChannel;
 import javax.imageio.ImageIO;
 
 public class Uploader {
-	private final static int configPort = Main.config.getPort();
-	private final static String configPass = Main.config.getPass();
-	private final static String configAddr = Main.config.getIp();
 	private BufferedImage img;
 	private byte[] bytes;
 	private SocketChannel socketChannel;
@@ -42,7 +39,7 @@ public class Uploader {
 	// Per gli screen parziali
 	public Uploader(Rectangle r) {
 		try {
-			SocketChannel socketChannel = createChannel(configAddr, configPort);
+			SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
 			this.socketChannel = socketChannel;
 
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -66,7 +63,7 @@ public class Uploader {
 	public Uploader(BufferedImage bi) {
 
 		try {
-			SocketChannel socketChannel = createChannel(configAddr, configPort);
+			SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
 			this.socketChannel = socketChannel;
 			this.img = bi;
 
@@ -83,7 +80,7 @@ public class Uploader {
 	// Per i file
 	public Uploader(String filePath) {
 
-		SocketChannel socketChannel = createChannel(configAddr, configPort);
+		SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
 		this.socketChannel = socketChannel;
 		this.filePath = filePath;
 	}
@@ -97,8 +94,8 @@ public class Uploader {
 
 			// send auth
 			System.out.println("[Uploader] Sending auth");
-			dos.writeUTF(configPass);
-			System.out.println("[Uploader] Auth sent: " + configPass);
+			dos.writeUTF(Main.config.getPass());
+			System.out.println("[Uploader] Auth sent: " + Main.config.getPass());
 			this.link = dis.readUTF();
 			System.out.println("[Uploader] Auth reply: " + link);
 			if (this.link.equals("OK")) {
