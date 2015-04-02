@@ -1,5 +1,6 @@
 package it.ksuploader.main;
 
+import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.utils.Environment;
 import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
@@ -23,6 +24,7 @@ public class FtpUploader {
 	private static FTPClient ftpClient;
 	private String link;
 	private String filePath;
+	private NotificationDialog notificationDialog;
 
 	// Per gli screen parziali
 	public FtpUploader(Rectangle r) {
@@ -38,8 +40,8 @@ public class FtpUploader {
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
-            if(Main.config.isSaveEnabled())
-                ImageIO.write(img, "png", toWrite);
+			if (Main.config.isSaveEnabled())
+				ImageIO.write(img, "png", toWrite);
 
 			this.filePath = toWrite.getPath();
 
@@ -58,9 +60,9 @@ public class FtpUploader {
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
-            if(Main.config.isSaveEnabled())
-                ImageIO.write(img, "png", toWrite);
-            
+			if (Main.config.isSaveEnabled())
+				ImageIO.write(img, "png", toWrite);
+
 			this.filePath = toWrite.getPath();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -76,25 +78,59 @@ public class FtpUploader {
 	public boolean send(String type) {
 
 		ftpClient = new FTPClient();
+		notificationDialog = new NotificationDialog();
 
 		try {
 			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
-			System.out.println("[FtpUploader] Connected to the ftp server");
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
+			e1.printStackTrace();
+			notificationDialog.show("Connection error", "Unable to connect to the server");
+			return false;
+		}
+		System.out.println("[FtpUploader] Connected to the ftp server");
+		try {
 			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
+			e1.printStackTrace();
+			notificationDialog.show("Login error", "Unable to login to the server");
+			return false;
+		}
+
+		try {
 			ftpClient.changeDirectory(Main.config.getFtpDir());
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
+			e1.printStackTrace();
+			notificationDialog.show("Error", "Unable to change directory");
+			return false;
+		}
+
+		try {
 			ftpClient.upload(new File(filePath));
 			System.out.println("[FtpUploader] File uploaded");
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
+				| FTPDataTransferException | FTPAbortedException e1) {
+			e1.printStackTrace();
+			notificationDialog.show("Upload error", "Error during the file upload");
+			return false;
+		}
+
+		try {
 			this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
 			System.out.println("[FtpUploader] Returning url: " + this.link);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		try {
 			ftpClient.disconnect(true);
 			System.out.println("[FtpUploader] Disconnected");
 			return true;
-		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
-				| FTPDataTransferException | FTPAbortedException e) {
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			e.printStackTrace();
+			notificationDialog.show("Disconnection error", "Error during the disconnection");
+			return false;
 		}
-
-		return false;
 
 	}
 
