@@ -84,9 +84,9 @@ public class SystemTrayMenu {
 				MenuItem caricaFile = new MenuItem("Upload File (ALT+3)");
 				MenuItem clipboard = new MenuItem("Upload Clipboard (ALT+4)");
 				MenuItem settings = new MenuItem("Settings");
-				MenuItem esci = new MenuItem("Esci");
+				MenuItem esci = new MenuItem("Quit");
 
-				popupMenu.add("Upload Recenti");
+				popupMenu.add("Recent Uploads");
 				popupMenu.addSeparator();
 				popupMenu.addSeparator();
 				popupMenu.add(catturaArea);
