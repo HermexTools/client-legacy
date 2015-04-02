@@ -146,5 +146,9 @@ public class NotificationDialog {
 	public void wrongPassword() {
 		show("Wrong password", "Correct the password server!");
 	}
+    
+    public void serverFull(){
+        show("Server full!", ":(");
+    }
 
 }
