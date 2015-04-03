@@ -34,8 +34,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class SystemTrayMenu {
 
-	private final static boolean configFtpEnabled = Main.config.getFtpEnabled();
-
 	private Clipboard clpbrd;
 	private CompleteScreen completeScreen;
 	private FtpUploader ftpUploader;
@@ -157,7 +155,7 @@ public class SystemTrayMenu {
 			trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
 		} else {
 
-			if (configFtpEnabled) {
+			if (Main.config.getFtpEnabled()) {
 				ftpUploader = new FtpUploader(partialScreen.getSelection());
 				boolean res = false;
 				res = ftpUploader.send("img");
@@ -187,7 +185,7 @@ public class SystemTrayMenu {
 	public void sendCompleteScreen() {
 		completeScreen = new CompleteScreen();
 		boolean res = false;
-		if (configFtpEnabled) {
+		if (Main.config.getFtpEnabled()) {
 			ftpUploader = new FtpUploader(completeScreen.getImg());
 			res = ftpUploader.send("img");
 			if (res) {
@@ -216,7 +214,7 @@ public class SystemTrayMenu {
 		public Void doInBackground() {
 
 			boolean res = false;
-			if (configFtpEnabled) {
+			if (Main.config.getFtpEnabled()) {
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
 					ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
 				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
@@ -304,7 +302,7 @@ public class SystemTrayMenu {
 			out.println(clipboard);
 			out.close();
 
-			if (configFtpEnabled) {
+			if (Main.config.getFtpEnabled()) {
 
 				ftpUploader = new FtpUploader(f.getPath());
 				res = ftpUploader.send("txt");

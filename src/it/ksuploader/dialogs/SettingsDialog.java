@@ -65,7 +65,6 @@ public class SettingsDialog extends JDialog {
 								ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
 								srvPassw.getText(), srvPort.getText(), srvAddr.getText(),
 								saveEnabled.isSelected() + "", saveDir.getSelectedFile().getPath());
-						Main.config = new LoadConfig();
 						setVisible(false);
 					}
 				});

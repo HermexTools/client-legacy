@@ -89,6 +89,19 @@ public class LoadConfig {
 			prop.setProperty("save_enabled", saveEnabled);
 			prop.setProperty("save_dir", saveDir);
 			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath()+"//client.properties"), null);
+            
+            this.ip = prop.getProperty("server_address");
+			this.pass = prop.getProperty("password");
+			this.ftpEnabled = Boolean.valueOf(prop.getProperty("ftp_enabled"));
+			this.port = Integer.parseInt(prop.getProperty("port"));
+			this.ftpAddr = prop.getProperty("ftp_address");
+			this.ftpUser = prop.getProperty("ftp_user");
+			this.ftpPass = prop.getProperty("ftp_password");
+			this.ftpPort = Integer.parseInt(prop.getProperty("ftp_port"));
+			this.ftpDir = prop.getProperty("ftp_directory");
+			this.ftpWebUrl = prop.getProperty("ftp_weburl");
+			this.saveEnabled = Boolean.valueOf(prop.getProperty("save_enabled"));
+			this.saveDir = prop.getProperty("save_dir");
 		} catch (IOException ex) {
 			ex.printStackTrace();
             Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
