@@ -12,11 +12,14 @@ You can host all files in your server (via dedicated socket [server application]
 Since this project is open source and java written, feel free to fork, give suggestions or make pull requests.
 
 ### How to install
-Actually simply run it one time to generate the `client.properties`: a config file.
-To run the client you can use: `java -jar KSUploader_client.jar`
+Actually simply run the binary file where you want, and it will save the configurations in the correct place.
 
 ### How to configure
-Open and edit the `client.properties` file, then launch the client again.
+Open KSUploader, right-click on systemtrayicon, settings, end change your config.
+
+OR
+
+Open and edit the `client.properties` file saved in `Appdata\Roaming\.ksuploader` on Windows, in your user home in the folder `.ksuploader` on Linux, then launch the client again.
 It contains:
 * `server_address`: the address where there is the server, you can use a domain (example.com) or an ip.
 * `password`: the password of the server that will be used during the authentication check.
