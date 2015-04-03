@@ -43,14 +43,20 @@ public class Environment {
 	public File getInstallDir() {
 		final String userHome = System.getProperty("user.home");
 		final String dirName = ".ksuploader";
-
+        File f;
 		switch (os) {
 		case LINUX:
-			return new File(userHome, dirName);
+            f = new File(userHome, dirName);
+            f.mkdir();
+			return f;
 		case WINDOWS:
-			return new File(userHome, "AppData\\Roaming\\" + dirName);
+            f = new File(userHome, "AppData\\Roaming\\" + dirName);
+            f.mkdir();
+			return f;
 		case OSX:
-			return new File(System.getProperty("user.home"), "Library/Application Support/" + dirName);
+            f = new File(System.getProperty("user.home"), "Library/Application Support/" + dirName);
+            f.mkdir();
+			return f;
 		default:
 			return null;
 

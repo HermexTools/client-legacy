@@ -21,8 +21,8 @@ public class Main {
     public static PrintWriter log; 
 
 	public static void main(String[] args) throws FileNotFoundException {
-        
         log = new PrintWriter(Main.so.getInstallDir().getPath()+"//log.txt");
+        
 		final SystemTrayMenu st = new SystemTrayMenu();
 
 		NativeKeyListener gkl = new NativeKeyListener() {
