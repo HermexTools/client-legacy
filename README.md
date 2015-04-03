@@ -27,7 +27,7 @@ It contains:
 * `ftp_password`: the FTP password.
 * `ftp_port`: the port where the FTP is listening (21 as default).
 * `ftp_directory`: the relative directory how to upload all files, use a dot (.) to say "this directory". To use a subfolder follow this example: "subFolder/anotherFolder".
-* `ftp_weburl`: the url that will be returned, the slash + filename is autoadded at the end, since this don't write a / at the end of the it.
+* `ftp_weburl`: the url that will be returned, write a / at the end of the it.
 
 >Attention: all config properties must be not null, even if you don't use one of them.
 
