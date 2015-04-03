@@ -15,7 +15,7 @@ Since this project is open source and java written, feel free to fork, give sugg
 Actually simply run the binary file where you want, and it will save the configurations in the correct place.
 
 ### How to configure
-Open KSUploader, right-click on systemtrayicon, settings, end change your config.
+Open KSUploader.jar, right-click on icon in the system tray, settings, and setup your client.
 
 OR
 
