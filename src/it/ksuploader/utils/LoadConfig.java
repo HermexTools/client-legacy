@@ -32,9 +32,9 @@ public class LoadConfig {
 	public LoadConfig() {
 		try {
 			this.prop = new Properties();
-            System.out.println("[LoadConfig] "+Main.so.getInstallDir().getPath()+"//client.properties");
-			if (!new File(Main.so.getInstallDir().getPath()+"//client.properties").exists()) {
-				prop.setProperty("ftp_weburl", "http://mydomain.com");
+			System.out.println("[LoadConfig] " + Main.so.getInstallDir().getPath() + "//client.properties");
+			if (!new File(Main.so.getInstallDir().getPath() + "//client.properties").exists()) {
+				prop.setProperty("ftp_weburl", "http://mydomain.com/");
 				prop.setProperty("ftp_directory", "subFolder/anotherFolder");
 				prop.setProperty("ftp_port", "21");
 				prop.setProperty("ftp_password", "pass");
@@ -46,9 +46,9 @@ public class LoadConfig {
 				prop.setProperty("server_address", "localhost");
 				prop.setProperty("save_enabled", "false");
 				prop.setProperty("save_dir", ".");
-				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath()+"//client.properties"), null);
+				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 			}
-			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath()+"//client.properties");
+			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath() + "//client.properties");
 			prop.load(inputStream);
 
 			this.ip = prop.getProperty("server_address");
@@ -67,7 +67,7 @@ public class LoadConfig {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading!");
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 
 	}
@@ -104,7 +104,7 @@ public class LoadConfig {
 			this.saveDir = prop.getProperty("save_dir");
 		} catch (IOException ex) {
 			ex.printStackTrace();
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 
 	}
