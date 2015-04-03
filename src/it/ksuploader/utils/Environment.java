@@ -42,11 +42,12 @@ public class Environment {
 
 	public File getInstallDir() {
 		final String appData = System.getenv("AppData");
+		final String userHome = System.getProperty("user.home");
 		final String dirName = ".ksuploader";
 		File f;
 		switch (os) {
 		case LINUX:
-			f = new File(appData, dirName);
+			f = new File(userHome, dirName);
 			f.mkdir();
 			return f;
 		case WINDOWS:
