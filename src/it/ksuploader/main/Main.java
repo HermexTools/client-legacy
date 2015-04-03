@@ -94,9 +94,11 @@ public class Main {
     public static void myLog(String s){
         System.out.println(s);
         log.println(s);
+        log.flush();
     }
     public static void myErr(String s){
         log.println(s);
+        log.flush();
     }
     
 }
