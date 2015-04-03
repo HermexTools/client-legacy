@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -223,6 +224,7 @@ public class SettingsDialog extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading");
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 
 		update();

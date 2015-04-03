@@ -16,6 +16,7 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -50,6 +51,7 @@ public class FtpUploader {
 
 		} catch (AWTException | IOException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 
@@ -72,6 +74,7 @@ public class FtpUploader {
 			this.filePath = toWrite.getPath();
 		} catch (IOException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 
@@ -91,6 +94,7 @@ public class FtpUploader {
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			notificationDialog.show("Connection error", "Unable to connect to the server");
+            Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
 			return false;
 		}
 		Main.myLog("[FtpUploader] Connected to the ftp server");
@@ -98,6 +102,7 @@ public class FtpUploader {
 			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
+            Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
 			notificationDialog.show("Login error", "Unable to login to the server");
 			return false;
 		}
@@ -106,6 +111,7 @@ public class FtpUploader {
 			ftpClient.changeDirectory(Main.config.getFtpDir());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
+            Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
 			notificationDialog.show("Error", "Unable to change directory");
 			return false;
 		}
@@ -116,6 +122,7 @@ public class FtpUploader {
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
 				| FTPDataTransferException | FTPAbortedException e1) {
 			e1.printStackTrace();
+            Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
 			notificationDialog.show("Upload error", "Error during the file upload");
 			return false;
 		}
@@ -125,6 +132,7 @@ public class FtpUploader {
 			Main.myLog("[FtpUploader] Returning url: " + this.link);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 			return false;
 		}
 
@@ -134,6 +142,7 @@ public class FtpUploader {
 			return true;
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 			notificationDialog.show("Disconnection error", "Error during the disconnection");
 			return false;
 		}

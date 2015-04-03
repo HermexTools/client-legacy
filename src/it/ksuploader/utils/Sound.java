@@ -1,5 +1,7 @@
 package it.ksuploader.utils;
+import it.ksuploader.main.Main;
 import java.net.URL;
+import java.util.Arrays;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -31,6 +33,7 @@ public class Sound extends Thread {
 			clip.start();
 		} catch (Exception e) {
 			e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 	}
 }

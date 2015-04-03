@@ -5,6 +5,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class CompleteScreen {
 	private BufferedImage img;
@@ -18,6 +19,7 @@ public class CompleteScreen {
 			this.img = new Robot().createScreenCapture(screenRect);
 		} catch (AWTException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 

@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -115,6 +116,7 @@ public class ProgressDialog {
 					dialogFrame.dispose();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+                    Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				}
 			};
 		}.start();
@@ -150,6 +152,7 @@ public class ProgressDialog {
 			callerUploader.stopUpload();
 		} catch (Exception e) {
 			e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 	}
 

@@ -15,6 +15,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -92,6 +93,7 @@ public class NotificationDialog {
 					Desktop.getDesktop().browse(new URI(messageLabel.getText()));
 				} catch (IOException | URISyntaxException e) {
 					e.printStackTrace();
+                    Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				}
 			}
 		});
@@ -138,6 +140,7 @@ public class NotificationDialog {
 					dialogFrame.setOpacity(1.00f);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+                    Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				}
 			};
 		}.start();
@@ -154,6 +157,10 @@ public class NotificationDialog {
     
     public void fileTooLarge(){
         show("Server: file too large!", "This file exceeds the maximum size allowed");
+    }
+    
+    public void connectionError(){
+        show("Connection Error!", "Check your connection or credential");
     }
 
 }

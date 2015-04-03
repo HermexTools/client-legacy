@@ -23,6 +23,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.UnresolvedAddressException;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -62,6 +64,7 @@ public class Uploader {
             }
 		} catch (AWTException | IOException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 
@@ -84,6 +87,7 @@ public class Uploader {
             }
 		} catch (IOException ex) {
 			ex.printStackTrace();
+            Main.myLog(ex.getMessage());
 		}
 	}
 
@@ -225,6 +229,7 @@ public class Uploader {
 					progressDialog.set((int) (100 * bytesSent / fileLength));
 				} catch (Exception e) {
 					e.printStackTrace();
+                    Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				}
 
 			}
@@ -238,6 +243,7 @@ public class Uploader {
 
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 
 	}
@@ -254,6 +260,7 @@ public class Uploader {
 			new File(new Environment().getTempDir() + "/KStemp.zip").delete();
 		} catch (IOException e) {
 			e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 	}
 
@@ -266,8 +273,10 @@ public class Uploader {
 			socketChannel.connect(socketAddress);
 			Main.myLog("[Uploader] Connected, now sending the file...");
 
-		} catch (IOException e) {
+		} catch (IOException | UnresolvedAddressException e) {
 			e.printStackTrace();
+            dialog.connectionError();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 		return socketChannel;
 	}

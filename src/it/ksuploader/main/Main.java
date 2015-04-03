@@ -95,4 +95,8 @@ public class Main {
         System.out.println(s);
         log.println(s);
     }
+    public static void myErr(String s){
+        log.println(s);
+    }
+    
 }

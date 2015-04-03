@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class LoadConfig {
@@ -66,6 +67,7 @@ public class LoadConfig {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading!");
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 
 	}
@@ -89,6 +91,7 @@ public class LoadConfig {
 			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath()+"//client.properties"), null);
 		} catch (IOException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 
 	}

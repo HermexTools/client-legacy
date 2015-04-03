@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -57,6 +58,7 @@ public class SystemTrayMenu {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 		this.notification = new NotificationDialog();
 		this.configPanel = new SettingsDialog();
@@ -139,6 +141,7 @@ public class SystemTrayMenu {
 				systemTray.add(trayIcon);
 			} catch (IOException | AWTException ex) {
 				ex.printStackTrace();
+                Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 			}
 		}
 	}
@@ -264,6 +267,7 @@ public class SystemTrayMenu {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 
@@ -280,6 +284,7 @@ public class SystemTrayMenu {
 					Desktop.getDesktop().browse(new URI(e.getActionCommand()));
 				} catch (URISyntaxException | IOException ex) {
 					ex.printStackTrace();
+                    Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 				}
 			}
 		});
@@ -327,6 +332,7 @@ public class SystemTrayMenu {
 		} catch (UnsupportedFlavorException | IOException ex) {
 			ex.printStackTrace();
 			notification.show("Errore!", "Impossibile completare l'operazione");
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 }

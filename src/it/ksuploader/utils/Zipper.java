@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -68,6 +69,7 @@ public class Zipper {
 			fis.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
+            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 		Main.myLog("[Zipper] Zipping finished: KStemp.zip");
 		return new Environment().getTempDir() + "/KStemp.zip";
