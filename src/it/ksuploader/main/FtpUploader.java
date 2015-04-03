@@ -40,8 +40,11 @@ public class FtpUploader {
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
-			if (Main.config.isSaveEnabled())
-				ImageIO.write(img, "png", toWrite);
+            
+			if (Main.config.isSaveEnabled()){
+				ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + fileName + ".png"));
+                Main.myLog("[Uploader] Screen saved");
+            }
 
 			this.filePath = toWrite.getPath();
 
@@ -60,8 +63,11 @@ public class FtpUploader {
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
-			if (Main.config.isSaveEnabled())
-				ImageIO.write(img, "png", toWrite);
+            
+			if (Main.config.isSaveEnabled()){
+				ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + fileName + ".png"));
+                Main.myLog("[Uploader] Screen saved");
+            }
 
 			this.filePath = toWrite.getPath();
 		} catch (IOException ex) {
@@ -87,7 +93,7 @@ public class FtpUploader {
 			notificationDialog.show("Connection error", "Unable to connect to the server");
 			return false;
 		}
-		System.out.println("[FtpUploader] Connected to the ftp server");
+		Main.myLog("[FtpUploader] Connected to the ftp server");
 		try {
 			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
@@ -106,7 +112,7 @@ public class FtpUploader {
 
 		try {
 			ftpClient.upload(new File(filePath));
-			System.out.println("[FtpUploader] File uploaded");
+			Main.myLog("[FtpUploader] File uploaded");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
 				| FTPDataTransferException | FTPAbortedException e1) {
 			e1.printStackTrace();
@@ -116,7 +122,7 @@ public class FtpUploader {
 
 		try {
 			this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
-			System.out.println("[FtpUploader] Returning url: " + this.link);
+			Main.myLog("[FtpUploader] Returning url: " + this.link);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 			return false;
@@ -124,7 +130,7 @@ public class FtpUploader {
 
 		try {
 			ftpClient.disconnect(true);
-			System.out.println("[FtpUploader] Disconnected");
+			Main.myLog("[FtpUploader] Disconnected");
 			return true;
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			e.printStackTrace();

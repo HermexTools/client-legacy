@@ -1,5 +1,6 @@
 package it.ksuploader.dialogs;
 
+import it.ksuploader.main.Main;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -34,7 +35,7 @@ public class NotificationDialog {
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException ex) {
-			System.err.println(ex.toString());
+			Main.myLog(ex.toString());
 		}
 
 		dialogFrame.setSize(200, 50);

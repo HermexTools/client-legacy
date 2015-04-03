@@ -2,7 +2,6 @@ package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.SettingsDialog;
-import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
 
@@ -47,7 +46,6 @@ public class SystemTrayMenu {
 	private TrayIcon trayIcon;
 	private Uploader uploader;
 
-	private Environment so;
 	private NotificationDialog notification;
 	private SettingsDialog configPanel;
 	private MenuItem[] uploads;
@@ -62,7 +60,6 @@ public class SystemTrayMenu {
 		}
 		this.notification = new NotificationDialog();
 		this.configPanel = new SettingsDialog();
-		this.so = new Environment();
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
 
@@ -133,6 +130,7 @@ public class SystemTrayMenu {
 				esci.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						SystemTray.getSystemTray().remove(trayIcon);
+                        Main.log.close();
 						System.exit(0);
 					}
 				});
@@ -228,7 +226,7 @@ public class SystemTrayMenu {
 					notification.show("File Caricato!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					new File(so.getTempDir() + "/KStemp.zip").delete();
+					new File(Main.so.getTempDir() + "/KStemp.zip").delete();
 					suono.run();
 				}
 
@@ -245,7 +243,7 @@ public class SystemTrayMenu {
 					notification.show("File Caricato!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-					new File(so.getTempDir() + "/KStemp.zip").delete();
+					new File(Main.so.getTempDir() + "/KStemp.zip").delete();
 					suono.run();
 				}
 
@@ -295,9 +293,9 @@ public class SystemTrayMenu {
 			String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getData(DataFlavor.stringFlavor);
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-			File f = new File(so.getTempDir() + "/" + fileName + ".txt");
-			System.out.println(f.getPath());
-			PrintWriter out = new PrintWriter(so.getTempDir() + "/" + fileName + ".txt");
+			File f = new File(Main.so.getTempDir() + "/" + fileName + ".txt");
+			Main.myLog(f.getPath());
+			PrintWriter out = new PrintWriter(Main.so.getTempDir() + "/" + fileName + ".txt");
 			out.println(clipboard);
 			out.close();
 

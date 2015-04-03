@@ -1,4 +1,5 @@
 package it.ksuploader.dialogs;
+import it.ksuploader.main.Main;
 import it.ksuploader.main.Uploader;
 
 import java.awt.Dimension;
@@ -32,7 +33,7 @@ public class ProgressDialog {
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException ex) {
-			System.err.println(ex.toString());
+			Main.myLog(ex.toString());
 		}
 
 		dialogFrame.setSize(200, 50);

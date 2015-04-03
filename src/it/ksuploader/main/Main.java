@@ -1,6 +1,9 @@
 package it.ksuploader.main;
 
+import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.LoadConfig;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -12,10 +15,14 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
-	public static LoadConfig config = new LoadConfig();
+	
+    public static Environment so = new Environment();
+    public static LoadConfig config = new LoadConfig();
+    public static PrintWriter log; 
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws FileNotFoundException {
+        
+        log = new PrintWriter(Main.so.getInstallDir().getPath()+"//log.txt");
 		final SystemTrayMenu st = new SystemTrayMenu();
 
 		NativeKeyListener gkl = new NativeKeyListener() {
@@ -33,25 +40,25 @@ public class Main {
 			public void nativeKeyReleased(NativeKeyEvent nke) {
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_1) {
-					System.out.println("Alt_l + 1 premuti");
+					myLog("Alt_l + 1 premuti");
 
 					st.sendPartialScreen();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
-					System.out.println("Alt_l + 2 premuti");
+					myLog("Alt_l + 2 premuti");
 
 					st.sendCompleteScreen();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_3) {
-					System.out.println("Alt_l + 3 premuti");
+					myLog("Alt_l + 3 premuti");
 
 					st.sendFile();
 				}
 
 				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_4) {
-					System.out.println("Alt_l + 4 premuti");
+					myLog("Alt_l + 4 premuti");
 
 					st.sendClipboard();
 				}
@@ -70,8 +77,8 @@ public class Main {
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException ex) {
-			System.err.println("Impossibile inizializzare NativeHook");
-			System.err.println(ex.getMessage());
+			myLog("Impossibile inizializzare NativeHook");
+			myLog(ex.getMessage());
 		}
 
 		GlobalScreen.addNativeKeyListener(gkl);
@@ -83,4 +90,9 @@ public class Main {
 			handlers[i].setLevel(Level.OFF);
 		}
 	}
+    
+    public static void myLog(String s){
+        System.out.println(s);
+        log.println(s);
+    }
 }

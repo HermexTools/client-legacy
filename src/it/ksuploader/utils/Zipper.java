@@ -1,6 +1,7 @@
 package it.ksuploader.utils;
 
 import it.ksuploader.dialogs.ProgressDialog;
+import it.ksuploader.main.Main;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +20,7 @@ public class Zipper {
 
 	public String toZip() {
 
-		System.out.println("[Zipper] file.length: " + file.length);
+		Main.myLog("[Zipper] file.length: " + file.length);
 		try {
 			FileOutputStream fos = new FileOutputStream(new Environment().getTempDir() + "/KStemp.zip");
 			ZipOutputStream zos = new ZipOutputStream(fos);
@@ -46,7 +47,7 @@ public class Zipper {
 					}
 				} else {
 					fis = new FileInputStream(f);
-					System.out.println("[Zipper] File length: " + f.length());
+					Main.myLog("[Zipper] File length: " + f.length());
 					zos.putNextEntry(new ZipEntry(f.getName()));
 					byte[] bytes = new byte[1024];
 					long count = 0;
@@ -68,7 +69,7 @@ public class Zipper {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("[Zipper] Zipping finished: KStemp.zip");
+		Main.myLog("[Zipper] Zipping finished: KStemp.zip");
 		return new Environment().getTempDir() + "/KStemp.zip";
 	}
 

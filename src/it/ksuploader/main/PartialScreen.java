@@ -144,7 +144,7 @@ public class PartialScreen extends JPanel implements NativeKeyListener {
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
-			System.out.println("Escape pressed");
+			Main.myLog("Escape pressed");
 			GlobalScreen.removeNativeKeyListener(this);
 			frame.dispose();
 		}

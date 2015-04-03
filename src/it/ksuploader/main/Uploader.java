@@ -56,8 +56,10 @@ public class Uploader {
 			outputArray.flush();
 			this.bytes = outputArray.toByteArray();
 			outputArray.close();
-            if(Main.config.isSaveEnabled())
+            if(Main.config.isSaveEnabled()){
                 ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
+                Main.myLog("[Uploader] Screen saved");
+            }
 		} catch (AWTException | IOException ex) {
 			ex.printStackTrace();
 		}
@@ -76,8 +78,10 @@ public class Uploader {
 			outputArray.flush();
 			this.bytes = outputArray.toByteArray();
 			outputArray.close();
-            if(Main.config.isSaveEnabled())
+            if(Main.config.isSaveEnabled()){
                 ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
+                Main.myLog("[Uploader] Screen saved");
+            }
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -99,22 +103,22 @@ public class Uploader {
 			// socketChannel.socket().setSoTimeout(10000);
 
 			// send auth
-			System.out.println("[Uploader] Sending auth");
+			Main.myLog("[Uploader] Sending auth");
 			dos.writeUTF(Main.config.getPass());
-			System.out.println("[Uploader] Auth sent: " + Main.config.getPass());
+			Main.myLog("[Uploader] Auth sent: " + Main.config.getPass());
 			this.link = dis.readUTF();
-			System.out.println("[Uploader] Auth reply: " + link);
+			Main.myLog("[Uploader] Auth reply: " + link);
             
 			if (this.link.equals("OK")) {
 
-				System.out.println("Sending type: " + type);
+				Main.myLog("Sending type: " + type);
 				dos.writeUTF(type);
                 String srvResponse;
 				// Controllo e aspetto che il server abbia ricevuto il type
 				// corretto
                 if (dis.readUTF().equals(type)) {
                     
-                    System.out.println("Il server riceve un: " + type);
+                    Main.myLog("Il server riceve un: " + type);
                     
 
                         
@@ -123,7 +127,7 @@ public class Uploader {
                             // image transfer
                             case "img":
                                 
-                                System.out.println("[Uploader] Uploading image...");
+                                Main.myLog("[Uploader] Uploading image...");
                                 
                                 dos.writeInt(bytes.length);
                                 
@@ -132,7 +136,7 @@ public class Uploader {
                                     dos.write(bytes, 0, bytes.length);
                                     dos.flush();
                                 } else if(srvResponse.equals("SERVER_FULL")){
-                                    System.out.println("[Uploader] Server Full");
+                                    Main.myLog("[Uploader] Server Full");
                                     dialog.serverFull();
                                 }
                                 
@@ -144,17 +148,17 @@ public class Uploader {
                                 
                                 File file = new File(filePath);
                                 long fileLength = file.length();
-                                System.out.println("[Uploader] File length: " + fileLength);
+                                Main.myLog("[Uploader] File length: " + fileLength);
                                 dos.writeLong(fileLength);
                                 srvResponse = dis.readUTF();
                                 if(srvResponse.equals("START_TRANSFER")){
                                     sendFile(file,fileLength);
                                 }else if(srvResponse.equals("FILE_TOO_LARGE")){
-                                    System.out.println("[Uploader] File too large");
+                                    Main.myLog("[Uploader] File too large");
                                     dialog.fileTooLarge();
                                     
                                 } else if(srvResponse.equals("SERVER_FULL")){
-                                    System.out.println("[Uploader] Server Full");
+                                    Main.myLog("[Uploader] Server Full");
                                     dialog.serverFull();
                                 }
                                 
@@ -168,19 +172,19 @@ public class Uploader {
                         }
                         
                         // return link
-                        System.out.println("[Uploader] Waiting link...");
+                        Main.myLog("[Uploader] Waiting link...");
                         this.link = dis.readUTF();
-                        System.out.println("[Uploader] Returned link: " + link);
+                        Main.myLog("[Uploader] Returned link: " + link);
                         if (type.equals("file") || type.equals("txt"))
                             progressDialog.close();
                     bytes = null;
 				} else {
-					System.out.println("[Uploader] The server had a bad interpretation of the fileType");
+					Main.myLog("[Uploader] The server had a bad interpretation of the fileType");
 					return false;
 				}
 
 			} else {
-				System.out.println("[Uploader] Wrong password, closed");
+				Main.myLog("[Uploader] Wrong password, closed");
 				dialog.wrongPassword();
 				return false;
 			}
@@ -217,7 +221,7 @@ public class Uploader {
 
 				// To secure overflow
 				try {
-					System.out.println("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
+					Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
 					progressDialog.set((int) (100 * bytesSent / fileLength));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -228,9 +232,9 @@ public class Uploader {
 			inChannel.close();
 
 			Thread.sleep(1000);
-			System.out.println("[Uploader] End of file reached..");
+			Main.myLog("[Uploader] End of file reached..");
 			aFile.close();
-			System.out.println("[Uploader] File closed.");
+			Main.myLog("[Uploader] File closed.");
 
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
@@ -260,7 +264,7 @@ public class Uploader {
 			socketChannel = SocketChannel.open();
 			SocketAddress socketAddress = new InetSocketAddress(ip, port);
 			socketChannel.connect(socketAddress);
-			System.out.println("[Uploader] Connected, now sending the file...");
+			Main.myLog("[Uploader] Connected, now sending the file...");
 
 		} catch (IOException e) {
 			e.printStackTrace();

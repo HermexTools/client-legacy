@@ -1,6 +1,7 @@
 package it.ksuploader.utils;
 
 import it.ksuploader.dialogs.NotificationDialog;
+import it.ksuploader.main.Main;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,8 +31,8 @@ public class LoadConfig {
 	public LoadConfig() {
 		try {
 			this.prop = new Properties();
-
-			if (!new File("client.properties").exists()) {
+            System.out.println("[LoadConfig] "+Main.so.getInstallDir().getPath()+"//client.properties");
+			if (!new File(Main.so.getInstallDir().getPath()+"//client.properties").exists()) {
 				prop.setProperty("ftp_weburl", "http://mydomain.com");
 				prop.setProperty("ftp_directory", "subFolder/anotherFolder");
 				prop.setProperty("ftp_port", "21");
@@ -44,9 +45,9 @@ public class LoadConfig {
 				prop.setProperty("server_address", "localhost");
 				prop.setProperty("save_enabled", "false");
 				prop.setProperty("save_dir", ".");
-				prop.store(new FileOutputStream("client.properties"), null);
+				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath()+"//client.properties"), null);
 			}
-			InputStream inputStream = new FileInputStream("client.properties");
+			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath()+"//client.properties");
 			prop.load(inputStream);
 
 			this.ip = prop.getProperty("server_address");
@@ -85,7 +86,7 @@ public class LoadConfig {
 			prop.setProperty("server_address", srvAddr);
 			prop.setProperty("save_enabled", saveEnabled);
 			prop.setProperty("save_dir", saveDir);
-			prop.store(new FileOutputStream("client.properties"), null);
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath()+"//client.properties"), null);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

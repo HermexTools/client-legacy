@@ -40,7 +40,7 @@ public class SettingsDialog extends JDialog {
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException ex) {
-			System.err.println(ex.toString());
+			Main.myLog(ex.toString());
 		}
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Settings");
