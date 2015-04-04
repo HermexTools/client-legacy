@@ -104,25 +104,31 @@ public class FtpUploader {
 			try {
 
 				// Setting up tls connection
-				TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
-					public X509Certificate[] getAcceptedIssuers() {
-						return null;
-					}
+				if (Main.config.isAcceptAllCertificates()) {
 
-					public void checkClientTrusted(X509Certificate[] certs, String authType) {
-					}
+					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
+						public X509Certificate[] getAcceptedIssuers() {
+							return null;
+						}
 
-					public void checkServerTrusted(X509Certificate[] certs, String authType) {
-					}
-				} };
+						public void checkClientTrusted(X509Certificate[] certs, String authType) {
+						}
 
-				SSLContext sslContext = null;
+						public void checkServerTrusted(X509Certificate[] certs, String authType) {
+						}
+					} };
 
-				sslContext = SSLContext.getInstance("TLS");
-				sslContext.init(null, trustManager, new SecureRandom());
+					SSLContext sslContext = null;
 
-				SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-				ftpClient.setSSLSocketFactory(sslSocketFactory);
+					sslContext = SSLContext.getInstance("TLS");
+					sslContext.init(null, trustManager, new SecureRandom());
+
+					SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+					ftpClient.setSSLSocketFactory(sslSocketFactory);
+				} else {
+					ftpClient.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+				}
+
 				ftpClient.setSecurity(FTPClient.SECURITY_FTPES);
 
 			} catch (NoSuchAlgorithmException | KeyManagementException e) {
