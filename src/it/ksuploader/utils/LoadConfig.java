@@ -282,7 +282,7 @@ public class LoadConfig {
         return startUpEnabled;
     }
 
-    public boolean isAcceptAllCertificates() {
+    public boolean getAcceptAllCertificates() {
         return acceptAllCertificates;
     }
     

@@ -104,7 +104,7 @@ public class FtpUploader {
 			try {
 
 				// Setting up tls connection
-				if (Main.config.isAcceptAllCertificates()) {
+				if (Main.config.getAcceptAllCertificates()) {
 
 					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
 						public X509Certificate[] getAcceptedIssuers() {

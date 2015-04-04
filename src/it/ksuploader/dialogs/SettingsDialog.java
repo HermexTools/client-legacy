@@ -246,7 +246,7 @@ public class SettingsDialog extends JDialog {
 			this.saveDir = new JFileChooser();
 			this.saveDir.setSelectedFile(new File(Main.config.getSaveDir()));
 			this.ftpesEnabled.setSelected(Main.config.getFtpesEnabled());
-			this.acceptCertificates.setSelected(Main.config.isAcceptAllCertificates());
+			this.acceptCertificates.setSelected(Main.config.getAcceptAllCertificates());
 		} catch (Exception e) {
 			e.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading");
