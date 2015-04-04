@@ -33,36 +33,112 @@ public class LoadConfig {
 		try {
 			this.prop = new Properties();
 			System.out.println("[LoadConfig] " + Main.so.getInstallDir().getPath() + "//client.properties");
+
 			if (!new File(Main.so.getInstallDir().getPath() + "//client.properties").exists()) {
-				prop.setProperty("ftp_weburl", "http://mydomain.com/");
-				prop.setProperty("ftp_directory", "subFolder/anotherFolder");
-				prop.setProperty("ftp_port", "21");
-				prop.setProperty("ftp_password", "pass");
-				prop.setProperty("ftp_user", "user");
-				prop.setProperty("ftp_address", "ftp.mydomain.com");
-				prop.setProperty("ftp_enabled", "false");
-				prop.setProperty("password", "pass");
-				prop.setProperty("port", "4030");
-				prop.setProperty("server_address", "localhost");
-				prop.setProperty("save_enabled", "false");
-				prop.setProperty("save_dir", ".");
 				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 			}
+
 			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath() + "//client.properties");
 			prop.load(inputStream);
+			inputStream.close();
 
-			this.ip = prop.getProperty("server_address");
-			this.pass = prop.getProperty("password");
-			this.ftpEnabled = Boolean.valueOf(prop.getProperty("ftp_enabled"));
-			this.port = Integer.parseInt(prop.getProperty("port"));
-			this.ftpAddr = prop.getProperty("ftp_address");
-			this.ftpUser = prop.getProperty("ftp_user");
-			this.ftpPass = prop.getProperty("ftp_password");
-			this.ftpPort = Integer.parseInt(prop.getProperty("ftp_port"));
-			this.ftpDir = prop.getProperty("ftp_directory");
-			this.ftpWebUrl = prop.getProperty("ftp_weburl");
-			this.saveEnabled = Boolean.valueOf(prop.getProperty("save_enabled"));
-			this.saveDir = prop.getProperty("save_dir");
+			boolean correct_config = false;
+
+			// Server address
+			if ((this.ip = prop.getProperty("server_address")) == null || prop.getProperty("server_address").isEmpty()) {
+				prop.setProperty("server_address", "localhost");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default server_address");
+			}
+
+			// Socket password
+			if ((this.pass = prop.getProperty("password")) == null || prop.getProperty("password").isEmpty()) {
+				prop.setProperty("password", "pass");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default password");
+			}
+
+			// FTP enabled
+			if (prop.getProperty("ftp_enabled") == null || prop.getProperty("ftp_enabled").isEmpty()) {
+				prop.setProperty("ftp_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_enabled");
+			} else {
+				this.ftpEnabled = Boolean.valueOf(prop.getProperty("ftp_enabled"));
+			}
+
+			// Socket port
+			if (prop.getProperty("port") == null || prop.getProperty("port").isEmpty()) {
+				prop.setProperty("port", "4030");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default port");
+			} else {
+				this.port = Integer.parseInt(prop.getProperty("port"));
+			}
+
+			// FTP address
+			if ((this.ftpAddr = prop.getProperty("ftp_address")) == null || prop.getProperty("ftp_address").isEmpty()) {
+				prop.setProperty("ftp_address", "ftp.mydomain.com");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_address");
+			}
+
+			// FTP user
+			if ((this.ftpUser = prop.getProperty("ftp_user")) == null || prop.getProperty("ftp_user").isEmpty()) {
+				prop.setProperty("ftp_user", "user");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_user");
+			}
+
+			// FTP password
+			if ((this.ftpPass = prop.getProperty("ftp_password")) == null || prop.getProperty("ftp_password").isEmpty()) {
+				prop.setProperty("ftp_password", "pass");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_password");
+			}
+
+			// FTP port
+			if (prop.getProperty("ftp_port") == null || prop.getProperty("ftp_port").isEmpty()) {
+				prop.setProperty("ftp_port", "21");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_port");
+			} else {
+				this.ftpPort = Integer.parseInt(prop.getProperty("ftp_port"));
+			}
+
+			// FTP directory
+			if ((this.ftpDir = prop.getProperty("ftp_directory")) == null
+					|| prop.getProperty("ftp_directory").isEmpty()) {
+				prop.setProperty("ftp_directory", "subFolder/anotherFolder");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_directory");
+			}
+
+			// FTP weburl
+			if ((this.ftpWebUrl = prop.getProperty("ftp_weburl")) == null || prop.getProperty("ftp_weburl").isEmpty()) {
+				prop.setProperty("ftp_weburl", "http://mydomain.com/");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_weburl");
+			}
+
+			// Save enabled
+			if (prop.getProperty("save_enabled") == null || prop.getProperty("save_enabled").isEmpty()) {
+				prop.setProperty("save_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default save_enabled");
+			} else {
+				this.saveEnabled = Boolean.valueOf(prop.getProperty("save_enabled"));
+			}
+
+			// Save directory
+			if ((this.saveDir = prop.getProperty("save_dir")) == null || prop.getProperty("save_dir").isEmpty()) {
+				prop.setProperty("save_dir", ".");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default save_dir");
+			}
+
+			if (correct_config)
+				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -88,9 +164,9 @@ public class LoadConfig {
 			prop.setProperty("server_address", srvAddr);
 			prop.setProperty("save_enabled", saveEnabled);
 			prop.setProperty("save_dir", saveDir);
-			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath()+"//client.properties"), null);
-            
-            this.ip = prop.getProperty("server_address");
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+
+			this.ip = prop.getProperty("server_address");
 			this.pass = prop.getProperty("password");
 			this.ftpEnabled = Boolean.valueOf(prop.getProperty("ftp_enabled"));
 			this.port = Integer.parseInt(prop.getProperty("port"));
