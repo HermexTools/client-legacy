@@ -5,7 +5,9 @@ import it.ksuploader.utils.LoadConfig;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,11 +24,17 @@ public class Main {
     public static HashSet<Integer> keyHashCScreen = new HashSet<>();
     public static HashSet<Integer> keyHashFile = new HashSet<>();
     public static HashSet<Integer> keyHashClipboard = new HashSet<>();
+    public static Map<Integer, String> fromKeyToName = new HashMap<Integer, String>();
 	public static LoadConfig config = new LoadConfig();
 	public static PrintWriter log;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		log = new PrintWriter(Main.so.getInstallDir().getPath() + "//log.txt");
+        fromKeyToName.put(56, "ALT");
+        fromKeyToName.put(2, "1");
+        fromKeyToName.put(3, "2");
+        fromKeyToName.put(4, "3");
+        fromKeyToName.put(5, "4");
 
 		final SystemTrayMenu st = new SystemTrayMenu();
 		final HashSet<Integer> hashKeyGlobal = new HashSet<>();

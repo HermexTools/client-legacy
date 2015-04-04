@@ -76,7 +76,7 @@ public class SystemTrayMenu {
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
-				MenuItem catturaArea = new MenuItem("Capture Area (ALT+1)");
+				MenuItem catturaArea = new MenuItem("Capture Area ("+Main.fromKeyToName.get(Main.config.getKeyScreen()[0])+"+"+Main.fromKeyToName.get(Main.config.getKeyScreen()[1])+")");
 				MenuItem catturaDesktop = new MenuItem("Capture Desktop (ALT+2)");
 				MenuItem caricaFile = new MenuItem("Upload File (ALT+3)");
 				MenuItem clipboard = new MenuItem("Upload Clipboard (ALT+4)");
