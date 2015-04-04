@@ -31,6 +31,7 @@ public class SettingsDialog extends JDialog {
 	private final JTextField srvPort;
 	private final JCheckBox ftpEnabled;
 	private final JCheckBox saveEnabled;
+    private final JCheckBox startUpEnabled;
 	private JFileChooser saveDir;
 
 	public SettingsDialog() {
@@ -47,43 +48,9 @@ public class SettingsDialog extends JDialog {
 		setBounds(100, 100, 480, 300);
 		setResizable(false);
 		getContentPane().setLayout(null);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 228, 464, 33);
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
-								ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
-								srvPassw.getText(), srvPort.getText(), srvAddr.getText(),
-								saveEnabled.isSelected() + "", saveDir.getSelectedFile().getPath());
-						setVisible(false);
-					}
-				});
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-
-				cancelButton.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-					}
-				});
-			}
-		}
 
 		ftpEnabled = new JCheckBox("FTP Enabled?");
-		ftpEnabled.setBounds(6, 7, 191, 23);
+		ftpEnabled.setBounds(6, 7, 130, 23);
 
 		ftpEnabled.addActionListener(new ActionListener() {
 			@Override
@@ -95,7 +62,7 @@ public class SettingsDialog extends JDialog {
 		getContentPane().add(ftpEnabled);
 		{
 			JPanel panel = new JPanel();
-			panel.setBounds(0, 37, 464, 187);
+			panel.setBounds(0, 37, 474, 234);
 			getContentPane().add(panel);
 			panel.setLayout(null);
 			{
@@ -185,10 +152,40 @@ public class SettingsDialog extends JDialog {
 			srvPort.setBounds(327, 58, 127, 20);
 			panel.add(srvPort);
 			srvPort.setColumns(10);
+			{
+				JButton okButton = new JButton("OK");
+				okButton.setBounds(324, 200, 65, 23);
+				panel.add(okButton);
+				okButton.setActionCommand("OK");
+				getRootPane().setDefaultButton(okButton);
+				{
+					JButton cancelButton = new JButton("Cancel");
+					cancelButton.setBounds(399, 200, 65, 23);
+					panel.add(cancelButton);
+					cancelButton.setActionCommand("Cancel");
+
+					cancelButton.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							setVisible(false);
+						}
+					});
+				}
+
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
+								ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
+								srvPassw.getText(), srvPort.getText(), srvAddr.getText(),
+								saveEnabled.isSelected() + "", saveDir.getSelectedFile().getPath());
+						setVisible(false);
+					}
+				});
+			}
 		}
 
 		saveEnabled = new JCheckBox("Save a local copy of images");
-		saveEnabled.setBounds(232, 7, 215, 23);
+		saveEnabled.setBounds(136, 7, 200, 23);
 		saveEnabled.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -202,6 +199,10 @@ public class SettingsDialog extends JDialog {
 			}
 		});
 		getContentPane().add(saveEnabled);
+		
+		startUpEnabled = new JCheckBox("Open at startup");
+		startUpEnabled.setBounds(338, 7, 130, 23);
+		getContentPane().add(startUpEnabled);
 	}
 
 	public void loadCurrentConfig() {
