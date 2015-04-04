@@ -21,6 +21,8 @@ public class LoadConfig {
 
 	private boolean ftpEnabled;
 	private boolean ftpesEnabled;
+    private boolean startUpEnabled;
+    private boolean acceptAllCertificates;
 	private String ftpAddr;
 	private String ftpUser;
 	private String ftpPass;
@@ -146,6 +148,24 @@ public class LoadConfig {
 			} else {
 				this.ftpesEnabled = Boolean.valueOf(prop.getProperty("ftpes_enabled"));
 			}
+            
+            // StartUp enabled
+			if (prop.getProperty("open_at_startup_enabled") == null || prop.getProperty("open_at_startup_enabled").isEmpty()) {
+				prop.setProperty("open_at_startup_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default open_at_startup_enabled");
+			} else {
+				this.startUpEnabled = Boolean.valueOf(prop.getProperty("open_at_startup_enabled"));
+			}
+            
+            // accept all certificates
+            if (prop.getProperty("accept_all_certificates") == null || prop.getProperty("accept_all_certificates").isEmpty()) {
+				prop.setProperty("accept_all_certificates", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default accept_all_certificates");
+			} else {
+				this.acceptAllCertificates = Boolean.valueOf(prop.getProperty("accept_all_certificates"));
+			}
 
 			if (correct_config)
 				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
@@ -160,7 +180,7 @@ public class LoadConfig {
 
 	public void storeNewConfig(String ftpWeburl, String ftpDir, String ftport, String ftpPass, String ftpUser,
 			String ftpAddr, String ftpEnabled, String srvPass, String srvPort, String srvAddr, String saveEnabled,
-			String saveDir) {
+			String saveDir, String startUp, String ftpes, String allCertificates ) {
 		try {
 			prop.setProperty("ftp_weburl", ftpWeburl);
 			prop.setProperty("ftp_directory", ftpDir);
@@ -169,11 +189,14 @@ public class LoadConfig {
 			prop.setProperty("ftp_user", ftpUser);
 			prop.setProperty("ftp_address", ftpAddr);
 			prop.setProperty("ftp_enabled", ftpEnabled);
+            prop.setProperty("ftpes_enabled", ftpes);
 			prop.setProperty("password", srvPass);
 			prop.setProperty("port", srvPort);
 			prop.setProperty("server_address", srvAddr);
 			prop.setProperty("save_enabled", saveEnabled);
 			prop.setProperty("save_dir", saveDir);
+            prop.setProperty("open_at_startup_enabled",startUp);
+            prop.setProperty("accept_all_certificates", allCertificates);
 			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 
 			this.ip = prop.getProperty("server_address");
@@ -188,6 +211,10 @@ public class LoadConfig {
 			this.ftpWebUrl = prop.getProperty("ftp_weburl");
 			this.saveEnabled = Boolean.valueOf(prop.getProperty("save_enabled"));
 			this.saveDir = prop.getProperty("save_dir");
+            this.startUpEnabled = Boolean.valueOf(prop.getProperty("open_at_startup_enabled"));
+            this.ftpesEnabled = Boolean.valueOf(prop.getProperty("ftpes_enabled"));
+            this.acceptAllCertificates = Boolean.valueOf(prop.getProperty("accept_all_certificates"));
+            
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
@@ -246,5 +273,19 @@ public class LoadConfig {
 	public boolean getFtpesEnabled() {
 		return ftpesEnabled;
 	}
+
+    public boolean isFtpesEnabled() {
+        return ftpesEnabled;
+    }
+
+    public boolean isStartUpEnabled() {
+        return startUpEnabled;
+    }
+
+    public boolean isAcceptAllCertificates() {
+        return acceptAllCertificates;
+    }
+    
+    
 
 }
