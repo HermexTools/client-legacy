@@ -76,10 +76,10 @@ public class SystemTrayMenu {
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
-				MenuItem catturaArea = new MenuItem("Capture Area ("+Main.fromKeyToName.get(Main.config.getKeyScreen()[0])+"+"+Main.fromKeyToName.get(Main.config.getKeyScreen()[1])+")");
-				MenuItem catturaDesktop = new MenuItem("Capture Desktop (ALT+2)");
-				MenuItem caricaFile = new MenuItem("Upload File (ALT+3)");
-				MenuItem clipboard = new MenuItem("Upload Clipboard (ALT+4)");
+				MenuItem catturaArea = new MenuItem("Capture Area "+loadKey(Main.config.getKeyScreen()));
+				MenuItem catturaDesktop = new MenuItem("Capture Desktop "+loadKey(Main.config.getKeyCScreen()));
+				MenuItem caricaFile = new MenuItem("Upload File "+loadKey(Main.config.getKeyFile()));
+				MenuItem clipboard = new MenuItem("Upload Clipboard "+loadKey(Main.config.getKeyClip()));
 				MenuItem settings = new MenuItem("Settings");
 				MenuItem esci = new MenuItem("Quit");
 
@@ -143,6 +143,16 @@ public class SystemTrayMenu {
 			}
 		}
 	}
+    
+    private String loadKey(int keyNumber[]){
+        String ret ="(" ;
+        for(int e : keyNumber){
+            ret=ret+Main.fromKeyToName.get(e)+"+";
+        }
+        ret=ret.substring(0,ret.length()-1);
+        ret+=")";
+        return ret;
+    }
 
 	public void sendPartialScreen() {
 		partialScreen = new PartialScreen();

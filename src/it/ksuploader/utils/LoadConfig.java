@@ -225,8 +225,9 @@ public class LoadConfig {
                 } 
             }
 
-			if (correct_config)
+			if (correct_config){
 				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+            }
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
