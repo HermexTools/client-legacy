@@ -18,6 +18,10 @@ import org.jnativehook.keyboard.NativeKeyListener;
 public class Main {
 
 	public static Environment so = new Environment();
+    public static HashSet<Integer> keyHashScreen = new HashSet<>();
+    public static HashSet<Integer> keyHashCScreen = new HashSet<>();
+    public static HashSet<Integer> keyHashFile = new HashSet<>();
+    public static HashSet<Integer> keyHashClipboard = new HashSet<>();
 	public static LoadConfig config = new LoadConfig();
 	public static PrintWriter log;
 
@@ -25,26 +29,21 @@ public class Main {
 		log = new PrintWriter(Main.so.getInstallDir().getPath() + "//log.txt");
 
 		final SystemTrayMenu st = new SystemTrayMenu();
-
 		final HashSet<Integer> hashKeyGlobal = new HashSet<>();
-
-		// Are all temporary static, ready to be dynamic. Configurable keystroke
-		// ready.
-		final HashSet<Integer> keyHashScreen = new HashSet<>();
-		keyHashScreen.add(56);
-		keyHashScreen.add(2);
-
-		final HashSet<Integer> keyHashCScreen = new HashSet<>();
-		keyHashCScreen.add(56);
-		keyHashCScreen.add(3);
-
-		final HashSet<Integer> keyHashFile = new HashSet<>();
-		keyHashFile.add(56);
-		keyHashFile.add(4);
-
-		final HashSet<Integer> keyHashClipboard = new HashSet<>();
-		keyHashClipboard.add(56);
-		keyHashClipboard.add(5);
+        
+        for (int i : config.getKeyScreen()) {
+            keyHashScreen.add(i);
+        }
+        
+        for (int i : config.getKeyCScreen()) {
+            keyHashCScreen.add(i);
+        }
+        for (int i : config.getKeyFile()) {
+            keyHashFile.add(i);
+        }
+        for (int i : config.getKeyClip()) {
+            keyHashClipboard.add(i);
+        }
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 

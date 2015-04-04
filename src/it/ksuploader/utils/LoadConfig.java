@@ -15,20 +15,26 @@ public class LoadConfig {
 
 	private String ip;
 	private String pass;
-	private int port;
-	private boolean saveEnabled;
 	private String saveDir;
-
+    private String ftpAddr;
+	private String ftpUser;
+	private String ftpPass;
+	private String ftpDir;
+	private String ftpWebUrl;
+    
+	private boolean saveEnabled;
 	private boolean ftpEnabled;
 	private boolean ftpesEnabled;
     private boolean startUpEnabled;
     private boolean acceptAllCertificates;
-	private String ftpAddr;
-	private String ftpUser;
-	private String ftpPass;
-	private int ftpPort;
-	private String ftpDir;
-	private String ftpWebUrl;
+    
+    private int port;
+    private int ftpPort;
+    private int keyScreen[];
+    private int keyCScreen[];
+    private int keyFile[];
+    private int keyClip[];
+	
 
 	private Properties prop;
 
@@ -166,6 +172,58 @@ public class LoadConfig {
 			} else {
 				this.acceptAllCertificates = Boolean.valueOf(prop.getProperty("accept_all_certificates"));
 			}
+            
+            // keys for partial screen
+            if (prop.getProperty("key_screen") == null || prop.getProperty("key_screen").isEmpty()) {
+				prop.setProperty("key_screen", "56:2");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_screen");
+			} else {
+                String[] tmp = prop.getProperty("key_screen").split(":");
+                this.keyScreen = new int[tmp.length];
+                for (int i = 0; i < tmp.length; i++) {
+                    this.keyScreen[i]=Integer.parseInt(tmp[i]);
+                } 
+            }
+            
+            // keys for partial screen
+            if (prop.getProperty("key_cscreen") == null || prop.getProperty("key_cscreen").isEmpty()) {
+				prop.setProperty("key_cscreen", "56:3");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_cscreen");
+			} else {
+                String[] tmp = prop.getProperty("key_cscreen").split(":");
+                this.keyCScreen = new int[tmp.length];
+                for (int i = 0; i < tmp.length; i++) {
+                    this.keyCScreen[i]=Integer.parseInt(tmp[i]);
+                } 
+            }
+            
+            // keys for files
+            if (prop.getProperty("key_file") == null || prop.getProperty("key_file").isEmpty()) {
+				prop.setProperty("key_file", "56:4");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_file");
+			} else {
+                String[] tmp = prop.getProperty("key_file").split(":");
+                this.keyFile = new int[tmp.length];
+                for (int i = 0; i < tmp.length; i++) {
+                    this.keyFile[i]=Integer.parseInt(tmp[i]);
+                } 
+            }
+            
+            // keys for clipboard
+            if (prop.getProperty("key_clipboard") == null || prop.getProperty("key_clipboard").isEmpty()) {
+				prop.setProperty("key_clipboard", "56:5");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_clipboard");
+			} else {
+                String[] tmp = prop.getProperty("key_clipboard").split(":");
+                this.keyClip = new int[tmp.length];
+                for (int i = 0; i < tmp.length; i++) {
+                    this.keyClip[i]=Integer.parseInt(tmp[i]);
+                } 
+            }
 
 			if (correct_config)
 				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
@@ -284,6 +342,22 @@ public class LoadConfig {
 
     public boolean getAcceptAllCertificates() {
         return acceptAllCertificates;
+    }
+
+    public int[] getKeyScreen() {
+        return keyScreen;
+    }
+
+    public int[] getKeyCScreen() {
+        return keyCScreen;
+    }
+
+    public int[] getKeyFile() {
+        return keyFile;
+    }
+
+    public int[] getKeyClip() {
+        return keyClip;
     }
     
     
