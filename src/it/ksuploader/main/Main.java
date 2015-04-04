@@ -2,9 +2,10 @@ package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.LoadConfig;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-
+import java.util.HashSet;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,57 +16,94 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
-	
-    public static Environment so = new Environment();
-    public static LoadConfig config = new LoadConfig();
-    public static PrintWriter log; 
+
+	public static Environment so = new Environment();
+	public static LoadConfig config = new LoadConfig();
+	public static PrintWriter log;
 
 	public static void main(String[] args) throws FileNotFoundException {
-        log = new PrintWriter(Main.so.getInstallDir().getPath()+"//log.txt");
-        
+		log = new PrintWriter(Main.so.getInstallDir().getPath() + "//log.txt");
+
 		final SystemTrayMenu st = new SystemTrayMenu();
+
+		final HashSet<Integer> hashKeyGlobal = new HashSet<>();
+
+		// Are all temporary static, ready to be dynamic. Configurable keystroke
+		// ready.
+		final HashSet<Integer> keyHashScreen = new HashSet<>();
+		keyHashScreen.add(56);
+		keyHashScreen.add(2);
+
+		final HashSet<Integer> keyHashCScreen = new HashSet<>();
+		keyHashCScreen.add(56);
+		keyHashCScreen.add(3);
+
+		final HashSet<Integer> keyHashFile = new HashSet<>();
+		keyHashFile.add(56);
+		keyHashFile.add(4);
+
+		final HashSet<Integer> keyHashClipboard = new HashSet<>();
+		keyHashClipboard.add(56);
+		keyHashClipboard.add(5);
 
 		NativeKeyListener gkl = new NativeKeyListener() {
 
-			boolean altPressed = false;
+			boolean hash1Ready = false;
 
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {
-				if (nke.getKeyCode() == NativeKeyEvent.VC_ALT_L) {
-					altPressed = true;
+
+				if (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
+						|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard.contains(nke.getKeyCode())) {
+					hashKeyGlobal.add(nke.getKeyCode());
+					hash1Ready = true;
 				}
 			}
 
 			@Override
 			public void nativeKeyReleased(NativeKeyEvent nke) {
 
-				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_1) {
-					myLog("Alt_l + 1 premuti");
+				if ((hash1Ready == true)
+						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
+								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
+									.contains(nke.getKeyCode())
 
+						)) {
+					myLog("Combination received");
+					hashKeyGlobal.add(nke.getKeyCode());
+				}
+
+				if (keyHashScreen.equals(hashKeyGlobal)) {
+					System.out.println("Via cattura parziale");
+					clearKeyComb();
 					st.sendPartialScreen();
 				}
 
-				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_2) {
-					myLog("Alt_l + 2 premuti");
-
+				if (keyHashCScreen.equals(hashKeyGlobal)) {
+					System.out.println("Via cattura globale");
+					clearKeyComb();
 					st.sendCompleteScreen();
 				}
 
-				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_3) {
-					myLog("Alt_l + 3 premuti");
-
+				if (keyHashFile.equals(hashKeyGlobal)) {
+					System.out.println("Via file");
+					clearKeyComb();
 					st.sendFile();
 				}
 
-				if ((altPressed == true) && nke.getKeyCode() == NativeKeyEvent.VC_4) {
-					myLog("Alt_l + 4 premuti");
-
+				if (keyHashClipboard.equals(hashKeyGlobal)) {
+					System.out.println("Via clipboard");
+					clearKeyComb();
 					st.sendClipboard();
 				}
 
-				if (nke.getKeyCode() == NativeKeyEvent.VC_ALT_L) {
-					altPressed = false;
-				}
+				clearKeyComb();
+			}
+
+			private void clearKeyComb() {
+				System.out.println("Combination cleared");
+				hash1Ready = false;
+				hashKeyGlobal.clear();
 			}
 
 			@Override
@@ -90,15 +128,16 @@ public class Main {
 			handlers[i].setLevel(Level.OFF);
 		}
 	}
-    
-    public static void myLog(String s){
-        System.out.println(s);
-        log.println(s);
-        log.flush();
-    }
-    public static void myErr(String s){
-        log.println(s);
-        log.flush();
-    }
-    
+
+	public static void myLog(String s) {
+		System.out.println(s);
+		log.println(s);
+		log.flush();
+	}
+
+	public static void myErr(String s) {
+		log.println(s);
+		log.flush();
+	}
+
 }
