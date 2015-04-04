@@ -20,6 +20,7 @@ public class LoadConfig {
 	private String saveDir;
 
 	private boolean ftpEnabled;
+	private boolean ftpesEnabled;
 	private String ftpAddr;
 	private String ftpUser;
 	private String ftpPass;
@@ -137,6 +138,15 @@ public class LoadConfig {
 				System.out.println("[LoadConfig] Setting default save_dir");
 			}
 
+			// FTPES enabled
+			if (prop.getProperty("ftpes_enabled") == null || prop.getProperty("ftpes_enabled").isEmpty()) {
+				prop.setProperty("ftpes_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftpes_enabled");
+			} else {
+				this.ftpesEnabled = Boolean.valueOf(prop.getProperty("ftpes_enabled"));
+			}
+
 			if (correct_config)
 				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 
@@ -231,6 +241,10 @@ public class LoadConfig {
 
 	public String getSaveDir() {
 		return saveDir;
+	}
+
+	public boolean getFtpesEnabled() {
+		return ftpesEnabled;
 	}
 
 }
