@@ -405,7 +405,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		} else if (count == 2 && !newKey.equals(secondKey)) {
 			newKey += "+" + arg0.getKeyCode();
 			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
-			disableListener();
+			disableListener(callerBtn);
 
 			if (callerBtn.equals(btnScreen)) {
 				Main.config.setScreenKeys(newKey);
@@ -416,8 +416,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			} else if (callerBtn.equals(btnClipboard)) {
 				Main.config.setClipboardKeys(newKey);
 			}
-            Main.st.updateKeys();
-            Main.keyListener.loadKeys();
+			Main.st.updateKeys();
+			Main.keyListener.loadKeys();
 		}
 	}
 
