@@ -42,13 +42,13 @@ public class LoadConfig {
 	public LoadConfig() {
 		try {
 			this.prop = new Properties();
-			System.out.println("[LoadConfig] " + Constants.so.getInstallDir().getPath() + "/client.properties");
+			System.out.println("[LoadConfig] " + Main.so.getInstallDir().getPath() + "/client.properties");
 
-			if (!new File(Constants.so.getInstallDir().getPath(), "client.properties").exists()) {
-				prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "/client.properties"), null);
+			if (!new File(Main.so.getInstallDir().getPath(), "client.properties").exists()) {
+				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "/client.properties"), null);
 			}
 
-			InputStream inputStream = new FileInputStream(Constants.so.getInstallDir().getPath()
+			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath()
 					+ "//client.properties");
 			prop.load(inputStream);
 			inputStream.close();
@@ -230,7 +230,7 @@ public class LoadConfig {
 			}
 
 			if (correct_config) {
-				prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 			}
 
 		} catch (Exception ex) {
@@ -260,7 +260,7 @@ public class LoadConfig {
 			prop.setProperty("save_dir", saveDir);
 			prop.setProperty("open_at_startup_enabled", startUp);
 			prop.setProperty("accept_all_certificates", allCertificates);
-			prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 
 			this.ip = prop.getProperty("server_address");
 			this.pass = prop.getProperty("password");
@@ -368,7 +368,7 @@ public class LoadConfig {
 	public void setScreenKeys(String comb) {
 		prop.setProperty("key_screen", comb);
 		try {
-			prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -383,7 +383,7 @@ public class LoadConfig {
 	public void setCScreenKeys(String comb) {
 		prop.setProperty("key_cscreen", comb);
 		try {
-			prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -398,7 +398,7 @@ public class LoadConfig {
 	public void setFileKeys(String comb) {
 		prop.setProperty("key_file", comb);
 		try {
-			prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -413,7 +413,7 @@ public class LoadConfig {
 	public void setClipboardKeys(String comb) {
 		prop.setProperty("key_clipboard", comb);
 		try {
-			prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

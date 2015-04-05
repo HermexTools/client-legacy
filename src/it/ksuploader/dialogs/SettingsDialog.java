@@ -1,7 +1,7 @@
 package it.ksuploader.dialogs;
 
 import it.ksuploader.main.Main;
-import it.ksuploader.utils.Constants;
+import it.ksuploader.utils.MyKeyListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -220,7 +220,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Constants.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
+				Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
 						ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
 						srvPassw.getText(), srvPort.getText(), srvAddr.getText(), saveEnabled.isSelected() + "",
 						saveDir.getSelectedFile().getPath(), startUpEnabled.isSelected() + "",
@@ -308,21 +308,21 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 
 	public void loadCurrentConfig() {
 		try {
-			this.ftpAddr.setText(Constants.config.getFtpAddr());
-			this.ftpDir.setText(Constants.config.getFtpDir());
-			this.ftpEnabled.setSelected(Constants.config.getFtpEnabled());
-			this.ftpPassw.setText(Constants.config.getFtpPass());
-			this.ftpPort.setText(Constants.config.getFtpPort() + "");
-			this.ftpUser.setText(Constants.config.getFtpUser());
-			this.ftpWeburl.setText(Constants.config.getFtpWebUrl());
-			this.srvAddr.setText(Constants.config.getIp());
-			this.srvPassw.setText(Constants.config.getPass());
-			this.srvPort.setText(Constants.config.getPort() + "");
-			this.saveEnabled.setSelected(Constants.config.isSaveEnabled());
+			this.ftpAddr.setText(Main.config.getFtpAddr());
+			this.ftpDir.setText(Main.config.getFtpDir());
+			this.ftpEnabled.setSelected(Main.config.getFtpEnabled());
+			this.ftpPassw.setText(Main.config.getFtpPass());
+			this.ftpPort.setText(Main.config.getFtpPort() + "");
+			this.ftpUser.setText(Main.config.getFtpUser());
+			this.ftpWeburl.setText(Main.config.getFtpWebUrl());
+			this.srvAddr.setText(Main.config.getIp());
+			this.srvPassw.setText(Main.config.getPass());
+			this.srvPort.setText(Main.config.getPort() + "");
+			this.saveEnabled.setSelected(Main.config.isSaveEnabled());
 			this.saveDir = new JFileChooser();
-			this.saveDir.setSelectedFile(new File(Constants.config.getSaveDir()));
-			this.ftpesEnabled.setSelected(Constants.config.getFtpesEnabled());
-			this.acceptCertificates.setSelected(Constants.config.getAcceptAllCertificates());
+			this.saveDir.setSelectedFile(new File(Main.config.getSaveDir()));
+			this.ftpesEnabled.setSelected(Main.config.getFtpesEnabled());
+			this.acceptCertificates.setSelected(Main.config.getAcceptAllCertificates());
 		} catch (Exception e) {
 			e.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading");
@@ -394,25 +394,26 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 
 		secondKey = arg0.getKeyCode() + "";
 
-		if (count == 1 && Constants.fromKeyToName.containsKey(arg0.getKeyCode())) {
+		if (count == 1 && MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			newKey += arg0.getKeyCode();
-			callerBtn.setText(Constants.fromKeyToName.get(arg0.getKeyCode()));
+			callerBtn.setText(MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			count++;
 		} else if (count == 2 && !newKey.equals(secondKey)) {
 			newKey += "+" + arg0.getKeyCode();
-			callerBtn.setText(callerBtn.getText() + "+" + Constants.fromKeyToName.get(arg0.getKeyCode()));
+			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			disableListener();
 
 			if (callerBtn.equals(btnScreen)) {
-				Constants.config.setScreenKeys(newKey);
+				Main.config.setScreenKeys(newKey);
 			} else if (callerBtn.equals(btnCScreen)) {
-				Constants.config.setCScreenKeys(newKey);
+				Main.config.setCScreenKeys(newKey);
 			} else if (callerBtn.equals(btnFile)) {
-				Constants.config.setFileKeys(newKey);
+				Main.config.setFileKeys(newKey);
 			} else if (callerBtn.equals(btnClipboard)) {
-				Constants.config.setClipboardKeys(newKey);
+				Main.config.setClipboardKeys(newKey);
 			}
             Main.st.updateKeys();
+            Main.keyListener.loadKeys();
 		}
 	}
 

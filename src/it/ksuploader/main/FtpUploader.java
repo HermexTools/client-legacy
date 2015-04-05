@@ -1,7 +1,6 @@
 package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
-import it.ksuploader.utils.Constants;
 import it.ksuploader.utils.Environment;
 import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
@@ -51,8 +50,8 @@ public class FtpUploader {
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
 
-			if (Constants.config.isSaveEnabled()) {
-				ImageIO.write(img, "png", new File(Constants.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+			if (Main.config.isSaveEnabled()) {
+				ImageIO.write(img, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
 						+ fileName + ".png"));
 				Main.myLog("[Uploader] Screen saved");
 			}
@@ -76,8 +75,8 @@ public class FtpUploader {
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
 
-			if (Constants.config.isSaveEnabled()) {
-				ImageIO.write(img, "png", new File(Constants.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+			if (Main.config.isSaveEnabled()) {
+				ImageIO.write(img, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
 						+ fileName + ".png"));
 				Main.myLog("[Uploader] Screen saved");
 			}
@@ -100,12 +99,12 @@ public class FtpUploader {
 		ftpClient = new FTPClient();
 		notificationDialog = new NotificationDialog();
 
-		if (Constants.config.getFtpesEnabled()) {
+		if (Main.config.getFtpesEnabled()) {
 
 			try {
 
 				// Setting up tls connection
-				if (Constants.config.getAcceptAllCertificates()) {
+				if (Main.config.getAcceptAllCertificates()) {
 
 					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
 						public X509Certificate[] getAcceptedIssuers() {
@@ -143,7 +142,7 @@ public class FtpUploader {
 
 		// Connection
 		try {
-			ftpClient.connect(Constants.config.getFtpAddr(), Constants.config.getFtpPort());
+			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			notificationDialog.show("Connection error", "Unable to connect to the server");
@@ -154,7 +153,7 @@ public class FtpUploader {
 
 		// Login
 		try {
-			ftpClient.login(Constants.config.getFtpUser(), Constants.config.getFtpPass());
+			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
@@ -164,7 +163,7 @@ public class FtpUploader {
 
 		// Change directory
 		try {
-			ftpClient.changeDirectory(Constants.config.getFtpDir());
+			ftpClient.changeDirectory(Main.config.getFtpDir());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
@@ -186,7 +185,7 @@ public class FtpUploader {
 
 		// Link return
 		try {
-			this.link = Constants.config.getFtpWebUrl() + new File(filePath).getName();
+			this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
 			Main.myLog("[FtpUploader] Returning url: " + this.link);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
