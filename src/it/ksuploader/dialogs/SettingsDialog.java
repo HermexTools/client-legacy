@@ -242,7 +242,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnScreen = new JButton("Change");
-		btnScreen.setBounds(270, 100, 90, 20);
+		btnScreen.setBounds(256, 108, 90, 20);
 		panel.add(btnScreen);
 
 		btnScreen.addActionListener(new ActionListener() {
@@ -253,7 +253,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnCScreen = new JButton("Change");
-		btnCScreen.setBounds(370, 100, 90, 20);
+		btnCScreen.setBounds(356, 108, 90, 20);
 		panel.add(btnCScreen);
 
 		btnCScreen.addActionListener(new ActionListener() {
@@ -264,7 +264,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnFile = new JButton("Change");
-		btnFile.setBounds(270, 150, 90, 20);
+		btnFile.setBounds(256, 150, 90, 20);
 		panel.add(btnFile);
 
 		btnFile.addActionListener(new ActionListener() {
@@ -275,8 +275,24 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnClipboard = new JButton("Change");
-		btnClipboard.setBounds(370, 150, 90, 20);
+		btnClipboard.setBounds(356, 150, 90, 20);
 		panel.add(btnClipboard);
+		
+		JLabel lblFileShortcut = new JLabel("File shortcut");
+		lblFileShortcut.setBounds(257, 134, 80, 14);
+		panel.add(lblFileShortcut);
+		
+		JLabel lblClipboard = new JLabel("Clipboard shortcut");
+		lblClipboard.setBounds(357, 134, 94, 14);
+		panel.add(lblClipboard);
+		
+		JLabel lblAreaShortcut = new JLabel("Area shortcut");
+		lblAreaShortcut.setBounds(257, 94, 90, 14);
+		panel.add(lblAreaShortcut);
+		
+		JLabel lblNewLabel = new JLabel("Desktop shortcut");
+		lblNewLabel.setBounds(357, 94, 87, 14);
+		panel.add(lblNewLabel);
 
 		btnClipboard.addActionListener(new ActionListener() {
 			@Override
@@ -396,6 +412,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			} else if (callerBtn.equals(btnClipboard)) {
 				Constants.config.setClipboardKeys(newKey);
 			}
+            Main.st.updateKeys();
 		}
 	}
 

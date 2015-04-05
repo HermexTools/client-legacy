@@ -49,6 +49,10 @@ public class SystemTrayMenu {
 	private NotificationDialog notification;
 	private SettingsDialog configPanel;
 	private MenuItem[] uploads;
+    private MenuItem catturaArea;
+    private MenuItem catturaDesktop;
+    private MenuItem caricaFile;
+    private MenuItem clipboard;
 
 	public SystemTrayMenu() {
 		try {
@@ -77,10 +81,11 @@ public class SystemTrayMenu {
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
-				MenuItem catturaArea = new MenuItem("Capture Area " + loadKey(Constants.config.getKeyScreen()));
-				MenuItem catturaDesktop = new MenuItem("Capture Desktop " + loadKey(Constants.config.getKeyCScreen()));
-				MenuItem caricaFile = new MenuItem("Upload File " + loadKey(Constants.config.getKeyFile()));
-				MenuItem clipboard = new MenuItem("Upload Clipboard " + loadKey(Constants.config.getKeyClipboard()));
+				catturaArea = new MenuItem();
+				catturaDesktop = new MenuItem();
+				caricaFile = new MenuItem();
+				clipboard = new MenuItem();
+                updateKeys();
 				MenuItem settings = new MenuItem("Settings");
 				MenuItem esci = new MenuItem("Quit");
 
@@ -144,6 +149,13 @@ public class SystemTrayMenu {
 			}
 		}
 	}
+    
+    public void updateKeys(){
+        catturaArea.setLabel(("Capture Area " + loadKey(Constants.config.getKeyScreen())));
+        catturaDesktop.setLabel("Capture Desktop " + loadKey(Constants.config.getKeyCScreen()));
+        caricaFile.setLabel("Upload File " + loadKey(Constants.config.getKeyFile()));
+        clipboard.setLabel("Upload Clipboard " + loadKey(Constants.config.getKeyClipboard()));
+    }
 
 	public String loadKey(int keyNumber[]) {
 		String ret = "(";

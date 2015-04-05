@@ -1,6 +1,5 @@
 package it.ksuploader.utils;
 
-import it.ksuploader.main.SystemTrayMenu;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ public class Constants {
 	public static HashMap<Integer, String> fromKeyToName = new HashMap<Integer, String>();
 	public static Environment so = new Environment();
 	public static LoadConfig config = new LoadConfig();
-	public static SystemTrayMenu st = new SystemTrayMenu();
 	public static PrintWriter log;
 	public static HashSet<Integer> keyHashScreen = new HashSet<>();
 	public static HashSet<Integer> keyHashCScreen = new HashSet<>();

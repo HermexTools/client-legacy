@@ -15,11 +15,12 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
+    public static SystemTrayMenu st;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		new Constants();
 		Constants.log = new PrintWriter(Constants.so.getInstallDir().getPath() + "//log.txt");
-
+        st = new SystemTrayMenu();
 		final HashSet<Integer> hashKeyGlobal = new HashSet<>();
 
 		for (int i : Constants.config.getKeyScreen()) {
@@ -69,25 +70,25 @@ public class Main {
 				if (Constants.keyHashScreen.equals(hashKeyGlobal)) {
 					System.out.println("Via cattura parziale");
 					clearKeyComb();
-					Constants.st.sendPartialScreen();
+					st.sendPartialScreen();
 				}
 
 				if (Constants.keyHashCScreen.equals(hashKeyGlobal)) {
 					System.out.println("Via cattura globale");
 					clearKeyComb();
-					Constants.st.sendCompleteScreen();
+					st.sendCompleteScreen();
 				}
 
 				if (Constants.keyHashFile.equals(hashKeyGlobal)) {
 					System.out.println("Via file");
 					clearKeyComb();
-					Constants.st.sendFile();
+					st.sendFile();
 				}
 
 				if (Constants.keyHashClipboard.equals(hashKeyGlobal)) {
 					System.out.println("Via clipboard");
 					clearKeyComb();
-					Constants.st.sendClipboard();
+					st.sendClipboard();
 				}
 
 				clearKeyComb();
