@@ -249,6 +249,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enableListener(btnScreen);
+				btnScreen.setEnabled(false);
 			}
 		});
 
@@ -260,6 +261,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enableListener(btnCScreen);
+				btnCScreen.setEnabled(false);
 			}
 		});
 
@@ -271,35 +273,37 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enableListener(btnFile);
+				btnFile.setEnabled(false);
 			}
 		});
 
 		btnClipboard = new JButton("Change");
 		btnClipboard.setBounds(356, 150, 90, 20);
 		panel.add(btnClipboard);
-		
-		JLabel lblFileShortcut = new JLabel("File shortcut");
-		lblFileShortcut.setBounds(257, 134, 80, 14);
-		panel.add(lblFileShortcut);
-		
-		JLabel lblClipboard = new JLabel("Clipboard shortcut");
-		lblClipboard.setBounds(357, 134, 94, 14);
-		panel.add(lblClipboard);
-		
-		JLabel lblAreaShortcut = new JLabel("Area shortcut");
-		lblAreaShortcut.setBounds(257, 94, 90, 14);
-		panel.add(lblAreaShortcut);
-		
-		JLabel lblNewLabel = new JLabel("Desktop shortcut");
-		lblNewLabel.setBounds(357, 94, 87, 14);
-		panel.add(lblNewLabel);
 
 		btnClipboard.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				enableListener(btnClipboard);
+				btnClipboard.setEnabled(false);
 			}
 		});
+
+		JLabel lblFileShortcut = new JLabel("File shortcut");
+		lblFileShortcut.setBounds(257, 134, 80, 14);
+		panel.add(lblFileShortcut);
+
+		JLabel lblClipboard = new JLabel("Clipboard shortcut");
+		lblClipboard.setBounds(357, 134, 94, 14);
+		panel.add(lblClipboard);
+
+		JLabel lblAreaShortcut = new JLabel("Area shortcut");
+		lblAreaShortcut.setBounds(257, 94, 90, 14);
+		panel.add(lblAreaShortcut);
+
+		JLabel lblNewLabel = new JLabel("Desktop shortcut");
+		lblNewLabel.setBounds(357, 94, 87, 14);
+		panel.add(lblNewLabel);
 	}
 
 	/*
@@ -377,10 +381,10 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		GlobalScreen.addNativeKeyListener(this);
 	}
 
-	protected void disableListener() {
+	protected void disableListener(JButton btn) {
 		System.out.println("[SettingsDialog] Listener disabled");
 		GlobalScreen.removeNativeKeyListener(this);
-
+		btn.setEnabled(true);
 	}
 
 	String newKey;
@@ -401,7 +405,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		} else if (count == 2 && !newKey.equals(secondKey)) {
 			newKey += "+" + arg0.getKeyCode();
 			callerBtn.setText(callerBtn.getText() + "+" + Constants.fromKeyToName.get(arg0.getKeyCode()));
-			disableListener();
+			disableListener(callerBtn);
 
 			if (callerBtn.equals(btnScreen)) {
 				Constants.config.setScreenKeys(newKey);
@@ -412,7 +416,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			} else if (callerBtn.equals(btnClipboard)) {
 				Constants.config.setClipboardKeys(newKey);
 			}
-            Main.st.updateKeys();
+			Main.st.updateKeys();
 		}
 	}
 
