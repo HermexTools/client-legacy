@@ -35,20 +35,21 @@ public class LoadConfig {
 	private int keyFile[];
 	private int keyClip[];
 
-	String[] tmp;
+	private String[] tmp;
 
 	private Properties prop;
 
 	public LoadConfig() {
 		try {
 			this.prop = new Properties();
-			System.out.println("[LoadConfig] " + Constants.so.getInstallDir().getPath() + "//client.properties");
+			System.out.println("[LoadConfig] " + Constants.so.getInstallDir().getPath() + "/client.properties");
 
-			if (!new File(Constants.so.getInstallDir().getPath() + "//client.properties").exists()) {
-				prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "//client.properties"), null);
+			if (!new File(Constants.so.getInstallDir().getPath(), "client.properties").exists()) {
+				prop.store(new FileOutputStream(Constants.so.getInstallDir().getPath() + "/client.properties"), null);
 			}
 
-			InputStream inputStream = new FileInputStream(Constants.so.getInstallDir().getPath() + "//client.properties");
+			InputStream inputStream = new FileInputStream(Constants.so.getInstallDir().getPath()
+					+ "//client.properties");
 			prop.load(inputStream);
 			inputStream.close();
 
