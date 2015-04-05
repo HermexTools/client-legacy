@@ -2,8 +2,9 @@ package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.ProgressDialog;
-
+import it.ksuploader.utils.Constants;
 import it.ksuploader.utils.Environment;
+
 
 
 
@@ -43,7 +44,7 @@ public class Uploader {
 	// Per gli screen parziali
 	public Uploader(Rectangle r) {
 		try {
-			SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+			SocketChannel socketChannel = createChannel(Constants.config.getIp(), Constants.config.getPort());
 			this.socketChannel = socketChannel;
 
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -58,8 +59,8 @@ public class Uploader {
 			outputArray.flush();
 			this.bytes = outputArray.toByteArray();
 			outputArray.close();
-            if(Main.config.isSaveEnabled()){
-                ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
+            if(Constants.config.isSaveEnabled()){
+                ImageIO.write(img, "png", new File(Constants.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
                 Main.myLog("[Uploader] Screen saved");
             }
 		} catch (AWTException | IOException ex) {
@@ -72,7 +73,7 @@ public class Uploader {
 	public Uploader(BufferedImage bi) {
 
 		try {
-			SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+			SocketChannel socketChannel = createChannel(Constants.config.getIp(), Constants.config.getPort());
 			this.socketChannel = socketChannel;
 			this.img = bi;
 
@@ -81,8 +82,8 @@ public class Uploader {
 			outputArray.flush();
 			this.bytes = outputArray.toByteArray();
 			outputArray.close();
-            if(Main.config.isSaveEnabled()){
-                ImageIO.write(img, "png", new File(Main.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
+            if(Constants.config.isSaveEnabled()){
+                ImageIO.write(img, "png", new File(Constants.config.getSaveDir()+"/"+System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999)+".png"));
                 Main.myLog("[Uploader] Screen saved");
             }
 		} catch (IOException ex) {
@@ -94,7 +95,7 @@ public class Uploader {
 	// Per i file
 	public Uploader(String filePath) {
 
-		SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+		SocketChannel socketChannel = createChannel(Constants.config.getIp(), Constants.config.getPort());
 		this.socketChannel = socketChannel;
 		this.filePath = filePath;
 	}
@@ -108,8 +109,8 @@ public class Uploader {
 
 			// send auth
 			Main.myLog("[Uploader] Sending auth");
-			dos.writeUTF(Main.config.getPass());
-			Main.myLog("[Uploader] Auth sent: " + Main.config.getPass());
+			dos.writeUTF(Constants.config.getPass());
+			Main.myLog("[Uploader] Auth sent: " + Constants.config.getPass());
 			this.link = dis.readUTF();
 			Main.myLog("[Uploader] Auth reply: " + link);
             

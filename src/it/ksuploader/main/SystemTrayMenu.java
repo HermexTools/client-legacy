@@ -2,6 +2,7 @@ package it.ksuploader.main;
 
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.SettingsDialog;
+import it.ksuploader.utils.Constants;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
 
@@ -76,10 +77,10 @@ public class SystemTrayMenu {
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
-				MenuItem catturaArea = new MenuItem("Capture Area " + loadKey(Main.config.getKeyScreen()));
-				MenuItem catturaDesktop = new MenuItem("Capture Desktop " + loadKey(Main.config.getKeyCScreen()));
-				MenuItem caricaFile = new MenuItem("Upload File " + loadKey(Main.config.getKeyFile()));
-				MenuItem clipboard = new MenuItem("Upload Clipboard " + loadKey(Main.config.getKeyClipboard()));
+				MenuItem catturaArea = new MenuItem("Capture Area " + loadKey(Constants.config.getKeyScreen()));
+				MenuItem catturaDesktop = new MenuItem("Capture Desktop " + loadKey(Constants.config.getKeyCScreen()));
+				MenuItem caricaFile = new MenuItem("Upload File " + loadKey(Constants.config.getKeyFile()));
+				MenuItem clipboard = new MenuItem("Upload Clipboard " + loadKey(Constants.config.getKeyClipboard()));
 				MenuItem settings = new MenuItem("Settings");
 				MenuItem esci = new MenuItem("Quit");
 
@@ -130,7 +131,7 @@ public class SystemTrayMenu {
 				esci.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						SystemTray.getSystemTray().remove(trayIcon);
-						Main.log.close();
+						Constants.log.close();
 						System.exit(0);
 					}
 				});
@@ -147,7 +148,7 @@ public class SystemTrayMenu {
 	public String loadKey(int keyNumber[]) {
 		String ret = "(";
 		for (int e : keyNumber) {
-			ret = ret + Main.fromKeyToName.get(e) + "+";
+			ret = ret + Constants.fromKeyToName.get(e) + "+";
 		}
 		ret = ret.substring(0, ret.length() - 1);
 		ret += ")";
@@ -165,7 +166,7 @@ public class SystemTrayMenu {
 			trayIcon.displayMessage("Info", "Caricamento annullato :(", TrayIcon.MessageType.INFO);
 		} else {
 
-			if (Main.config.getFtpEnabled()) {
+			if (Constants.config.getFtpEnabled()) {
 				ftpUploader = new FtpUploader(partialScreen.getSelection());
 				boolean res = false;
 				res = ftpUploader.send("img");
@@ -195,7 +196,7 @@ public class SystemTrayMenu {
 	public void sendCompleteScreen() {
 		completeScreen = new CompleteScreen();
 		boolean res = false;
-		if (Main.config.getFtpEnabled()) {
+		if (Constants.config.getFtpEnabled()) {
 			ftpUploader = new FtpUploader(completeScreen.getImg());
 			res = ftpUploader.send("img");
 			if (res) {
@@ -224,7 +225,7 @@ public class SystemTrayMenu {
 		public Void doInBackground() {
 
 			boolean res = false;
-			if (Main.config.getFtpEnabled()) {
+			if (Constants.config.getFtpEnabled()) {
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
 					ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
 				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
@@ -237,7 +238,7 @@ public class SystemTrayMenu {
 					notification.show("File Caricato!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					new File(Main.so.getTempDir() + "/KStemp.zip").delete();
+					new File(Constants.so.getTempDir() + "/KStemp.zip").delete();
 					suono.run();
 				}
 
@@ -254,7 +255,7 @@ public class SystemTrayMenu {
 					notification.show("File Caricato!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-					new File(Main.so.getTempDir() + "/KStemp.zip").delete();
+					new File(Constants.so.getTempDir() + "/KStemp.zip").delete();
 					suono.run();
 				}
 
@@ -306,13 +307,13 @@ public class SystemTrayMenu {
 			String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getData(DataFlavor.stringFlavor);
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-			File f = new File(Main.so.getTempDir() + "/" + fileName + ".txt");
+			File f = new File(Constants.so.getTempDir() + "/" + fileName + ".txt");
 			Main.myLog(f.getPath());
-			PrintWriter out = new PrintWriter(Main.so.getTempDir() + "/" + fileName + ".txt");
+			PrintWriter out = new PrintWriter(Constants.so.getTempDir() + "/" + fileName + ".txt");
 			out.println(clipboard);
 			out.close();
 
-			if (Main.config.getFtpEnabled()) {
+			if (Constants.config.getFtpEnabled()) {
 
 				ftpUploader = new FtpUploader(f.getPath());
 				res = ftpUploader.send("txt");

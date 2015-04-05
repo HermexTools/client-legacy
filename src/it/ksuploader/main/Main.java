@@ -1,11 +1,9 @@
 package it.ksuploader.main;
 
-import it.ksuploader.utils.Environment;
-import it.ksuploader.utils.LoadConfig;
+import it.ksuploader.utils.Constants;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -18,76 +16,24 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 public class Main {
 
-	public static Environment so = new Environment();
-	public static HashSet<Integer> keyHashScreen = new HashSet<>();
-	public static HashSet<Integer> keyHashCScreen = new HashSet<>();
-	public static HashSet<Integer> keyHashFile = new HashSet<>();
-	public static HashSet<Integer> keyHashClipboard = new HashSet<>();
-	public static HashMap<Integer, String> fromKeyToName = new HashMap<Integer, String>();
-	public static LoadConfig config = new LoadConfig();
-	public static PrintWriter log;
-
 	public static void main(String[] args) throws FileNotFoundException {
-		log = new PrintWriter(Main.so.getInstallDir().getPath() + "//log.txt");
-
-		fromKeyToName.put(NativeKeyEvent.VC_ALT_L, "ALT-L");
-		fromKeyToName.put(NativeKeyEvent.VC_ALT_R, "ALT-R");
-		fromKeyToName.put(NativeKeyEvent.VC_SHIFT_L, "SHIFT-L");
-		fromKeyToName.put(NativeKeyEvent.VC_SHIFT_R, "SHIFT-R");
-		fromKeyToName.put(NativeKeyEvent.VC_CONTROL_L, "CTRL-L");
-		fromKeyToName.put(NativeKeyEvent.VC_CONTROL_R, "CTRL-R");
-		fromKeyToName.put(NativeKeyEvent.VC_0, "0");
-		fromKeyToName.put(NativeKeyEvent.VC_1, "1");
-		fromKeyToName.put(NativeKeyEvent.VC_2, "2");
-		fromKeyToName.put(NativeKeyEvent.VC_3, "3");
-		fromKeyToName.put(NativeKeyEvent.VC_4, "4");
-		fromKeyToName.put(NativeKeyEvent.VC_5, "5");
-		fromKeyToName.put(NativeKeyEvent.VC_6, "6");
-		fromKeyToName.put(NativeKeyEvent.VC_7, "7");
-		fromKeyToName.put(NativeKeyEvent.VC_8, "8");
-		fromKeyToName.put(NativeKeyEvent.VC_9, "9");
-		fromKeyToName.put(NativeKeyEvent.VC_A, "A");
-		fromKeyToName.put(NativeKeyEvent.VC_B, "B");
-		fromKeyToName.put(NativeKeyEvent.VC_C, "C");
-		fromKeyToName.put(NativeKeyEvent.VC_D, "D");
-		fromKeyToName.put(NativeKeyEvent.VC_E, "E");
-		fromKeyToName.put(NativeKeyEvent.VC_F, "F");
-		fromKeyToName.put(NativeKeyEvent.VC_G, "G");
-		fromKeyToName.put(NativeKeyEvent.VC_H, "H");
-		fromKeyToName.put(NativeKeyEvent.VC_I, "I");
-		fromKeyToName.put(NativeKeyEvent.VC_J, "J");
-		fromKeyToName.put(NativeKeyEvent.VC_K, "K");
-		fromKeyToName.put(NativeKeyEvent.VC_L, "L");
-		fromKeyToName.put(NativeKeyEvent.VC_M, "M");
-		fromKeyToName.put(NativeKeyEvent.VC_N, "N");
-		fromKeyToName.put(NativeKeyEvent.VC_O, "O");
-		fromKeyToName.put(NativeKeyEvent.VC_P, "P");
-		fromKeyToName.put(NativeKeyEvent.VC_Q, "Q");
-		fromKeyToName.put(NativeKeyEvent.VC_R, "R");
-		fromKeyToName.put(NativeKeyEvent.VC_S, "S");
-		fromKeyToName.put(NativeKeyEvent.VC_T, "T");
-		fromKeyToName.put(NativeKeyEvent.VC_U, "U");
-		fromKeyToName.put(NativeKeyEvent.VC_V, "V");
-		fromKeyToName.put(NativeKeyEvent.VC_W, "W");
-		fromKeyToName.put(NativeKeyEvent.VC_X, "X");
-		fromKeyToName.put(NativeKeyEvent.VC_Y, "Y");
-		fromKeyToName.put(NativeKeyEvent.VC_Z, "Z");
+		new Constants();
+		Constants.log = new PrintWriter(Constants.so.getInstallDir().getPath() + "//log.txt");
 
 		final HashSet<Integer> hashKeyGlobal = new HashSet<>();
-		final SystemTrayMenu st = new SystemTrayMenu();
 
-		for (int i : config.getKeyScreen()) {
-			keyHashScreen.add(i);
+		for (int i : Constants.config.getKeyScreen()) {
+			Constants.keyHashScreen.add(i);
 		}
 
-		for (int i : config.getKeyCScreen()) {
-			keyHashCScreen.add(i);
+		for (int i : Constants.config.getKeyCScreen()) {
+			Constants.keyHashCScreen.add(i);
 		}
-		for (int i : config.getKeyFile()) {
-			keyHashFile.add(i);
+		for (int i : Constants.config.getKeyFile()) {
+			Constants.keyHashFile.add(i);
 		}
-		for (int i : config.getKeyClipboard()) {
-			keyHashClipboard.add(i);
+		for (int i : Constants.config.getKeyClipboard()) {
+			Constants.keyHashClipboard.add(i);
 		}
 
 		NativeKeyListener gkl = new NativeKeyListener() {
@@ -97,8 +43,10 @@ public class Main {
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {
 
-				if (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
-						|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard.contains(nke.getKeyCode())) {
+				if (Constants.keyHashScreen.contains(nke.getKeyCode())
+						|| Constants.keyHashCScreen.contains(nke.getKeyCode())
+						|| Constants.keyHashFile.contains(nke.getKeyCode())
+						|| Constants.keyHashClipboard.contains(nke.getKeyCode())) {
 					hashKeyGlobal.add(nke.getKeyCode());
 					hash1Ready = true;
 				}
@@ -108,8 +56,9 @@ public class Main {
 			public void nativeKeyReleased(NativeKeyEvent nke) {
 
 				if ((hash1Ready == true)
-						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
-								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
+						&& (Constants.keyHashScreen.contains(nke.getKeyCode())
+								|| Constants.keyHashCScreen.contains(nke.getKeyCode())
+								|| Constants.keyHashFile.contains(nke.getKeyCode()) || Constants.keyHashClipboard
 									.contains(nke.getKeyCode())
 
 						)) {
@@ -117,28 +66,28 @@ public class Main {
 					hashKeyGlobal.add(nke.getKeyCode());
 				}
 
-				if (keyHashScreen.equals(hashKeyGlobal)) {
+				if (Constants.keyHashScreen.equals(hashKeyGlobal)) {
 					System.out.println("Via cattura parziale");
 					clearKeyComb();
-					st.sendPartialScreen();
+					Constants.st.sendPartialScreen();
 				}
 
-				if (keyHashCScreen.equals(hashKeyGlobal)) {
+				if (Constants.keyHashCScreen.equals(hashKeyGlobal)) {
 					System.out.println("Via cattura globale");
 					clearKeyComb();
-					st.sendCompleteScreen();
+					Constants.st.sendCompleteScreen();
 				}
 
-				if (keyHashFile.equals(hashKeyGlobal)) {
+				if (Constants.keyHashFile.equals(hashKeyGlobal)) {
 					System.out.println("Via file");
 					clearKeyComb();
-					st.sendFile();
+					Constants.st.sendFile();
 				}
 
-				if (keyHashClipboard.equals(hashKeyGlobal)) {
+				if (Constants.keyHashClipboard.equals(hashKeyGlobal)) {
 					System.out.println("Via clipboard");
 					clearKeyComb();
-					st.sendClipboard();
+					Constants.st.sendClipboard();
 				}
 
 				clearKeyComb();
@@ -175,13 +124,13 @@ public class Main {
 
 	public static void myLog(String s) {
 		System.out.println(s);
-		log.println(s);
-		log.flush();
+		Constants.log.println(s);
+		Constants.log.flush();
 	}
 
 	public static void myErr(String s) {
-		log.println(s);
-		log.flush();
+		Constants.log.println(s);
+		Constants.log.flush();
 	}
 
 }
