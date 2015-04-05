@@ -35,6 +35,8 @@ public class LoadConfig {
 	private int keyFile[];
 	private int keyClip[];
 
+	String[] tmp;
+
 	private Properties prop;
 
 	public LoadConfig() {
@@ -174,39 +176,40 @@ public class LoadConfig {
 			}
 			this.acceptAllCertificates = Boolean.valueOf(prop.getProperty("accept_all_certificates"));
 
-			// keys for partial screen
+			// Keys for partial screen
 			if (prop.getProperty("key_screen") == null || prop.getProperty("key_screen").isEmpty()) {
-				prop.setProperty("key_screen", "56:2");
+				prop.setProperty("key_screen", "56+2");
 				correct_config = true;
 				System.out.println("[LoadConfig] Setting default key_screen");
 			}
-			String[] tmp = prop.getProperty("key_screen").split(":");
+			tmp = null;
+			tmp = prop.getProperty("key_screen").split("[+]");
 			this.keyScreen = new int[tmp.length];
 			for (int i = 0; i < tmp.length; i++) {
 				this.keyScreen[i] = Integer.parseInt(tmp[i]);
 			}
 
-			// keys for partial screen
+			// Keys for complete screen
 			if (prop.getProperty("key_cscreen") == null || prop.getProperty("key_cscreen").isEmpty()) {
-				prop.setProperty("key_cscreen", "56:3");
+				prop.setProperty("key_cscreen", "56+3");
 				correct_config = true;
 				System.out.println("[LoadConfig] Setting default key_cscreen");
 			}
 			tmp = null;
-			tmp = prop.getProperty("key_cscreen").split(":");
+			tmp = prop.getProperty("key_cscreen").split("[+]");
 			this.keyCScreen = new int[tmp.length];
 			for (int i = 0; i < tmp.length; i++) {
 				this.keyCScreen[i] = Integer.parseInt(tmp[i]);
 			}
 
-			// keys for files
+			// Keys for files
 			if (prop.getProperty("key_file") == null || prop.getProperty("key_file").isEmpty()) {
-				prop.setProperty("key_file", "56:4");
+				prop.setProperty("key_file", "56+4");
 				correct_config = true;
 				System.out.println("[LoadConfig] Setting default key_file");
 			}
 			tmp = null;
-			tmp = prop.getProperty("key_file").split(":");
+			tmp = prop.getProperty("key_file").split("[+]");
 			this.keyFile = new int[tmp.length];
 			for (int i = 0; i < tmp.length; i++) {
 				this.keyFile[i] = Integer.parseInt(tmp[i]);
@@ -214,12 +217,12 @@ public class LoadConfig {
 
 			// keys for clipboard
 			if (prop.getProperty("key_clipboard") == null || prop.getProperty("key_clipboard").isEmpty()) {
-				prop.setProperty("key_clipboard", "56:5");
+				prop.setProperty("key_clipboard", "56+5");
 				correct_config = true;
 				System.out.println("[LoadConfig] Setting default key_clipboard");
 			}
 			tmp = null;
-			tmp = prop.getProperty("key_clipboard").split(":");
+			tmp = prop.getProperty("key_clipboard").split("[+]");
 			this.keyClip = new int[tmp.length];
 			for (int i = 0; i < tmp.length; i++) {
 				this.keyClip[i] = Integer.parseInt(tmp[i]);
@@ -357,8 +360,68 @@ public class LoadConfig {
 		return keyFile;
 	}
 
-	public int[] getKeyClip() {
+	public int[] getKeyClipboard() {
 		return keyClip;
+	}
+
+	public void setScreenKeys(String comb) {
+		prop.setProperty("key_screen", comb);
+		try {
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = prop.getProperty("key_screen").split("[+]");
+		this.keyScreen = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyScreen[i] = Integer.parseInt(tmp[i]);
+		}
+	}
+
+	public void setCScreenKeys(String comb) {
+		prop.setProperty("key_cscreen", comb);
+		try {
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = prop.getProperty("key_cscreen").split("[+]");
+		this.keyCScreen = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyCScreen[i] = Integer.parseInt(tmp[i]);
+		}
+	}
+
+	public void setFileKeys(String comb) {
+		prop.setProperty("key_file", comb);
+		try {
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = prop.getProperty("key_file").split("[+]");
+		this.keyFile = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyFile[i] = Integer.parseInt(tmp[i]);
+		}
+	}
+
+	public void setClipboardKeys(String comb) {
+		prop.setProperty("key_clipboard", comb);
+		try {
+			prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = prop.getProperty("key_clipboard").split("[+]");
+		this.keyClip = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyClip[i] = Integer.parseInt(tmp[i]);
+		}
 	}
 
 }

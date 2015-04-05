@@ -56,7 +56,7 @@ public class SystemTrayMenu {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 		this.notification = new NotificationDialog();
 		this.configPanel = new SettingsDialog();
@@ -76,10 +76,10 @@ public class SystemTrayMenu {
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
-				MenuItem catturaArea = new MenuItem("Capture Area "+loadKey(Main.config.getKeyScreen()));
-				MenuItem catturaDesktop = new MenuItem("Capture Desktop "+loadKey(Main.config.getKeyCScreen()));
-				MenuItem caricaFile = new MenuItem("Upload File "+loadKey(Main.config.getKeyFile()));
-				MenuItem clipboard = new MenuItem("Upload Clipboard "+loadKey(Main.config.getKeyClip()));
+				MenuItem catturaArea = new MenuItem("Capture Area " + loadKey(Main.config.getKeyScreen()));
+				MenuItem catturaDesktop = new MenuItem("Capture Desktop " + loadKey(Main.config.getKeyCScreen()));
+				MenuItem caricaFile = new MenuItem("Upload File " + loadKey(Main.config.getKeyFile()));
+				MenuItem clipboard = new MenuItem("Upload Clipboard " + loadKey(Main.config.getKeyClipboard()));
 				MenuItem settings = new MenuItem("Settings");
 				MenuItem esci = new MenuItem("Quit");
 
@@ -122,7 +122,7 @@ public class SystemTrayMenu {
 
 				settings.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-                        configPanel.loadCurrentConfig();
+						configPanel.loadCurrentConfig();
 						configPanel.setVisible(true);
 					}
 				});
@@ -130,7 +130,7 @@ public class SystemTrayMenu {
 				esci.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						SystemTray.getSystemTray().remove(trayIcon);
-                        Main.log.close();
+						Main.log.close();
 						System.exit(0);
 					}
 				});
@@ -139,20 +139,20 @@ public class SystemTrayMenu {
 				systemTray.add(trayIcon);
 			} catch (IOException | AWTException ex) {
 				ex.printStackTrace();
-                Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+				Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 			}
 		}
 	}
-    
-    private String loadKey(int keyNumber[]){
-        String ret ="(" ;
-        for(int e : keyNumber){
-            ret=ret+Main.fromKeyToName.get(e)+"+";
-        }
-        ret=ret.substring(0,ret.length()-1);
-        ret+=")";
-        return ret;
-    }
+
+	public String loadKey(int keyNumber[]) {
+		String ret = "(";
+		for (int e : keyNumber) {
+			ret = ret + Main.fromKeyToName.get(e) + "+";
+		}
+		ret = ret.substring(0, ret.length() - 1);
+		ret += ")";
+		return ret;
+	}
 
 	public void sendPartialScreen() {
 		partialScreen = new PartialScreen();
@@ -275,7 +275,7 @@ public class SystemTrayMenu {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 
@@ -292,7 +292,7 @@ public class SystemTrayMenu {
 					Desktop.getDesktop().browse(new URI(e.getActionCommand()));
 				} catch (URISyntaxException | IOException ex) {
 					ex.printStackTrace();
-                    Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+					Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 				}
 			}
 		});
@@ -340,7 +340,7 @@ public class SystemTrayMenu {
 		} catch (UnsupportedFlavorException | IOException ex) {
 			ex.printStackTrace();
 			notification.show("Errore!", "Impossibile completare l'operazione");
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}
 }

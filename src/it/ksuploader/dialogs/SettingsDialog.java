@@ -17,8 +17,13 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.SwingDispatchService;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+
 @SuppressWarnings("serial")
-public class SettingsDialog extends JDialog {
+public class SettingsDialog extends JDialog implements NativeKeyListener {
 	private final JTextField ftpAddr;
 	private final JTextField ftpPort;
 	private final JTextField ftpDir;
@@ -34,6 +39,10 @@ public class SettingsDialog extends JDialog {
 	private final JCheckBox ftpesEnabled;
 	private final JCheckBox acceptCertificates;
 	private JFileChooser saveDir;
+	private final JButton btnScreen;
+	private final JButton btnCScreen;
+	private final JButton btnFile;
+	private final JButton btnClipboard;
 
 	public SettingsDialog() {
 
@@ -49,6 +58,8 @@ public class SettingsDialog extends JDialog {
 		setBounds(100, 100, 480, 300);
 		setResizable(false);
 		getContentPane().setLayout(null);
+
+		GlobalScreen.setEventDispatcher(new SwingDispatchService());
 
 		ftpEnabled = new JCheckBox("Use FTP");
 		ftpEnabled.setBounds(6, 7, 130, 23);
@@ -228,7 +239,55 @@ public class SettingsDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+
+		btnScreen = new JButton("Change");
+		btnScreen.setBounds(270, 100, 90, 20);
+		panel.add(btnScreen);
+
+		btnScreen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enableListener(btnScreen);
+			}
+		});
+
+		btnCScreen = new JButton("Change");
+		btnCScreen.setBounds(370, 100, 90, 20);
+		panel.add(btnCScreen);
+
+		btnCScreen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enableListener(btnCScreen);
+			}
+		});
+
+		btnFile = new JButton("Change");
+		btnFile.setBounds(270, 150, 90, 20);
+		panel.add(btnFile);
+
+		btnFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enableListener(btnFile);
+			}
+		});
+
+		btnClipboard = new JButton("Change");
+		btnClipboard.setBounds(370, 150, 90, 20);
+		panel.add(btnClipboard);
+
+		btnClipboard.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enableListener(btnClipboard);
+			}
+		});
 	}
+
+	/*
+	 * LOADER + STATUS_UPDATER
+	 */
 
 	public void loadCurrentConfig() {
 		try {
@@ -286,5 +345,64 @@ public class SettingsDialog extends JDialog {
 			this.srvPort.setEnabled(false);
 			Main.myLog("[Settings] Server disabled, ftp enabled");
 		}
+	}
+
+	/*
+	 * LISTENER
+	 */
+	JButton callerBtn;
+
+	protected void enableListener(JButton btn) {
+		System.out.println("[SettingsDialog] Listener enabled");
+		newKey = "";
+		count = 1;
+		this.callerBtn = btn;
+		GlobalScreen.addNativeKeyListener(this);
+	}
+
+	protected void disableListener() {
+		System.out.println("[SettingsDialog] Listener disabled");
+		GlobalScreen.removeNativeKeyListener(this);
+
+	}
+
+	String newKey;
+	String secondKey;
+	int count;
+
+	@Override
+	public void nativeKeyPressed(NativeKeyEvent arg0) {
+
+		System.out.println("[SettingsDialog] Pressed: " + arg0.getKeyCode());
+
+		secondKey = arg0.getKeyCode() + "";
+
+		if (count == 1 && Main.fromKeyToName.containsKey(arg0.getKeyCode())) {
+			newKey += arg0.getKeyCode();
+			callerBtn.setText(Main.fromKeyToName.get(arg0.getKeyCode()));
+			count++;
+		} else if (count == 2 && !newKey.equals(secondKey)) {
+			newKey += "+" + arg0.getKeyCode();
+			callerBtn.setText(callerBtn.getText() + "+" + Main.fromKeyToName.get(arg0.getKeyCode()));
+			disableListener();
+
+			if (callerBtn.equals(btnScreen)) {
+				Main.config.setScreenKeys(newKey);
+			} else if (callerBtn.equals(btnCScreen)) {
+				Main.config.setCScreenKeys(newKey);
+			} else if (callerBtn.equals(btnFile)) {
+				Main.config.setFileKeys(newKey);
+			} else if (callerBtn.equals(btnClipboard)) {
+				Main.config.setClipboardKeys(newKey);
+			}
+		}
+	}
+
+	@Override
+	public void nativeKeyReleased(NativeKeyEvent arg0) {
+	}
+
+	@Override
+	public void nativeKeyTyped(NativeKeyEvent arg0) {
 	}
 }
