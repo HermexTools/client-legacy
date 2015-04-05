@@ -33,6 +33,9 @@ It contains:
 * `ftp_weburl`: the url that will be returned, write a / at the end of the it.
 * `save_enabled`: you can choose if save locally the pics taken, set it as true or false.
 * `save_dir`: the folder where all images will be saved, use a . to say "where the client is located".
+* `ftpes_enabled`: enable or disable (with "true" or "false") the FTPES.
+* `accept_all_certificates`: choose to accept all certificates or not (true/false).
+* `open_at_startup_enabled`: enable the autorun at os boot (NOT IMPLEMENTED YET).
 
 >Attention: all config properties must be not null, even if you don't use one of them.
 
