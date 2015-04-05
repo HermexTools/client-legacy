@@ -95,15 +95,15 @@ public class FtpUploader {
 	}
 
 	public boolean send(String type) {
-
 		ftpClient = new FTPClient();
 		notificationDialog = new NotificationDialog();
 
+		System.out.println("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
 		if (Main.config.getFtpesEnabled()) {
-
 			try {
 
 				// Setting up tls connection
+				System.out.println("[FtpUploader] AcceptAllCertificates: " + Main.config.getAcceptAllCertificates());
 				if (Main.config.getAcceptAllCertificates()) {
 
 					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
@@ -129,6 +129,7 @@ public class FtpUploader {
 					ftpClient.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
 				}
 
+				System.out.println("[FtpUploader] SetSecurity: SECURITY_FTPES");
 				ftpClient.setSecurity(FTPClient.SECURITY_FTPES);
 
 			} catch (NoSuchAlgorithmException | KeyManagementException e) {
@@ -142,6 +143,8 @@ public class FtpUploader {
 
 		// Connection
 		try {
+			// System.out.println(Main.config.getFtpAddr() +
+			// Main.config.getFtpPort());
 			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
@@ -153,6 +156,8 @@ public class FtpUploader {
 
 		// Login
 		try {
+			// System.out.println(Main.config.getFtpUser() +
+			// Main.config.getFtpPass());
 			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
@@ -183,15 +188,38 @@ public class FtpUploader {
 			return false;
 		}
 
+		// Rename
+		String fileName = null;
+		if (type.equals("file"))
+			try {
+				fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
+				ftpClient.rename(new File(filePath).getName(), fileName + ".zip");
+			} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
+				e1.printStackTrace();
+				Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
+				notificationDialog.show("Error", "Error during the file rename");
+				return false;
+			}
+
 		// Link return
-		try {
-			this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
-			Main.myLog("[FtpUploader] Returning url: " + this.link);
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-			return false;
-		}
+		if (type.equals("file"))
+			try {
+				this.link = Main.config.getFtpWebUrl() + fileName + ".zip";
+				Main.myLog("[FtpUploader] Returning url: " + this.link);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+				Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+				return false;
+			}
+		else
+			try {
+				this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
+				Main.myLog("[FtpUploader] Returning url: " + this.link);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+				Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+				return false;
+			}
 
 		// Disconnect
 		try {

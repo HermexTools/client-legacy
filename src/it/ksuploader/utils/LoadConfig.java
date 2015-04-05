@@ -48,8 +48,7 @@ public class LoadConfig {
 				prop.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "/client.properties"), null);
 			}
 
-			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath()
-					+ "//client.properties");
+			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath() + "//client.properties");
 			prop.load(inputStream);
 			inputStream.close();
 

@@ -49,10 +49,10 @@ public class SystemTrayMenu {
 	private NotificationDialog notification;
 	private SettingsDialog configPanel;
 	private MenuItem[] uploads;
-    private MenuItem catturaArea;
-    private MenuItem catturaDesktop;
-    private MenuItem caricaFile;
-    private MenuItem clipboard;
+	private MenuItem catturaArea;
+	private MenuItem catturaDesktop;
+	private MenuItem caricaFile;
+	private MenuItem clipboard;
 
 	public SystemTrayMenu() {
 		try {
@@ -85,7 +85,7 @@ public class SystemTrayMenu {
 				catturaDesktop = new MenuItem();
 				caricaFile = new MenuItem();
 				clipboard = new MenuItem();
-                updateKeys();
+				updateKeys();
 				MenuItem settings = new MenuItem("Settings");
 				MenuItem esci = new MenuItem("Quit");
 
@@ -149,13 +149,13 @@ public class SystemTrayMenu {
 			}
 		}
 	}
-    
-    public void updateKeys(){
-        catturaArea.setLabel(("Capture Area " + loadKey(Main.config.getKeyScreen())));
-        catturaDesktop.setLabel("Capture Desktop " + loadKey(Main.config.getKeyCScreen()));
-        caricaFile.setLabel("Upload File " + loadKey(Main.config.getKeyFile()));
-        clipboard.setLabel("Upload Clipboard " + loadKey(Main.config.getKeyClipboard()));
-    }
+
+	public void updateKeys() {
+		catturaArea.setLabel(("Capture Area " + loadKey(Main.config.getKeyScreen())));
+		catturaDesktop.setLabel("Capture Desktop " + loadKey(Main.config.getKeyCScreen()));
+		caricaFile.setLabel("Upload File " + loadKey(Main.config.getKeyFile()));
+		clipboard.setLabel("Upload Clipboard " + loadKey(Main.config.getKeyClipboard()));
+	}
 
 	public String loadKey(int keyNumber[]) {
 		String ret = "(";
@@ -238,8 +238,11 @@ public class SystemTrayMenu {
 
 			boolean res = false;
 			if (Main.config.getFtpEnabled()) {
+				// Se non finisce con .zip O ci sono più file
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
 					ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
+
+					// Altrimenti se finisce con .zip O è uno solo
 				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
 						|| selFile.getSelectedFiles().length == 1) {
 					ftpUploader = new FtpUploader(selFile.getSelectedFiles()[0].getPath());
