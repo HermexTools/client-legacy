@@ -385,6 +385,9 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 	protected void enableListener(JButton btn) {
 		System.out.println("[SettingsDialog] Listener enabled");
 		newKey = "";
+		hashKeyGlobal.clear();
+		hash1Ready = false;
+		hash2Ready = false;
 		this.callerBtn = btn;
 		Main.keyListener.disableListener();
 		GlobalScreen.addNativeKeyListener(this);
