@@ -143,8 +143,6 @@ public class FtpUploader {
 
 		// Connection
 		try {
-			// System.out.println(Main.config.getFtpAddr() +
-			// Main.config.getFtpPort());
 			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
@@ -156,8 +154,6 @@ public class FtpUploader {
 
 		// Login
 		try {
-			// System.out.println(Main.config.getFtpUser() +
-			// Main.config.getFtpPass());
 			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
