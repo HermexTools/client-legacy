@@ -75,9 +75,21 @@ public class MyKeyListener {
 		gkl = new NativeKeyListener() {
 
 			boolean hash1Ready = false;
+			boolean hash2Ready = false;
 
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {
+
+				if ((hash1Ready == true)
+						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
+								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
+									.contains(nke.getKeyCode())
+
+						)) {
+					myLog("Combination received");
+					hashKeyGlobal.add(nke.getKeyCode());
+					hash2Ready = true;
+				}
 
 				if (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
 						|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard.contains(nke.getKeyCode())) {
@@ -89,7 +101,7 @@ public class MyKeyListener {
 			@Override
 			public void nativeKeyReleased(NativeKeyEvent nke) {
 
-				if ((hash1Ready == true)
+				if ((hash1Ready == true || hash2Ready == true)
 						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
 								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
 									.contains(nke.getKeyCode())
@@ -129,6 +141,7 @@ public class MyKeyListener {
 			private void clearKeyComb() {
 				// System.out.println("Combination cleared");
 				hash1Ready = false;
+				hash2Ready = false;
 				hashKeyGlobal.clear();
 			}
 
