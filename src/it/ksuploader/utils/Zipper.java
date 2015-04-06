@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -19,11 +20,19 @@ public class Zipper {
 		this.file = file;
 	}
 
-	public String toZip() {
+	public String toZip(String method) {
 
+		String fileName = null;
 		Main.myLog("[Zipper] file.length: " + file.length);
 		try {
-			FileOutputStream fos = new FileOutputStream(new Environment().getTempDir() + "/KStemp.zip");
+			FileOutputStream fos;
+
+			if (method.equals("socket")) // socket or ftp
+				fileName = "KStemp.zip";
+			else
+				fileName = System.currentTimeMillis() / 1000 + new Random().nextInt(999) + ".zip";
+
+			fos = new FileOutputStream(new Environment().getTempDir() + "/" + fileName);
 			ZipOutputStream zos = new ZipOutputStream(fos);
 			FileInputStream fis = null;
 
@@ -69,10 +78,9 @@ public class Zipper {
 			fis.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
-		Main.myLog("[Zipper] Zipping finished: KStemp.zip");
-		return new Environment().getTempDir() + "/KStemp.zip";
+		Main.myLog("[Zipper] Zipping finished: " + fileName);
+		return new Environment().getTempDir() + "/" + fileName;
 	}
-
 }

@@ -94,7 +94,7 @@ public class FtpUploader {
 		this.filePath = filePath;
 	}
 
-	public boolean send(String type) {
+	public boolean send() {
 		ftpClient = new FTPClient();
 		notificationDialog = new NotificationDialog();
 
@@ -184,41 +184,19 @@ public class FtpUploader {
 			return false;
 		}
 
-		// Rename
-		String fileName = null;
-		if (type.equals("file"))
-			try {
-				fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-				ftpClient.rename(new File(filePath).getName(), fileName + ".zip");
-			} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
-				e1.printStackTrace();
-				Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
-				notificationDialog.show("Error", "Error during the file rename");
-				return false;
-			}
-
 		// Link return
-		if (type.equals("file"))
-			try {
-				this.link = Main.config.getFtpWebUrl() + fileName + ".zip";
-				Main.myLog("[FtpUploader] Returning url: " + this.link);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-				Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-				return false;
-			}
-		else
-			try {
-				this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
-				Main.myLog("[FtpUploader] Returning url: " + this.link);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-				Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-				return false;
-			}
-
-		// Disconnect
 		try {
+			this.link = Main.config.getFtpWebUrl() + new File(filePath).getName();
+			Main.myLog("[FtpUploader] Returning url: " + this.link);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+			return false;
+		}
+
+		// Clean and Disconnect
+		try {
+			new File(filePath).delete();
 			ftpClient.disconnect(true);
 			Main.myLog("[FtpUploader] Disconnected");
 			return true;

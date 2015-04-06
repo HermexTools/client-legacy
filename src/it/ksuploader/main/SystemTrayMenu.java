@@ -136,7 +136,7 @@ public class SystemTrayMenu {
 				esci.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						SystemTray.getSystemTray().remove(trayIcon);
-                        Main.startUpCheck(Main.config.isStartUpEnabled());
+						Main.startUpCheck(Main.config.isStartUpEnabled());
 						Main.log.close();
 						System.exit(0);
 					}
@@ -182,7 +182,7 @@ public class SystemTrayMenu {
 			if (Main.config.getFtpEnabled()) {
 				ftpUploader = new FtpUploader(partialScreen.getSelection());
 				boolean res = false;
-				res = ftpUploader.send("img");
+				res = ftpUploader.send();
 				if (res) {
 					notification.show("Screenshot Caricato!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
@@ -211,7 +211,7 @@ public class SystemTrayMenu {
 		boolean res = false;
 		if (Main.config.getFtpEnabled()) {
 			ftpUploader = new FtpUploader(completeScreen.getImg());
-			res = ftpUploader.send("img");
+			res = ftpUploader.send();
 			if (res) {
 				notification.show("Screenshot Caricato!", ftpUploader.getLink());
 				history(ftpUploader.getLink());
@@ -241,7 +241,7 @@ public class SystemTrayMenu {
 			if (Main.config.getFtpEnabled()) {
 				// Se non finisce con .zip O ci sono più file
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-					ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip());
+					ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip("ftp"));
 
 					// Altrimenti se finisce con .zip O è uno solo
 				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
@@ -249,19 +249,18 @@ public class SystemTrayMenu {
 					ftpUploader = new FtpUploader(selFile.getSelectedFiles()[0].getPath());
 				}
 
-				res = ftpUploader.send("file");
+				res = ftpUploader.send();
 				if (res) {
 					notification.show("File Caricato!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					new File(Main.so.getTempDir(),"KStemp.zip").delete();
 					suono.run();
 				}
 
 			} else {
 
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-					uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip());
+					uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip("socket"));
 				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
 						|| selFile.getSelectedFiles().length == 1) {
 					uploader = new Uploader(selFile.getSelectedFiles()[0].getPath());
@@ -332,12 +331,11 @@ public class SystemTrayMenu {
 			if (Main.config.getFtpEnabled()) {
 
 				ftpUploader = new FtpUploader(f.getPath());
-				res = ftpUploader.send("txt");
+				res = ftpUploader.send();
 				if (res) {
 					notification.show("Clipboard Caricata!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					f.delete();
 					suono.run();
 				}
 
