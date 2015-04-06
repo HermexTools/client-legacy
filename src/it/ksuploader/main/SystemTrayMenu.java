@@ -254,7 +254,7 @@ public class SystemTrayMenu {
 					notification.show("File Caricato!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					new File(Main.so.getTempDir() + "/KStemp.zip").delete();
+					new File(Main.so.getTempDir(),"KStemp.zip").delete();
 					suono.run();
 				}
 
@@ -271,7 +271,7 @@ public class SystemTrayMenu {
 					notification.show("File Caricato!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-					new File(Main.so.getTempDir() + "/KStemp.zip").delete();
+					new File(Main.so.getTempDir(), "KStemp.zip").delete();
 					suono.run();
 				}
 

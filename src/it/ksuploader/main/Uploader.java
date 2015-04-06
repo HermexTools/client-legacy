@@ -257,7 +257,7 @@ public class Uploader {
 			dos.close();
 			dis.close();
 			socketChannel.close();
-			new File(new Environment().getTempDir() + "/KStemp.zip").delete();
+			new File(new Environment().getTempDir(), "KStemp.zip").delete();
 		} catch (IOException e) {
 			e.printStackTrace();
             Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
