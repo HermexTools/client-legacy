@@ -377,6 +377,11 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 	 */
 	JButton callerBtn;
 
+	String newKey;
+	HashSet<Integer> hashKeyGlobal = new HashSet<>();
+	boolean hash1Ready = false;
+	boolean hash2Ready = false;
+
 	protected void enableListener(JButton btn) {
 		System.out.println("[SettingsDialog] Listener enabled");
 		newKey = "";
@@ -392,34 +397,31 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		btn.setEnabled(true);
 	}
 
-	String newKey;
-	HashSet<Integer> hashKeyGlobal = new HashSet<>();
-	boolean hash1Ready = false;
-	boolean hash2Ready = false;
-
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent arg0) {
 
 		System.out.println("[SettingsDialog] Pressed: " + arg0.getKeyCode());
 
-		if (hash2Ready == true && !hashKeyGlobal.contains(arg0.getKeyCode())) {
+		if (hash2Ready == true && !hashKeyGlobal.contains(arg0.getKeyCode())
+				&& MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			hashKeyGlobal.add(arg0.getKeyCode());
-			newKey += "+" + arg0.getKeyCode();
+			newKey += "+" + String.valueOf(arg0.getKeyCode());
 			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			System.out.println("[MyKeyListener] Max key combination reached");
 		}
 
-		if ((hash1Ready == true) && !hashKeyGlobal.contains(arg0.getKeyCode())) {
+		if ((hash1Ready == true) && !hashKeyGlobal.contains(arg0.getKeyCode())
+				&& MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			myLog("[MyKeyListener] Combination received");
 			hashKeyGlobal.add(arg0.getKeyCode());
-			newKey += "+" + arg0.getKeyCode();
+			newKey += "+" + String.valueOf(arg0.getKeyCode());
 			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			hash2Ready = true;
 		}
 
-		if (!hashKeyGlobal.contains(arg0.getKeyCode())) {
+		if (!hashKeyGlobal.contains(arg0.getKeyCode()) && MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			hashKeyGlobal.add(arg0.getKeyCode());
-			newKey += arg0.getKeyCode();
+			newKey += String.valueOf(arg0.getKeyCode());
 			callerBtn.setText(MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			hash1Ready = true;
 		}

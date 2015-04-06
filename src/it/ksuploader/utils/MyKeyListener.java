@@ -80,13 +80,15 @@ public class MyKeyListener {
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {
 
-				if (hash2Ready == true && !hashKeyGlobal.contains(nke.getKeyCode())) {
+				if (hash2Ready == true && !hashKeyGlobal.contains(nke.getKeyCode())
+						&& MyKeyListener.fromKeyToName.containsKey(nke.getKeyCode())) {
 					hashKeyGlobal.add(nke.getKeyCode());
 					System.out.println("[MyKeyListener] Max key combination reached");
 				}
 
 				if ((hash1Ready == true)
 						&& !hashKeyGlobal.contains(nke.getKeyCode())
+						&& MyKeyListener.fromKeyToName.containsKey(nke.getKeyCode())
 						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
 								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
 									.contains(nke.getKeyCode())
@@ -97,9 +99,10 @@ public class MyKeyListener {
 					hash2Ready = true;
 				}
 
-				if (!hashKeyGlobal.contains(nke.getKeyCode()) && keyHashScreen.contains(nke.getKeyCode())
-						|| keyHashCScreen.contains(nke.getKeyCode()) || keyHashFile.contains(nke.getKeyCode())
-						|| keyHashClipboard.contains(nke.getKeyCode())) {
+				if (!hashKeyGlobal.contains(nke.getKeyCode())
+						&& MyKeyListener.fromKeyToName.containsKey(nke.getKeyCode())
+						&& keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
+						|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard.contains(nke.getKeyCode())) {
 					hashKeyGlobal.add(nke.getKeyCode());
 					hash1Ready = true;
 				}
