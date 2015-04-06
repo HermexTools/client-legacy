@@ -63,5 +63,24 @@ public class Environment {
 
 		}
 	}
+    
+    public String getStartUpFolder(){
+        String f = null;
+        switch (os) {
+		case LINUX:
+            
+			return f;
+		case WINDOWS:
+            f = System.getenv("Appdata")+"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
+			return f;
+		case OSX:
+
+			return f;
+		default:
+			return null;
+
+		}
+        
+    }
 
 }

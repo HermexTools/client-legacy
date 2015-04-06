@@ -363,6 +363,8 @@ public class LoadConfig {
 	public int[] getKeyClipboard() {
 		return keyClip;
 	}
+    
+    
 
 	public void setScreenKeys(String comb) {
 		prop.setProperty("key_screen", comb);

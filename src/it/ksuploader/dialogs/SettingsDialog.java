@@ -113,6 +113,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		startUpEnabled.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+                Main.startUpCheck(startUpEnabled.isSelected());
 			}
 		});
 
@@ -327,6 +328,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			this.saveDir.setSelectedFile(new File(Main.config.getSaveDir()));
 			this.ftpesEnabled.setSelected(Main.config.getFtpesEnabled());
 			this.acceptCertificates.setSelected(Main.config.getAcceptAllCertificates());
+            this.startUpEnabled.setSelected(Main.config.isStartUpEnabled());
 		} catch (Exception e) {
 			e.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading");
