@@ -129,7 +129,7 @@ public class ProgressDialog {
 
 	public void set(int n) {
 		progressBar.setValue(n);
-		progressBar.setString(n + "");
+		progressBar.setString(n + " %");
 	}
 
 	public void setMessage(String headingLabel) {
