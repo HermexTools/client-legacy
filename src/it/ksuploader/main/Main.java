@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.jimmc.jshortcut.JShellLink;
 
 public class Main {
@@ -18,7 +22,7 @@ public class Main {
     public static PrintWriter log;
     public static SystemTrayMenu st;
 
-	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
         log = new PrintWriter(so.getInstallDir().getPath() + "//log.txt");
         keyListener = new MyKeyListener();
         st = new SystemTrayMenu();
@@ -26,14 +30,21 @@ public class Main {
 	}
     
     public static void startUpCheck(boolean active) {
+        myLog("[Main] removing shortcut"+new File(Main.so.getStartUpFolder(),"KSUploader.lnk").delete());
         if(active){
-            JShellLink shortcut = new JShellLink();
-            shortcut.setPath(new File("KSUploader.jar").getAbsolutePath());
-            shortcut.setName("KSUploader");
-            shortcut.setFolder(Main.so.getStartUpFolder());
-            shortcut.save();
+            try {
+                JShellLink shortcut = new JShellLink();
+                shortcut.setPath(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath());
+                shortcut.setName("KSUploader_autostart");
+                shortcut.setFolder(Main.so.getStartUpFolder());
+                shortcut.save();
+                myLog("[Main] Shortcut created");
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+                myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+            }
         } else {
-            System.out.println(new File(Main.so.getStartUpFolder(),"KSUploader.lnk").delete());
+            myLog("[Main] removing shortcut"+new File(Main.so.getStartUpFolder(),"KSUploader.lnk").delete());
         }
         
     }
