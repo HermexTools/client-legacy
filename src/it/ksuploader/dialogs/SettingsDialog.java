@@ -1,5 +1,6 @@
 package it.ksuploader.dialogs;
 
+import static it.ksuploader.main.Main.myLog;
 import it.ksuploader.main.Main;
 import it.ksuploader.utils.MyKeyListener;
 
@@ -7,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -113,7 +115,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		startUpEnabled.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-                Main.startUpCheck(startUpEnabled.isSelected());
+				Main.startUpCheck(startUpEnabled.isSelected());
 			}
 		});
 
@@ -328,7 +330,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			this.saveDir.setSelectedFile(new File(Main.config.getSaveDir()));
 			this.ftpesEnabled.setSelected(Main.config.getFtpesEnabled());
 			this.acceptCertificates.setSelected(Main.config.getAcceptAllCertificates());
-            this.startUpEnabled.setSelected(Main.config.isStartUpEnabled());
+			this.startUpEnabled.setSelected(Main.config.isStartUpEnabled());
 		} catch (Exception e) {
 			e.printStackTrace();
 			new NotificationDialog().show("Config error", "Error during the config loading");
@@ -378,7 +380,6 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 	protected void enableListener(JButton btn) {
 		System.out.println("[SettingsDialog] Listener enabled");
 		newKey = "";
-		count = 1;
 		this.callerBtn = btn;
 		Main.keyListener.disableListener();
 		GlobalScreen.addNativeKeyListener(this);
@@ -392,24 +393,42 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 	}
 
 	String newKey;
-	String secondKey;
-	int count;
+	HashSet<Integer> hashKeyGlobal = new HashSet<>();
+	boolean hash1Ready = false;
+	boolean hash2Ready = false;
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent arg0) {
 
 		System.out.println("[SettingsDialog] Pressed: " + arg0.getKeyCode());
 
-		secondKey = arg0.getKeyCode() + "";
-
-		if (count == 1 && MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
-			newKey += arg0.getKeyCode();
-			callerBtn.setText(MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
-			count++;
-		} else if (count == 2 && !newKey.equals(secondKey)
-				&& MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
+		if (hash2Ready == true && !hashKeyGlobal.contains(arg0.getKeyCode())) {
+			hashKeyGlobal.add(arg0.getKeyCode());
 			newKey += "+" + arg0.getKeyCode();
 			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
+			System.out.println("[MyKeyListener] Max key combination reached");
+		}
+
+		if ((hash1Ready == true) && !hashKeyGlobal.contains(arg0.getKeyCode())) {
+			myLog("[MyKeyListener] Combination received");
+			hashKeyGlobal.add(arg0.getKeyCode());
+			newKey += "+" + arg0.getKeyCode();
+			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
+			hash2Ready = true;
+		}
+
+		if (!hashKeyGlobal.contains(arg0.getKeyCode())) {
+			hashKeyGlobal.add(arg0.getKeyCode());
+			newKey += arg0.getKeyCode();
+			callerBtn.setText(MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
+			hash1Ready = true;
+		}
+
+	}
+
+	@Override
+	public void nativeKeyReleased(NativeKeyEvent arg0) {
+		if ((hash1Ready == true || hash2Ready == true)) {
 			disableListener(callerBtn);
 
 			if (callerBtn.equals(btnScreen)) {
@@ -424,10 +443,6 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			Main.st.updateKeys();
 			Main.keyListener.loadKeys();
 		}
-	}
-
-	@Override
-	public void nativeKeyReleased(NativeKeyEvent arg0) {
 	}
 
 	@Override

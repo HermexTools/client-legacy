@@ -80,19 +80,26 @@ public class MyKeyListener {
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {
 
+				if (hash2Ready == true && !hashKeyGlobal.contains(nke.getKeyCode())) {
+					hashKeyGlobal.add(nke.getKeyCode());
+					System.out.println("[MyKeyListener] Max key combination reached");
+				}
+
 				if ((hash1Ready == true)
+						&& !hashKeyGlobal.contains(nke.getKeyCode())
 						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
 								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
 									.contains(nke.getKeyCode())
 
 						)) {
-					myLog("Combination received");
+					myLog("[MyKeyListener] Combination received");
 					hashKeyGlobal.add(nke.getKeyCode());
 					hash2Ready = true;
 				}
 
-				if (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
-						|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard.contains(nke.getKeyCode())) {
+				if (!hashKeyGlobal.contains(nke.getKeyCode()) && keyHashScreen.contains(nke.getKeyCode())
+						|| keyHashCScreen.contains(nke.getKeyCode()) || keyHashFile.contains(nke.getKeyCode())
+						|| keyHashClipboard.contains(nke.getKeyCode())) {
 					hashKeyGlobal.add(nke.getKeyCode());
 					hash1Ready = true;
 				}
@@ -107,32 +114,31 @@ public class MyKeyListener {
 									.contains(nke.getKeyCode())
 
 						)) {
-					myLog("Combination received");
-					hashKeyGlobal.add(nke.getKeyCode());
-				}
+					myLog("[MyKeyListener] Combination released");
 
-				if (keyHashScreen.equals(hashKeyGlobal)) {
-					System.out.println("Via cattura parziale");
-					clearKeyComb();
-					st.sendPartialScreen();
-				}
+					if (keyHashScreen.equals(hashKeyGlobal)) {
+						System.out.println("Via cattura parziale");
+						clearKeyComb();
+						st.sendPartialScreen();
+					}
 
-				if (keyHashCScreen.equals(hashKeyGlobal)) {
-					System.out.println("Via cattura globale");
-					clearKeyComb();
-					st.sendCompleteScreen();
-				}
+					if (keyHashCScreen.equals(hashKeyGlobal)) {
+						System.out.println("Via cattura globale");
+						clearKeyComb();
+						st.sendCompleteScreen();
+					}
 
-				if (keyHashFile.equals(hashKeyGlobal)) {
-					System.out.println("Via file");
-					clearKeyComb();
-					st.sendFile();
-				}
+					if (keyHashFile.equals(hashKeyGlobal)) {
+						System.out.println("Via file");
+						clearKeyComb();
+						st.sendFile();
+					}
 
-				if (keyHashClipboard.equals(hashKeyGlobal)) {
-					System.out.println("Via clipboard");
-					clearKeyComb();
-					st.sendClipboard();
+					if (keyHashClipboard.equals(hashKeyGlobal)) {
+						System.out.println("Via clipboard");
+						clearKeyComb();
+						st.sendClipboard();
+					}
 				}
 
 				clearKeyComb();
