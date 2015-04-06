@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import net.jimmc.jshortcut.JShellLink;
 
 public class Main {
@@ -29,16 +27,11 @@ public class Main {
     
     public static void startUpCheck(boolean active) {
         if(active){
-            try {
-                JShellLink shortcut = new JShellLink();
-                shortcut.setPath(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-                shortcut.setName("KSUploader");
-                shortcut.setFolder(Main.so.getStartUpFolder());
-                shortcut.save();
-            } catch (URISyntaxException ex) {
-                ex.printStackTrace();
-                myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
-            }
+            JShellLink shortcut = new JShellLink();
+            shortcut.setPath(new File("KSUploader.jar").getAbsolutePath());
+            shortcut.setName("KSUploader");
+            shortcut.setFolder(Main.so.getStartUpFolder());
+            shortcut.save();
         } else {
             System.out.println(new File(Main.so.getStartUpFolder(),"KSUploader.lnk").delete());
         }
