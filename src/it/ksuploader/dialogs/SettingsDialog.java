@@ -404,7 +404,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			newKey += arg0.getKeyCode();
 			callerBtn.setText(MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			count++;
-		} else if (count == 2 && !newKey.equals(secondKey)) {
+		} else if (count == 2 && !newKey.equals(secondKey)
+				&& MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			newKey += "+" + arg0.getKeyCode();
 			callerBtn.setText(callerBtn.getText() + "+" + MyKeyListener.fromKeyToName.get(arg0.getKeyCode()));
 			disableListener(callerBtn);
