@@ -68,7 +68,7 @@ public class Environment {
         String f = null;
         switch (os) {
 		case LINUX:
-            
+			f = "~/.config/autostart";
 			return f;
 		case WINDOWS:
             f = System.getenv("Appdata")+"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
