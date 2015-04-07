@@ -4,9 +4,6 @@ import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.ProgressDialog;
 import it.ksuploader.utils.Environment;
 
-
-
-
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -159,8 +156,7 @@ public class Uploader {
                                     sendFile(file,fileLength);
                                 }else if(srvResponse.equals("FILE_TOO_LARGE")){
                                     Main.myLog("[Uploader] File too large");
-                                    dialog.fileTooLarge();
-                                    
+                                    dialog.fileTooLarge();  
                                 } else if(srvResponse.equals("SERVER_FULL")){
                                     Main.myLog("[Uploader] Server Full");
                                     dialog.serverFull();
@@ -220,28 +216,22 @@ public class Uploader {
 
 			// send the file
 			long bfSize = Math.min(131072, fileLength); // 128kB buffer
-			while (bytesSent < fileLength) {
-				bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
-
-				// To secure overflow
-				try {
-					Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
-					progressDialog.set((int) (100 * bytesSent / fileLength));
-				} catch (Exception e) {
-					e.printStackTrace();
-                    Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-				}
-
-			}
+            
+            while (bytesSent < fileLength) {
+                bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
+                
+                // To secure overflow
+                Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
+                progressDialog.set((int) (100 * bytesSent / fileLength));
+            }
 			progressDialog.setWait();
 			inChannel.close();
 
-			Thread.sleep(1000);
 			Main.myLog("[Uploader] End of file reached..");
 			aFile.close();
 			Main.myLog("[Uploader] File closed.");
 
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
             Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
