@@ -119,31 +119,24 @@ public class Uploader {
 			progressDialog.setMessage("Caricando...");
 
 			// send the file
-			long bfSize = Math.min(131072, fileLength); // 128kB buffer
-			while (bytesSent < fileLength) {
-				bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
-
-				// To secure overflow
-				try {
-					Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
-					progressDialog.set((int) (100 * bytesSent / fileLength));
-				} catch (Exception e) {
-					e.printStackTrace();
-					Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-				}
-			}
-			progressDialog.setWait();
-			inChannel.close();
-
-			Thread.sleep(1000);
-			Main.myLog("[Uploader] End of file reached..");
-			aFile.close();
-			Main.myLog("[Uploader] File closed.");
-
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-		}
+            long bfSize = Math.min(131072, fileLength); // 128kB buffer
+            while (bytesSent < fileLength) {
+                bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
+                
+                Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
+                progressDialog.set((int) (100 * bytesSent / fileLength));
+            }
+            progressDialog.setWait();
+            inChannel.close();
+            
+            Main.myLog("[Uploader] End of file reached..");
+            aFile.close();
+            Main.myLog("[Uploader] File closed.");
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+        }
 
 	}
 
