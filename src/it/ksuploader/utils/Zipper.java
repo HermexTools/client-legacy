@@ -46,7 +46,7 @@ public class Zipper {
 						long count = 0;
 						int length;
 						ProgressDialog progressDialog = new ProgressDialog();
-						progressDialog.setMessage("Comprimendo...");
+						progressDialog.setMessage("Zipping...");
 						while ((length = fis.read(bytes)) >= 0) {
 							zos.write(bytes, 0, length);
 							count += length;
@@ -63,7 +63,7 @@ public class Zipper {
 					long count = 0;
 					int length;
 					ProgressDialog progressDialog = new ProgressDialog();
-					progressDialog.setMessage("Comprimendo...");
+					progressDialog.setMessage("Zipping...");
 					while ((length = fis.read(bytes)) >= 0) {
 						zos.write(bytes, 0, length);
 						count += length;

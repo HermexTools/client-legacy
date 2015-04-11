@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.SettingsDialog;
 import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.MyKeyListener;
@@ -53,7 +52,6 @@ public class SystemTrayMenu {
 	private TrayIcon trayIcon;
 	private Uploader uploader;
 
-	private NotificationDialog notification;
 	private SettingsDialog configPanel;
 	private MenuItem[] uploads;
 	private MenuItem catturaArea;
@@ -70,7 +68,6 @@ public class SystemTrayMenu {
 			ex.printStackTrace();
 			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
-		this.notification = new NotificationDialog();
 		this.configPanel = new SettingsDialog();
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
@@ -192,7 +189,7 @@ public class SystemTrayMenu {
 				boolean res = false;
 				res = ftpUploader.send();
 				if (res) {
-					notification.show("Screenshot Caricato!", ftpUploader.getLink());
+					Main.dialog.show("Screenshot Caricato!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
 					suono.run();
@@ -232,7 +229,7 @@ public class SystemTrayMenu {
 				boolean res;
 				res = uploader.send("img");
 				if (res) {
-					notification.show("Screenshot Caricato!", uploader.getLink());
+					Main.dialog.show("Upload Completed!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 					tempFile.delete();
@@ -251,7 +248,7 @@ public class SystemTrayMenu {
 			ftpUploader = new FtpUploader(completeScreen.getImg());
 			res = ftpUploader.send();
 			if (res) {
-				notification.show("Screenshot Caricato!", ftpUploader.getLink());
+				Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 				history(ftpUploader.getLink());
 				clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
 				suono.run();
@@ -282,7 +279,7 @@ public class SystemTrayMenu {
 			uploader = new Uploader(tempFile.getPath());
 			res = uploader.send("img");
 			if (res) {
-				notification.show("Screenshot Caricato!", uploader.getLink());
+				Main.dialog.show("Upload Completed!", uploader.getLink());
 				history(uploader.getLink());
 				clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 				tempFile.delete();
@@ -309,7 +306,7 @@ public class SystemTrayMenu {
 
 				res = ftpUploader.send();
 				if (res) {
-					notification.show("File Caricato!", ftpUploader.getLink());
+					Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
 					suono.run();
@@ -325,7 +322,7 @@ public class SystemTrayMenu {
 				}
 				res = uploader.send("file");
 				if (res) {
-					notification.show("File Caricato!", uploader.getLink());
+					Main.dialog.show("Upload Completed!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 					new File(Main.so.getTempDir(), "KStemp.zip").delete();
@@ -391,7 +388,7 @@ public class SystemTrayMenu {
 				ftpUploader = new FtpUploader(f.getPath());
 				res = ftpUploader.send();
 				if (res) {
-					notification.show("Clipboard Caricata!", ftpUploader.getLink());
+					Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
 					suono.run();
@@ -402,7 +399,7 @@ public class SystemTrayMenu {
 				uploader = new Uploader(f.getPath());
 				res = uploader.send("txt");
 				if (res) {
-					notification.show("Clipboard Caricata!", uploader.getLink());
+					Main.dialog.show("Upload Completed!", uploader.getLink());
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 					f.delete();
@@ -412,7 +409,7 @@ public class SystemTrayMenu {
 
 		} catch (UnsupportedFlavorException | IOException ex) {
 			ex.printStackTrace();
-			notification.show("Errore!", "Impossibile completare l'operazione");
+			Main.dialog.show("Error!", "Error with clipboard!");
 			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 	}

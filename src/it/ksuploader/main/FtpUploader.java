@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.utils.Environment;
 import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
@@ -33,7 +32,6 @@ public class FtpUploader {
 	private static FTPClient ftpClient;
 	private String link;
 	private String filePath;
-	private NotificationDialog notificationDialog;
 
 	// Per gli screen parziali
 	public FtpUploader(Rectangle r) {
@@ -96,7 +94,6 @@ public class FtpUploader {
 
 	public boolean send() {
 		ftpClient = new FTPClient();
-		notificationDialog = new NotificationDialog();
 
 		System.out.println("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
 		if (Main.config.getFtpesEnabled()) {
@@ -107,13 +104,16 @@ public class FtpUploader {
 				if (Main.config.getAcceptAllCertificates()) {
 
 					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
+                        @Override
 						public X509Certificate[] getAcceptedIssuers() {
 							return null;
 						}
 
+                        @Override
 						public void checkClientTrusted(X509Certificate[] certs, String authType) {
 						}
 
+                        @Override
 						public void checkServerTrusted(X509Certificate[] certs, String authType) {
 						}
 					} };
@@ -135,7 +135,7 @@ public class FtpUploader {
 			} catch (NoSuchAlgorithmException | KeyManagementException e) {
 
 				e.printStackTrace();
-				notificationDialog.show("Connection error", "Unable to connect to the server via ftpes");
+				Main.dialog.show("Connection error", "Unable to connect to the server via ftpes");
 				Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				return false;
 			}
@@ -146,7 +146,7 @@ public class FtpUploader {
 			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
-			notificationDialog.show("Connection error", "Unable to connect to the server");
+			Main.dialog.show("Connection error", "Unable to connect to the server");
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
 			return false;
 		}
@@ -158,7 +158,7 @@ public class FtpUploader {
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
-			notificationDialog.show("Login error", "Unable to login to the server");
+			Main.dialog.show("Login error", "Unable to login to the server");
 			return false;
 		}
 
@@ -168,7 +168,7 @@ public class FtpUploader {
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
-			notificationDialog.show("Error", "Unable to change directory");
+			Main.dialog.show("Error", "Unable to change directory");
 			return false;
 		}
 
@@ -180,7 +180,7 @@ public class FtpUploader {
 				| FTPDataTransferException | FTPAbortedException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
-			notificationDialog.show("Upload error", "Error during the file upload");
+			Main.dialog.show("Upload error", "Error during the file upload");
 			return false;
 		}
 
@@ -203,7 +203,7 @@ public class FtpUploader {
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-			notificationDialog.show("Disconnection error", "Error during the disconnection");
+			Main.dialog.show("Disconnection error", "Error during the disconnection");
 			return false;
 		}
 

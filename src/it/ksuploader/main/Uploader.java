@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.dialogs.ProgressDialog;
 import it.ksuploader.utils.Environment;
 
@@ -22,8 +21,6 @@ public class Uploader {
 	private String filePath;
 	private DataOutputStream dos;
 	private DataInputStream dis;
-	private ProgressDialog progressDialog;
-	private static NotificationDialog dialog = new NotificationDialog();
 
 	// Per i file
 	public Uploader(String filePath) {
@@ -68,20 +65,20 @@ public class Uploader {
 
 					} else if (srvResponse.equals("FILE_TOO_LARGE")) {
 						Main.myLog("[Uploader] File too large");
-						dialog.fileTooLarge();
+						Main.dialog.fileTooLarge();
 
 					} else if (srvResponse.equals("SERVER_FULL")) {
 						Main.myLog("[Uploader] Server Full");
-						dialog.serverFull();
+						Main.dialog.serverFull();
 					}
 
-					progressDialog.setWait();
+					Main.progressDialog.setWait();
 
 					// return link
 					Main.myLog("[Uploader] Waiting link...");
 					this.link = dis.readUTF();
 					Main.myLog("[Uploader] Returned link: " + link);
-					progressDialog.close();
+					Main.progressDialog.close();
 				} else {
 					Main.myLog("[Uploader] The server had a bad interpretation of the fileType");
 					return false;
@@ -89,7 +86,7 @@ public class Uploader {
 
 			} else {
 				Main.myLog("[Uploader] Wrong password, closed");
-				dialog.wrongPassword();
+				Main.dialog.wrongPassword();
 				return false;
 			}
 
@@ -114,9 +111,9 @@ public class Uploader {
 
 			long bytesSent = 0;
 
-			progressDialog = new ProgressDialog();
-			progressDialog.setUploader(this);
-			progressDialog.setMessage("Caricando...");
+			Main.progressDialog = new ProgressDialog();
+			Main.progressDialog.setUploader(this);
+			Main.progressDialog.setMessage("Uploading...");
 
 			// send the file
             long bfSize = Math.min(131072, fileLength); // 128kB buffer
@@ -124,9 +121,9 @@ public class Uploader {
                 bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
                 
                 Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
-                progressDialog.set((int) (100 * bytesSent / fileLength));
+                Main.progressDialog.set((int) (100 * bytesSent / fileLength));
             }
-            progressDialog.setWait();
+            Main.progressDialog.setWait();
             inChannel.close();
             
             Main.myLog("[Uploader] End of file reached..");
@@ -167,7 +164,7 @@ public class Uploader {
 
 		} catch (IOException | UnresolvedAddressException e) {
 			e.printStackTrace();
-			dialog.connectionError();
+			Main.dialog.connectionError();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 		return socketChannel;

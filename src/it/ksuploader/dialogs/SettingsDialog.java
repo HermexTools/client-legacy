@@ -58,7 +58,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		}
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		setTitle("Settings");
-		setBounds(100, 100, 480, 300);
+		setBounds(100, 100, 480, 330);
 		setResizable(false);
 		getContentPane().setLayout(null);
 
@@ -120,7 +120,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 62, 474, 209);
+		panel.setBounds(0, 63, 474, 238);
 		getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -216,7 +216,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		srvPort.setColumns(10);
 
 		JButton okButton = new JButton("OK");
-		okButton.setBounds(327, 181, 65, 23);
+		okButton.setBounds(327, 204, 65, 23);
 		panel.add(okButton);
 		okButton.setActionCommand("OK");
 
@@ -233,7 +233,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setBounds(402, 181, 65, 23);
+		cancelButton.setBounds(402, 204, 65, 23);
 		panel.add(cancelButton);
 		cancelButton.setActionCommand("Cancel");
 
@@ -245,7 +245,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnScreen = new JButton("Change");
-		btnScreen.setBounds(256, 108, 90, 20);
+		btnScreen.setBounds(327, 83, 127, 20);
+        btnScreen.setFont(btnScreen.getFont().deriveFont(9f));
 		panel.add(btnScreen);
 
 		btnScreen.addActionListener(new ActionListener() {
@@ -257,7 +258,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnCScreen = new JButton("Change");
-		btnCScreen.setBounds(356, 108, 90, 20);
+		btnCScreen.setBounds(327, 108, 127, 20);
+        btnCScreen.setFont(btnCScreen.getFont().deriveFont(9f));
 		panel.add(btnCScreen);
 
 		btnCScreen.addActionListener(new ActionListener() {
@@ -269,7 +271,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnFile = new JButton("Change");
-		btnFile.setBounds(256, 150, 90, 20);
+		btnFile.setBounds(327, 133, 127, 20);
+        btnFile.setFont(btnFile.getFont().deriveFont(9f));
 		panel.add(btnFile);
 
 		btnFile.addActionListener(new ActionListener() {
@@ -281,7 +284,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		btnClipboard = new JButton("Change");
-		btnClipboard.setBounds(356, 150, 90, 20);
+		btnClipboard.setBounds(327, 158, 127, 20);
+        btnClipboard.setFont(btnClipboard.getFont().deriveFont(9f));
 		panel.add(btnClipboard);
 
 		btnClipboard.addActionListener(new ActionListener() {
@@ -293,19 +297,19 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		});
 
 		JLabel lblFileShortcut = new JLabel("File shortcut");
-		lblFileShortcut.setBounds(257, 134, 80, 14);
+		lblFileShortcut.setBounds(237, 136, 80, 14);
 		panel.add(lblFileShortcut);
 
 		JLabel lblClipboard = new JLabel("Clipboard shortcut");
-		lblClipboard.setBounds(357, 134, 94, 14);
+		lblClipboard.setBounds(237, 161, 94, 14);
 		panel.add(lblClipboard);
 
 		JLabel lblAreaShortcut = new JLabel("Area shortcut");
-		lblAreaShortcut.setBounds(257, 94, 90, 14);
+		lblAreaShortcut.setBounds(237, 86, 90, 14);
 		panel.add(lblAreaShortcut);
 
 		JLabel lblNewLabel = new JLabel("Desktop shortcut");
-		lblNewLabel.setBounds(357, 94, 87, 14);
+		lblNewLabel.setBounds(237, 111, 87, 14);
 		panel.add(lblNewLabel);
 	}
 
