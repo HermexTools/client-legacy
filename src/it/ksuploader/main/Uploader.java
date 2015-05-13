@@ -111,19 +111,18 @@ public class Uploader {
 
 			long bytesSent = 0;
 
-			Main.progressDialog = new ProgressDialog();
+			//Main.progressDialog = new ProgressDialog();
 			Main.progressDialog.setUploader(this);
 			Main.progressDialog.setMessage("Uploading...");
 
 			// send the file
-            long bfSize = Math.min(131072, fileLength); // 128kB buffer
+            long bfSize = Math.min(16384, fileLength); // 128kB buffer
             while (bytesSent < fileLength) {
                 bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
                 
                 Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
                 Main.progressDialog.set((int) (100 * bytesSent / fileLength));
             }
-            Main.progressDialog.setWait();
             inChannel.close();
             
             Main.myLog("[Uploader] End of file reached..");

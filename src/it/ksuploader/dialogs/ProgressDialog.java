@@ -20,15 +20,14 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class ProgressDialog {
-	private JDialog dialogFrame;
+public class ProgressDialog extends JDialog{
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
 	private Uploader callerUploader;
 
 	public ProgressDialog() {
 
-		dialogFrame = new JDialog();
+		//dialogFrame = new JDialog();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -37,8 +36,8 @@ public class ProgressDialog {
 			Main.myLog(ex.toString());
 		}
 
-		dialogFrame.setSize(200, 50);
-		dialogFrame.setLayout(new GridBagLayout());
+		setSize(200, 50);
+		setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -53,8 +52,8 @@ public class ProgressDialog {
 		f = new Font(f.getFontName(), Font.BOLD, f.getSize());
 		headingLabel.setFont(f);
 		headingLabel.setOpaque(false);
-		dialogFrame.add(headingLabel, constraints);
-		dialogFrame.setUndecorated(true);
+		add(headingLabel, constraints);
+		setUndecorated(true);
 
 		// Bottone
 		constraints.gridx = 1;
@@ -65,7 +64,7 @@ public class ProgressDialog {
 		JButton xButton = new JButton("X");
 		xButton.setMargin(new Insets(1, 4, 1, 4));
 		xButton.setFocusable(false);
-		dialogFrame.add(xButton, constraints);
+		add(xButton, constraints);
 
 		// Progress bar
 		constraints.gridx = 0;
@@ -83,12 +82,12 @@ public class ProgressDialog {
 		progressBar.setMinimumSize(dim);
 		progressBar.setStringPainted(true);
 		progressBar.setBorderPainted(true);
-		dialogFrame.add(progressBar, constraints);
+		add(progressBar, constraints);
 
 		xButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialogFrame.dispose();
+				dispose();
 				stoppedUploaderClose();
 			}
 		});
@@ -98,9 +97,9 @@ public class ProgressDialog {
 		// Per il posizionamento in basso a destra
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// altezza taskbar
-		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(dialogFrame.getGraphicsConfiguration());
-		dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(), scrSize.height - 5 - toolHeight.bottom
-				- dialogFrame.getHeight());
+		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(this.getGraphicsConfiguration());
+		this.setLocation(scrSize.width - 5 - this.getWidth(), scrSize.height - 5 - toolHeight.bottom
+				- this.getHeight());
 	}
 
 	public void destroy() {
@@ -110,10 +109,10 @@ public class ProgressDialog {
 				try {
 					Thread.sleep(500);
 					for (float i = 1.00f; i >= 0; i -= 0.01f) {
-						dialogFrame.setOpacity(i);
+						setOpacity(i);
 						Thread.sleep(15);
 					}
-					dialogFrame.dispose();
+					dispose();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
                     Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
@@ -135,8 +134,8 @@ public class ProgressDialog {
 	public void setMessage(String headingLabel) {
 		this.headingLabel.setText(headingLabel);
 		autoPosition();
-		dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
-		dialogFrame.setVisible(true);
+		this.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
+		this.setVisible(true);
 	}
 
 	public void setWait() {
@@ -144,7 +143,7 @@ public class ProgressDialog {
 	}
 
 	public void close() {
-		dialogFrame.dispose();
+		this.dispose();
 	}
 
 	public void stoppedUploaderClose() {
