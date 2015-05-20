@@ -1,4 +1,5 @@
 package it.ksuploader.dialogs;
+
 import it.ksuploader.main.Main;
 import it.ksuploader.main.Uploader;
 
@@ -20,14 +21,15 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class ProgressDialog extends JDialog{
+@SuppressWarnings("serial")
+public class ProgressDialog extends JDialog {
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
 	private Uploader callerUploader;
 
 	public ProgressDialog() {
 
-		//dialogFrame = new JDialog();
+		// dialogFrame = new JDialog();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -98,8 +100,7 @@ public class ProgressDialog extends JDialog{
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// altezza taskbar
 		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(this.getGraphicsConfiguration());
-		this.setLocation(scrSize.width - 5 - this.getWidth(), scrSize.height - 5 - toolHeight.bottom
-				- this.getHeight());
+		this.setLocation(scrSize.width - 5 - this.getWidth(), scrSize.height - 5 - toolHeight.bottom - this.getHeight());
 	}
 
 	public void destroy() {
@@ -115,7 +116,7 @@ public class ProgressDialog extends JDialog{
 					dispose();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-                    Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+					Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				}
 			};
 		}.start();
@@ -151,7 +152,7 @@ public class ProgressDialog extends JDialog{
 			callerUploader.stopUpload();
 		} catch (Exception e) {
 			e.printStackTrace();
-            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 	}
 

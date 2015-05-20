@@ -4,6 +4,7 @@ import it.ksuploader.utils.Environment;
 import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
 import it.sauronsoftware.ftp4j.FTPDataTransferException;
+import it.sauronsoftware.ftp4j.FTPDataTransferListener;
 import it.sauronsoftware.ftp4j.FTPException;
 import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
 
@@ -104,16 +105,16 @@ public class FtpUploader {
 				if (Main.config.getAcceptAllCertificates()) {
 
 					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
-                        @Override
+						@Override
 						public X509Certificate[] getAcceptedIssuers() {
 							return null;
 						}
 
-                        @Override
+						@Override
 						public void checkClientTrusted(X509Certificate[] certs, String authType) {
 						}
 
-                        @Override
+						@Override
 						public void checkServerTrusted(X509Certificate[] certs, String authType) {
 						}
 					} };
@@ -174,7 +175,7 @@ public class FtpUploader {
 
 		// Upload
 		try {
-			ftpClient.upload(new File(filePath));
+			ftpClient.upload(new File(filePath), new MyTransferListener());
 			Main.myLog("[FtpUploader] File uploaded");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
 				| FTPDataTransferException | FTPAbortedException e1) {
@@ -211,5 +212,31 @@ public class FtpUploader {
 
 	public String getLink() {
 		return link;
+	}
+
+	public class MyTransferListener implements FTPDataTransferListener {
+
+		long tot_trasf = 0; // in bytes
+
+		public void started() {
+		}
+
+		public void transferred(int length) {
+
+			Main.progressDialog.setMessage("Uploading...");
+			int percentage_sent = (int) ((100 * (tot_trasf += length)) / new File(filePath).length());
+			Main.myLog("[FtpUploader] Sent: " + percentage_sent + "%");
+			Main.progressDialog.set(percentage_sent);
+		}
+
+		public void completed() {
+		}
+
+		public void aborted() {
+		}
+
+		public void failed() {
+		}
+
 	}
 }

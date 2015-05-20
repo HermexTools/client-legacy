@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.dialogs.ProgressDialog;
 import it.ksuploader.utils.Environment;
 
 import java.io.DataInputStream;
@@ -111,28 +110,28 @@ public class Uploader {
 
 			long bytesSent = 0;
 
-			//Main.progressDialog = new ProgressDialog();
+			// Main.progressDialog = new ProgressDialog();
 			Main.progressDialog.setUploader(this);
 			Main.progressDialog.setMessage("Uploading...");
 
 			// send the file
-            long bfSize = Math.min(16384, fileLength); // 128kB buffer
-            while (bytesSent < fileLength) {
-                bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
-                
-                Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
-                Main.progressDialog.set((int) (100 * bytesSent / fileLength));
-            }
-            inChannel.close();
-            
-            Main.myLog("[Uploader] End of file reached..");
-            aFile.close();
-            Main.myLog("[Uploader] File closed.");
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-        }
+			long bfSize = Math.min(16384, fileLength); // 128kB buffer
+			while (bytesSent < fileLength) {
+				bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
+
+				Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
+				Main.progressDialog.set((int) (100 * bytesSent / fileLength));
+			}
+			inChannel.close();
+
+			Main.myLog("[Uploader] End of file reached..");
+			aFile.close();
+			Main.myLog("[Uploader] File closed.");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+		}
 
 	}
 

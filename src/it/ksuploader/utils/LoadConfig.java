@@ -11,7 +11,8 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class LoadConfig extends Properties{
+@SuppressWarnings("serial")
+public class LoadConfig extends Properties {
 
 	private String ip;
 	private String pass;
@@ -360,8 +361,6 @@ public class LoadConfig extends Properties{
 	public int[] getKeyClipboard() {
 		return keyClip;
 	}
-    
-    
 
 	public void setScreenKeys(String comb) {
 		this.setProperty("key_screen", comb);
