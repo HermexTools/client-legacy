@@ -41,3 +41,8 @@ build.xml
 config.properties
 manifest.mf
 client.properties
+
+#jetbrains
+out/
+.idea/
+*.iml
