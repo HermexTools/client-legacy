@@ -1,29 +1,17 @@
 package it.ksuploader.main;
 
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Area;
-
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.SwingDispatchService;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Area;
+
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 @SuppressWarnings("serial")
 public class PartialScreen extends JPanel implements NativeKeyListener {

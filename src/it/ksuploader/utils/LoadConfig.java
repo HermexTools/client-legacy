@@ -3,11 +3,7 @@ package it.ksuploader.utils;
 import it.ksuploader.dialogs.NotificationDialog;
 import it.ksuploader.main.Main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
 

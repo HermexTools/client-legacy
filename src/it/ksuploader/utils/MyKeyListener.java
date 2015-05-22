@@ -1,8 +1,10 @@
 package it.ksuploader.utils;
 
-import static it.ksuploader.main.Main.myLog;
-import static it.ksuploader.main.Main.st;
 import it.ksuploader.main.Main;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,13 +12,11 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
+import static it.ksuploader.main.Main.myLog;
+import static it.ksuploader.main.Main.st;
 
 public class MyKeyListener {
-	public static HashMap<Integer, String> fromKeyToName = new HashMap<>();;
+	public static HashMap<Integer, String> fromKeyToName = new HashMap<>();
 	public HashSet<Integer> keyHashScreen;
 	public HashSet<Integer> keyHashCScreen;
 	public HashSet<Integer> keyHashFile;
@@ -80,13 +80,13 @@ public class MyKeyListener {
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nke) {
 
-				if (hash2Ready == true && !hashKeyGlobal.contains(nke.getKeyCode())
+				if (hash2Ready && !hashKeyGlobal.contains(nke.getKeyCode())
 						&& MyKeyListener.fromKeyToName.containsKey(nke.getKeyCode())) {
 					hashKeyGlobal.add(nke.getKeyCode());
 					System.out.println("[MyKeyListener] Max key combination reached");
 				}
 
-				if ((hash1Ready == true)
+				if ((hash1Ready)
 						&& !hashKeyGlobal.contains(nke.getKeyCode())
 						&& MyKeyListener.fromKeyToName.containsKey(nke.getKeyCode())
 						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
@@ -111,7 +111,7 @@ public class MyKeyListener {
 			@Override
 			public void nativeKeyReleased(NativeKeyEvent nke) {
 
-				if ((hash1Ready == true || hash2Ready == true)
+				if ((hash1Ready || hash2Ready)
 						&& (keyHashScreen.contains(nke.getKeyCode()) || keyHashCScreen.contains(nke.getKeyCode())
 								|| keyHashFile.contains(nke.getKeyCode()) || keyHashClipboard
 									.contains(nke.getKeyCode())
@@ -172,8 +172,8 @@ public class MyKeyListener {
 		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 		logger.setLevel(Level.OFF);
 		Handler[] handlers = Logger.getLogger("").getHandlers();
-		for (int i = 0; i < handlers.length; i++) {
-			handlers[i].setLevel(Level.OFF);
+		for (Handler handler : handlers) {
+			handler.setLevel(Level.OFF);
 		}
 		loadKeys();
 	}

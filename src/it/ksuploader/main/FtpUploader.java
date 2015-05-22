@@ -1,18 +1,14 @@
 package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
-import it.sauronsoftware.ftp4j.FTPAbortedException;
-import it.sauronsoftware.ftp4j.FTPClient;
-import it.sauronsoftware.ftp4j.FTPDataTransferException;
-import it.sauronsoftware.ftp4j.FTPDataTransferListener;
-import it.sauronsoftware.ftp4j.FTPException;
-import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
+import it.sauronsoftware.ftp4j.*;
 
-import java.awt.AWTException;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.Robot;
+import javax.imageio.ImageIO;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,14 +19,8 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-public class FtpUploader {
-	private static FTPClient ftpClient;
+public class FtpUploader extends  FTPClient{
+	//private static FTPClient ftpClient;
 	private String link;
 	private String filePath;
 
@@ -68,14 +58,12 @@ public class FtpUploader {
 
 		try {
 
-			BufferedImage img = bi;
-
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
-			ImageIO.write(img, "png", toWrite);
+			ImageIO.write(bi, "png", toWrite);
 
 			if (Main.config.isSaveEnabled()) {
-				ImageIO.write(img, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+				ImageIO.write(bi, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
 						+ fileName + ".png"));
 				Main.myLog("[Uploader] Screen saved");
 			}
@@ -94,7 +82,7 @@ public class FtpUploader {
 	}
 
 	public boolean send() {
-		ftpClient = new FTPClient();
+		//ftpClient = new FTPClient();
 
 		System.out.println("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
 		if (Main.config.getFtpesEnabled()) {
@@ -119,19 +107,19 @@ public class FtpUploader {
 						}
 					} };
 
-					SSLContext sslContext = null;
+					SSLContext sslContext;
 
 					sslContext = SSLContext.getInstance("TLS");
 					sslContext.init(null, trustManager, new SecureRandom());
 
 					SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-					ftpClient.setSSLSocketFactory(sslSocketFactory);
+					this.setSSLSocketFactory(sslSocketFactory);
 				} else {
-					ftpClient.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+					this.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
 				}
 
 				System.out.println("[FtpUploader] SetSecurity: SECURITY_FTPES");
-				ftpClient.setSecurity(FTPClient.SECURITY_FTPES);
+				this.setSecurity(FTPClient.SECURITY_FTPES);
 
 			} catch (NoSuchAlgorithmException | KeyManagementException e) {
 
@@ -144,7 +132,7 @@ public class FtpUploader {
 
 		// Connection
 		try {
-			ftpClient.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
+			this.connect(Main.config.getFtpAddr(), Main.config.getFtpPort());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.dialog.show("Connection error", "Unable to connect to the server");
@@ -155,7 +143,7 @@ public class FtpUploader {
 
 		// Login
 		try {
-			ftpClient.login(Main.config.getFtpUser(), Main.config.getFtpPass());
+			this.login(Main.config.getFtpUser(), Main.config.getFtpPass());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
@@ -165,7 +153,7 @@ public class FtpUploader {
 
 		// Change directory
 		try {
-			ftpClient.changeDirectory(Main.config.getFtpDir());
+			this.changeDirectory(Main.config.getFtpDir());
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
@@ -175,7 +163,7 @@ public class FtpUploader {
 
 		// Upload
 		try {
-			ftpClient.upload(new File(filePath), new MyTransferListener());
+			this.upload(new File(filePath), new MyTransferListener());
 			Main.myLog("[FtpUploader] File uploaded");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
 				| FTPDataTransferException | FTPAbortedException e1) {
@@ -198,7 +186,7 @@ public class FtpUploader {
 		// Clean and Disconnect
 		try {
 			new File(filePath).delete();
-			ftpClient.disconnect(true);
+			this.disconnect(true);
 			Main.myLog("[FtpUploader] Disconnected");
 			return true;
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
@@ -214,7 +202,7 @@ public class FtpUploader {
 		return link;
 	}
 
-	public class MyTransferListener implements FTPDataTransferListener {
+	private class MyTransferListener implements FTPDataTransferListener {
 
 		long tot_trasf = 0; // in bytes
 

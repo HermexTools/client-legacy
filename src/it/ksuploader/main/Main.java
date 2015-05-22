@@ -5,6 +5,7 @@ import it.ksuploader.dialogs.ProgressDialog;
 import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.LoadConfig;
 import it.ksuploader.utils.MyKeyListener;
+import net.jimmc.jshortcut.JShellLink;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,8 +13,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-
-import net.jimmc.jshortcut.JShellLink;
 
 public class Main {
 	public static Environment so = new Environment();
@@ -24,8 +23,7 @@ public class Main {
 	public static PrintWriter log;
 	public static SystemTrayMenu st;
 
-	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException,
-			URISyntaxException {
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, URISyntaxException {
 		log = new PrintWriter(so.getInstallDir().getPath() + "//log.txt");
 		keyListener = new MyKeyListener();
 		st = new SystemTrayMenu();

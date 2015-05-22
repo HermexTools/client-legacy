@@ -1,29 +1,20 @@
 package it.ksuploader.dialogs;
 
-import static it.ksuploader.main.Main.myLog;
 import it.ksuploader.main.Main;
 import it.ksuploader.utils.MyKeyListener;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.SwingDispatchService;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.SwingDispatchService;
-import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
+import static it.ksuploader.main.Main.myLog;
 
 @SuppressWarnings("serial")
 public class SettingsDialog extends JDialog implements NativeKeyListener {
@@ -68,31 +59,23 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		ftpEnabled.setBounds(6, 7, 130, 23);
 		getContentPane().add(ftpEnabled);
 
-		ftpEnabled.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				update();
-			}
-		});
+		ftpEnabled.addActionListener(e -> update());
 
 		saveEnabled = new JCheckBox("Save a local copy of images");
 		saveEnabled.setBounds(237, 7, 200, 23);
 		getContentPane().add(saveEnabled);
 
-		saveEnabled.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (saveEnabled.isSelected()) {
-					saveDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					if (saveDir.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
-						saveDir.setSelectedFile(new File("."));
-					Main.myLog("[Settings] local save enabled");
-				} else {
-					saveDir.setSelectedFile(new File("."));
-					Main.myLog("[Settings] local save disabled");
-				}
-			}
-		});
+		saveEnabled.addActionListener(e -> {
+            if (saveEnabled.isSelected()) {
+                saveDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                if (saveDir.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
+                    saveDir.setSelectedFile(new File("."));
+                Main.myLog("[Settings] local save enabled");
+            } else {
+                saveDir.setSelectedFile(new File("."));
+                Main.myLog("[Settings] local save disabled");
+            }
+        });
 
 		ftpesEnabled = new JCheckBox("Use FTPES");
 		ftpesEnabled.setBounds(6, 33, 130, 23);
@@ -182,11 +165,8 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		acceptCertificates.setBounds(98, 158, 127, 20);
 		panel.add(acceptCertificates);
 
-		acceptCertificates.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		acceptCertificates.addActionListener(e -> {
+        });
 
 		JLabel labelSrvSrv = new JLabel("Server Address");
 		labelSrvSrv.setBounds(237, 11, 107, 14);
@@ -220,81 +200,61 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		panel.add(okButton);
 		okButton.setActionCommand("OK");
 
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
-						ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
-						srvPassw.getText(), srvPort.getText(), srvAddr.getText(), saveEnabled.isSelected() + "",
-						saveDir.getSelectedFile().getPath(), startUpEnabled.isSelected() + "",
-						ftpesEnabled.isSelected() + "", acceptCertificates.isSelected() + "");
-				setVisible(false);
-			}
-		});
+		okButton.addActionListener(e -> {
+            Main.config.storeNewConfig(ftpWeburl.getText(), ftpDir.getText(), ftpPort.getText(),
+                    ftpPassw.getText(), ftpUser.getText(), ftpAddr.getText(), ftpEnabled.isSelected() + "",
+                    srvPassw.getText(), srvPort.getText(), srvAddr.getText(), saveEnabled.isSelected() + "",
+                    saveDir.getSelectedFile().getPath(), startUpEnabled.isSelected() + "",
+                    ftpesEnabled.isSelected() + "", acceptCertificates.isSelected() + "");
+            setVisible(false);
+        });
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setBounds(402, 204, 65, 23);
 		panel.add(cancelButton);
 		cancelButton.setActionCommand("Cancel");
 
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
+		cancelButton.addActionListener(e -> setVisible(false));
 
 		btnScreen = new JButton("Change");
 		btnScreen.setBounds(327, 83, 127, 20);
         btnScreen.setFont(btnScreen.getFont().deriveFont(9f));
 		panel.add(btnScreen);
 
-		btnScreen.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				enableListener(btnScreen);
-				btnScreen.setEnabled(false);
-			}
-		});
+		btnScreen.addActionListener(e -> {
+            enableListener(btnScreen);
+            btnScreen.setEnabled(false);
+        });
 
 		btnCScreen = new JButton("Change");
 		btnCScreen.setBounds(327, 108, 127, 20);
         btnCScreen.setFont(btnCScreen.getFont().deriveFont(9f));
 		panel.add(btnCScreen);
 
-		btnCScreen.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				enableListener(btnCScreen);
-				btnCScreen.setEnabled(false);
-			}
-		});
+		btnCScreen.addActionListener(e -> {
+            enableListener(btnCScreen);
+            btnCScreen.setEnabled(false);
+        });
 
 		btnFile = new JButton("Change");
 		btnFile.setBounds(327, 133, 127, 20);
         btnFile.setFont(btnFile.getFont().deriveFont(9f));
 		panel.add(btnFile);
 
-		btnFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				enableListener(btnFile);
-				btnFile.setEnabled(false);
-			}
-		});
+		btnFile.addActionListener(e -> {
+            enableListener(btnFile);
+            btnFile.setEnabled(false);
+        });
 
 		btnClipboard = new JButton("Change");
 		btnClipboard.setBounds(327, 158, 127, 20);
         btnClipboard.setFont(btnClipboard.getFont().deriveFont(9f));
 		panel.add(btnClipboard);
 
-		btnClipboard.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				enableListener(btnClipboard);
-				btnClipboard.setEnabled(false);
-			}
-		});
+		btnClipboard.addActionListener(e -> {
+            enableListener(btnClipboard);
+            btnClipboard.setEnabled(false);
+        });
 
 		JLabel lblFileShortcut = new JLabel("File shortcut");
 		lblFileShortcut.setBounds(237, 136, 80, 14);
@@ -409,7 +369,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 
 		System.out.println("[SettingsDialog] Pressed: " + arg0.getKeyCode());
 
-		if (hash2Ready == true && !hashKeyGlobal.contains(arg0.getKeyCode())
+		if (hash2Ready && !hashKeyGlobal.contains(arg0.getKeyCode())
 				&& MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			hashKeyGlobal.add(arg0.getKeyCode());
 			newKey += "+" + String.valueOf(arg0.getKeyCode());
@@ -417,7 +377,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			System.out.println("[MyKeyListener] Max key combination reached");
 		}
 
-		if ((hash1Ready == true) && !hashKeyGlobal.contains(arg0.getKeyCode())
+		if ((hash1Ready) && !hashKeyGlobal.contains(arg0.getKeyCode())
 				&& MyKeyListener.fromKeyToName.containsKey(arg0.getKeyCode())) {
 			myLog("[MyKeyListener] Combination received");
 			hashKeyGlobal.add(arg0.getKeyCode());
@@ -437,7 +397,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent arg0) {
-		if ((hash1Ready == true || hash2Ready == true)) {
+		if ((hash1Ready || hash2Ready)) {
 			disableListener(callerBtn);
 
 			if (callerBtn.equals(btnScreen)) {

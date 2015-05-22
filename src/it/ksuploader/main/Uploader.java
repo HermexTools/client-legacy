@@ -2,11 +2,7 @@ package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.FileChannel;
@@ -22,9 +18,9 @@ public class Uploader {
 	private DataInputStream dis;
 
 	// Per i file
-	public Uploader(String filePath) {
+		public Uploader(String filePath) {
 
-		SocketChannel socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+		this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
 		this.socketChannel = socketChannel;
 		this.filePath = filePath;
 	}
@@ -59,16 +55,20 @@ public class Uploader {
 					Main.myLog("[Uploader] File length: " + fileLength);
 					dos.writeLong(fileLength);
 					srvResponse = dis.readUTF();
-					if (srvResponse.equals("START_TRANSFER")) {
-						sendFile(file, fileLength);
+					switch (srvResponse) {
+						case "START_TRANSFER":
+							sendFile(file, fileLength);
 
-					} else if (srvResponse.equals("FILE_TOO_LARGE")) {
-						Main.myLog("[Uploader] File too large");
-						Main.dialog.fileTooLarge();
+							break;
+						case "FILE_TOO_LARGE":
+							Main.myLog("[Uploader] File too large");
+							Main.dialog.fileTooLarge();
 
-					} else if (srvResponse.equals("SERVER_FULL")) {
-						Main.myLog("[Uploader] Server Full");
-						Main.dialog.serverFull();
+							break;
+						case "SERVER_FULL":
+							Main.myLog("[Uploader] Server Full");
+							Main.dialog.serverFull();
+							break;
 					}
 
 					Main.progressDialog.setWait();
@@ -102,7 +102,7 @@ public class Uploader {
 	}
 
 	public void sendFile(File file, long fileLength) {
-		RandomAccessFile aFile = null;
+		RandomAccessFile aFile;
 		try {
 
 			aFile = new RandomAccessFile(file, "r");
