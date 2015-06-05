@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.utils.Environment;
 import it.sauronsoftware.ftp4j.*;
 
 import javax.imageio.ImageIO;
@@ -36,7 +35,7 @@ public class FtpUploader extends  FTPClient{
 			BufferedImage img = new Robot().createScreenCapture(screenRect).getSubimage(r.x, r.y, r.width, r.height);
 
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
+			File toWrite = new File(Main.so.getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
 
 			if (Main.config.isSaveEnabled()) {
@@ -59,12 +58,11 @@ public class FtpUploader extends  FTPClient{
 		try {
 
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
+			File toWrite = new File(Main.so.getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(bi, "png", toWrite);
 
 			if (Main.config.isSaveEnabled()) {
-				ImageIO.write(bi, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
-						+ fileName + ".png"));
+				ImageIO.write(bi, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + fileName + ".png"));
 				Main.myLog("[Uploader] Screen saved");
 			}
 
