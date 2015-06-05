@@ -1,13 +1,23 @@
 package it.ksuploader.main;
 
+import static java.awt.SystemTray.getSystemTray;
+import static java.awt.SystemTray.isSupported;
 import it.ksuploader.dialogs.SettingsDialog;
 import it.ksuploader.utils.MyKeyListener;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Desktop;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -21,8 +31,11 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Random;
 
-import static java.awt.SystemTray.getSystemTray;
-import static java.awt.SystemTray.isSupported;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.SwingWorker;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class SystemTrayMenu {
 
@@ -144,7 +157,7 @@ public class SystemTrayMenu {
 
 				// Se FTP
 				if (Main.config.getFtpEnabled()) {
-					FtpUploader ftpUploader = new FtpUploader(partialScreen.getSelection());
+					FtpUploader ftpUploader = FtpUploader.getInstance(partialScreen.getSelection());
 					boolean res = false;
 					res = ftpUploader.send();
 					if (res) {
@@ -209,51 +222,53 @@ public class SystemTrayMenu {
 					screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 				}
 
+				boolean res = false;
 
-			boolean res = false;
-
-			// Se FTP
-			if (Main.config.getFtpEnabled()) {
-				FtpUploader ftpUploader = new FtpUploader(new Robot().createScreenCapture(screenRect));
-				res = ftpUploader.send();
-				if (res) {
-					Main.dialog.show("Upload Completed!", ftpUploader.getLink());
-					history(ftpUploader.getLink());
-					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					suono.run();
-				}
-
-				// Se socket
-			} else {
-
-				File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
-
-				try {
-
-					//ByteArrayOutputStream outputArray = new ByteArrayOutputStream();
-					//ImageIO.write(new Robot().createScreenCapture(screenRect), "png", outputArray);
-
-					ImageIO.write(new Robot().createScreenCapture(screenRect), "png", tempFile);
-					if (Main.config.isSaveEnabled()) {
-						ImageIO.write(new Robot().createScreenCapture(screenRect), "png",
-								new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + ""
-										+ new Random().nextInt(999) + ".png"));
-						Main.myLog("[Uploader] Screen saved");
-					}
-
-					Uploader uploader = new Uploader(tempFile.getPath());
-					res = uploader.send("img");
+				// Se FTP
+				if (Main.config.getFtpEnabled()) {
+					FtpUploader ftpUploader = new FtpUploader(new Robot().createScreenCapture(screenRect));
+					res = ftpUploader.send();
 					if (res) {
-						Main.dialog.show("Upload Completed!", uploader.getLink());
-						history(uploader.getLink());
-						clpbrd.setContents(new StringSelection(uploader.getLink()), null);
-						tempFile.delete();
+						Main.dialog.show("Upload Completed!", ftpUploader.getLink());
+						history(ftpUploader.getLink());
+						clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
 						suono.run();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
+
+					// Se socket
+				} else {
+
+					File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
+
+					try {
+
+						// ByteArrayOutputStream outputArray = new
+						// ByteArrayOutputStream();
+						// ImageIO.write(new
+						// Robot().createScreenCapture(screenRect), "png",
+						// outputArray);
+
+						ImageIO.write(new Robot().createScreenCapture(screenRect), "png", tempFile);
+						if (Main.config.isSaveEnabled()) {
+							ImageIO.write(new Robot().createScreenCapture(screenRect), "png",
+									new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + ""
+											+ new Random().nextInt(999) + ".png"));
+							Main.myLog("[Uploader] Screen saved");
+						}
+
+						Uploader uploader = new Uploader(tempFile.getPath());
+						res = uploader.send("img");
+						if (res) {
+							Main.dialog.show("Upload Completed!", uploader.getLink());
+							history(uploader.getLink());
+							clpbrd.setContents(new StringSelection(uploader.getLink()), null);
+							tempFile.delete();
+							suono.run();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-			}
 			} catch (AWTException ex) {
 				ex.printStackTrace();
 				Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
@@ -274,7 +289,8 @@ public class SystemTrayMenu {
 					ftpUploader = new FtpUploader(new Zipper(selFile.getSelectedFiles()).toZip("ftp"));
 
 					// Altrimenti se finisce con .zip O è uno solo
-				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length == 1) {
+				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
+						|| selFile.getSelectedFiles().length == 1) {
 					ftpUploader = new FtpUploader(selFile.getSelectedFiles()[0].getPath());
 				}
 
@@ -291,7 +307,8 @@ public class SystemTrayMenu {
 				Uploader uploader = null;
 				if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
 					uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip("socket"));
-				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length == 1) {
+				} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip")
+						|| selFile.getSelectedFiles().length == 1) {
 					uploader = new Uploader(selFile.getSelectedFiles()[0].getPath());
 				}
 				res = uploader.send("file");
@@ -336,16 +353,16 @@ public class SystemTrayMenu {
 	private void history(String link) {
 		popupMenu.remove(uploads[uploads.length - 1]);
 
-        System.arraycopy(uploads, 0, uploads, 1, uploads.length - 1);
+		System.arraycopy(uploads, 0, uploads, 1, uploads.length - 1);
 		uploads[0] = new MenuItem(link);
 		uploads[0].addActionListener(e -> {
-            try {
-                Desktop.getDesktop().browse(new URI(e.getActionCommand()));
-            } catch (URISyntaxException | IOException ex) {
-                ex.printStackTrace();
-                Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
-            }
-        });
+			try {
+				Desktop.getDesktop().browse(new URI(e.getActionCommand()));
+			} catch (URISyntaxException | IOException ex) {
+				ex.printStackTrace();
+				Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+			}
+		});
 		popupMenu.insert(uploads[0], 2);
 	}
 
