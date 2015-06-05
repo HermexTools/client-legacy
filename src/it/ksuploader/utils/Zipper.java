@@ -45,14 +45,14 @@ public class Zipper {
 						byte[] bytes = new byte[1024];
 						long count = 0;
 						int length;
-						ProgressDialog progressDialog = new ProgressDialog();
+						ProgressDialog progressDialog = ProgressDialog.getInstance();
 						progressDialog.setMessage("Zipping...");
 						while ((length = fis.read(bytes)) >= 0) {
 							zos.write(bytes, 0, length);
 							count += length;
 							progressDialog.set((int) (count * 100 / fileDir.length()));
 						}
-						progressDialog.close();
+						progressDialog.destroy();
 
 					}
 				} else {
@@ -62,14 +62,14 @@ public class Zipper {
 					byte[] bytes = new byte[1024];
 					long count = 0;
 					int length;
-					ProgressDialog progressDialog = new ProgressDialog();
+					ProgressDialog progressDialog = ProgressDialog.getInstance();
 					progressDialog.setMessage("Zipping...");
 					while ((length = fis.read(bytes)) >= 0) {
 						zos.write(bytes, 0, length);
 						count += length;
 						progressDialog.set((int) (count * 100 / f.length()));
 					}
-					progressDialog.close();
+					progressDialog.destroy();
 
 				}
 			}

@@ -157,7 +157,7 @@ public class SystemTrayMenu {
 
 				// Se FTP
 				if (Main.config.getFtpEnabled()) {
-					FtpUploader ftpUploader = FtpUploader.getInstance(partialScreen.getSelection());
+					FtpUploader ftpUploader = new FtpUploader(partialScreen.getSelection());
 					boolean res = false;
 					res = ftpUploader.send();
 					if (res) {

@@ -2,7 +2,11 @@ package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.FileChannel;
@@ -18,7 +22,7 @@ public class Uploader {
 	private DataInputStream dis;
 
 	// Per i file
-		public Uploader(String filePath) {
+	public Uploader(String filePath) {
 
 		this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
 		this.socketChannel = socketChannel;
@@ -56,19 +60,19 @@ public class Uploader {
 					dos.writeLong(fileLength);
 					srvResponse = dis.readUTF();
 					switch (srvResponse) {
-						case "START_TRANSFER":
-							sendFile(file, fileLength);
+					case "START_TRANSFER":
+						sendFile(file, fileLength);
 
-							break;
-						case "FILE_TOO_LARGE":
-							Main.myLog("[Uploader] File too large");
-							Main.dialog.fileTooLarge();
+						break;
+					case "FILE_TOO_LARGE":
+						Main.myLog("[Uploader] File too large");
+						Main.dialog.fileTooLarge();
 
-							break;
-						case "SERVER_FULL":
-							Main.myLog("[Uploader] Server Full");
-							Main.dialog.serverFull();
-							break;
+						break;
+					case "SERVER_FULL":
+						Main.myLog("[Uploader] Server Full");
+						Main.dialog.serverFull();
+						break;
 					}
 
 					Main.progressDialog.setWait();
@@ -77,7 +81,7 @@ public class Uploader {
 					Main.myLog("[Uploader] Waiting link...");
 					this.link = dis.readUTF();
 					Main.myLog("[Uploader] Returned link: " + link);
-					Main.progressDialog.close();
+					Main.progressDialog.destroy();
 				} else {
 					Main.myLog("[Uploader] The server had a bad interpretation of the fileType");
 					return false;

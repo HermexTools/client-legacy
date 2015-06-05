@@ -28,7 +28,16 @@ public class ProgressDialog extends JDialog {
 	private JLabel headingLabel;
 	private Object callerUploader;
 
-	public ProgressDialog() {
+	private static ProgressDialog instance;
+
+	public static ProgressDialog getInstance() {
+		if (instance == null) {
+			instance = new ProgressDialog();
+		}
+		return instance;
+	}
+
+	private ProgressDialog() {
 
 		// dialogFrame = new JDialog();
 		try {
@@ -90,8 +99,9 @@ public class ProgressDialog extends JDialog {
 		xButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				System.out.println("CHIUDOOOOOOOOOOO");
 				stoppedUploaderClose();
+				dispose();
 			}
 		});
 	}
@@ -124,7 +134,7 @@ public class ProgressDialog extends JDialog {
 
 	}
 
-	public void setUploader(Uploader callerUploader) {
+	public void setUploader(Object callerUploader) {
 		this.callerUploader = callerUploader;
 	}
 
@@ -144,16 +154,15 @@ public class ProgressDialog extends JDialog {
 		headingLabel.setText("Waiting link...");
 	}
 
-	public void close() {
-		this.dispose();
-	}
-
 	public void stoppedUploaderClose() {
 		try {
-			if (callerUploader instanceof Uploader)
+			if (callerUploader instanceof Uploader) {
+				System.out.println("Chiusura di uploader");
 				((Uploader) callerUploader).stopUpload();
-			else if (callerUploader instanceof FtpUploader)
-				FtpUploader.getInstance(null).stopUpload();
+			} else if (callerUploader instanceof FtpUploader) {
+				System.out.println("Chiusura di ftpuploader");
+				FtpUploader.getInstance().stopUpload();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));

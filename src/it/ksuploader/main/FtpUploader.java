@@ -35,15 +35,9 @@ public class FtpUploader extends FTPClient {
 
 	private static FtpUploader instance;
 
-	public static FtpUploader getInstance(Rectangle r) {
-		if (instance == null) {
-			instance = new FtpUploader(r);
-		}
-		return instance;
-	}
-
 	// Per gli screen parziali
-	private FtpUploader(Rectangle r) {
+	public FtpUploader(Rectangle r) {
+		instance = this;
 		try {
 
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -73,7 +67,7 @@ public class FtpUploader extends FTPClient {
 
 	// Per gli screen completi
 	public FtpUploader(BufferedImage bi) {
-
+		instance = this;
 		try {
 
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
@@ -95,7 +89,7 @@ public class FtpUploader extends FTPClient {
 
 	// Per i file
 	public FtpUploader(String filePath) {
-
+		instance = this;
 		this.filePath = filePath;
 	}
 
@@ -181,6 +175,7 @@ public class FtpUploader extends FTPClient {
 
 		// Upload
 		try {
+			Main.progressDialog.setUploader(this);
 			this.upload(new File(filePath), new MyTransferListener());
 			Main.myLog("[FtpUploader] File uploaded");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
@@ -239,6 +234,7 @@ public class FtpUploader extends FTPClient {
 		}
 
 		public void aborted() {
+			System.out.println("Connessione ftp abortita");
 		}
 
 		public void failed() {
@@ -248,10 +244,16 @@ public class FtpUploader extends FTPClient {
 
 	public void stopUpload() {
 		try {
+			this.abortCurrentDataTransfer(true);
 			this.disconnect(true);
+			System.out.println("Mi disconnetto dallo spazio ftp");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
+	}
+
+	public static FtpUploader getInstance() {
+		return instance;
 	}
 
 }
