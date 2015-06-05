@@ -1,14 +1,18 @@
 package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
-import it.sauronsoftware.ftp4j.*;
+import it.sauronsoftware.ftp4j.FTPAbortedException;
+import it.sauronsoftware.ftp4j.FTPClient;
+import it.sauronsoftware.ftp4j.FTPDataTransferException;
+import it.sauronsoftware.ftp4j.FTPDataTransferListener;
+import it.sauronsoftware.ftp4j.FTPException;
+import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
 
-import javax.imageio.ImageIO;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +23,27 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Random;
 
-public class FtpUploader extends  FTPClient{
-	//private static FTPClient ftpClient;
+import javax.imageio.ImageIO;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+public class FtpUploader extends FTPClient {
 	private String link;
 	private String filePath;
 
+	private static FtpUploader instance;
+
+	public static FtpUploader getInstance(Rectangle r) {
+		if (instance == null) {
+			instance = new FtpUploader(r);
+		}
+		return instance;
+	}
+
 	// Per gli screen parziali
-	public FtpUploader(Rectangle r) {
+	private FtpUploader(Rectangle r) {
 		try {
 
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -82,7 +100,7 @@ public class FtpUploader extends  FTPClient{
 	}
 
 	public boolean send() {
-		//ftpClient = new FTPClient();
+		// ftpClient = new FTPClient();
 
 		System.out.println("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
 		if (Main.config.getFtpesEnabled()) {
@@ -227,4 +245,13 @@ public class FtpUploader extends  FTPClient{
 		}
 
 	}
+
+	public void stopUpload() {
+		try {
+			this.disconnect(true);
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
+			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+		}
+	}
+
 }

@@ -1,5 +1,6 @@
 package it.ksuploader.dialogs;
 
+import it.ksuploader.main.FtpUploader;
 import it.ksuploader.main.Main;
 import it.ksuploader.main.Uploader;
 
@@ -25,7 +26,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class ProgressDialog extends JDialog {
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
-	private Uploader callerUploader;
+	private Object callerUploader;
 
 	public ProgressDialog() {
 
@@ -149,7 +150,10 @@ public class ProgressDialog extends JDialog {
 
 	public void stoppedUploaderClose() {
 		try {
-			callerUploader.stopUpload();
+			if (callerUploader instanceof Uploader)
+				((Uploader) callerUploader).stopUpload();
+			else if (callerUploader instanceof FtpUploader)
+				FtpUploader.getInstance(null).stopUpload();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
