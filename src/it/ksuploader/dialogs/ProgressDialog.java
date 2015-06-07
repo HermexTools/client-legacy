@@ -4,23 +4,12 @@ import it.ksuploader.main.FtpUploader;
 import it.ksuploader.main.Main;
 import it.ksuploader.main.Uploader;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Arrays;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 @SuppressWarnings("serial")
 public class ProgressDialog extends JDialog {
@@ -161,7 +150,7 @@ public class ProgressDialog extends JDialog {
 				((Uploader) callerUploader).stopUpload();
 			} else if (callerUploader instanceof FtpUploader) {
 				System.out.println("Chiusura di ftpuploader");
-				FtpUploader.getInstance().stopUpload();
+				((FtpUploader) callerUploader).stopUpload();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

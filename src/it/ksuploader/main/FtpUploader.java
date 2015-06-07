@@ -1,18 +1,14 @@
 package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
-import it.sauronsoftware.ftp4j.FTPAbortedException;
-import it.sauronsoftware.ftp4j.FTPClient;
-import it.sauronsoftware.ftp4j.FTPDataTransferException;
-import it.sauronsoftware.ftp4j.FTPDataTransferListener;
-import it.sauronsoftware.ftp4j.FTPException;
-import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
+import it.sauronsoftware.ftp4j.*;
 
-import java.awt.AWTException;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.Robot;
+import javax.imageio.ImageIO;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,12 +18,6 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class FtpUploader extends FTPClient {
 	private String link;
@@ -225,12 +215,14 @@ public class FtpUploader extends FTPClient {
 		public void transferred(int length) {
 
 			Main.progressDialog.setMessage("Uploading...");
+			Main.progressDialog.setUploader(this);
 			int percentage_sent = (int) ((100 * (tot_trasf += length)) / new File(filePath).length());
 			Main.myLog("[FtpUploader] Sent: " + percentage_sent + "%");
 			Main.progressDialog.set(percentage_sent);
 		}
 
 		public void completed() {
+			Main.progressDialog.destroy();
 		}
 
 		public void aborted() {
@@ -250,10 +242,6 @@ public class FtpUploader extends FTPClient {
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
-	}
-
-	public static FtpUploader getInstance() {
-		return instance;
 	}
 
 }
