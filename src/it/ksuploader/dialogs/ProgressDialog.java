@@ -12,7 +12,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.Arrays;
 
 
-public final class ProgressDialog extends JDialog {
+public class ProgressDialog extends JDialog {
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
 	private Object callerUploader;
