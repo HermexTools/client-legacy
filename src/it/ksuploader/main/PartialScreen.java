@@ -96,14 +96,17 @@ public class PartialScreen extends JPanel implements NativeKeyListener {
 	public Rectangle getSelection() {
 		GlobalScreen.removeNativeKeyListener(this);
 		if (fromClickPoint != null)
-			if (fromClickPoint.x + fromClickPoint.y < toClickPoint.x + toClickPoint.y)
+			if (fromClickPoint.x + fromClickPoint.y < toClickPoint.x + toClickPoint.y) {
 				return new Rectangle(fromClickPoint.x + 1, fromClickPoint.y + 1, toClickPoint.x - fromClickPoint.x - 1,
 						toClickPoint.y - fromClickPoint.y - 1);
-			else
+			}
+			else {
 				return new Rectangle(toClickPoint.x + 1, toClickPoint.y + 1, fromClickPoint.x - toClickPoint.x - 1,
 						fromClickPoint.y - toClickPoint.y - 1);
-		else
+			}
+		else {
 			return null;
+		}
 	}
 
 	@Override

@@ -1,23 +1,13 @@
 package it.ksuploader.main;
 
-import static java.awt.SystemTray.getSystemTray;
-import static java.awt.SystemTray.isSupported;
 import it.ksuploader.dialogs.SettingsDialog;
 import it.ksuploader.utils.MyKeyListener;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
 
-import java.awt.AWTException;
-import java.awt.Desktop;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -31,11 +21,8 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.SwingWorker;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import static java.awt.SystemTray.getSystemTray;
+import static java.awt.SystemTray.isSupported;
 
 public class SystemTrayMenu {
 
@@ -113,7 +100,6 @@ public class SystemTrayMenu {
 				esci.addActionListener(e -> {
 					getSystemTray().remove(trayIcon);
 					Main.startUpCheck(Main.config.isStartUpEnabled());
-					Main.log.close();
 					System.exit(0);
 				});
 
@@ -134,13 +120,13 @@ public class SystemTrayMenu {
 	}
 
 	public String loadKey(int keyNumber[]) {
-		String ret = "(";
+		StringBuffer ret = new StringBuffer("(");
 		for (int e : keyNumber) {
-			ret = ret + MyKeyListener.fromKeyToName.get(e) + "+";
+			ret.append(MyKeyListener.fromKeyToName.get(e) + "+");
 		}
-		ret = ret.substring(0, ret.length() - 1);
-		ret += ")";
-		return ret;
+		ret.replace(0,ret.length(),ret.substring(0, ret.length() - 1));
+		ret.append(")");
+		return ret.toString();
 	}
 
 	private class UploadPartialScreen extends SwingWorker<Void, Void> {
@@ -164,7 +150,7 @@ public class SystemTrayMenu {
 						Main.dialog.show("Screenshot Caricato!", ftpUploader.getLink());
 						history(ftpUploader.getLink());
 						clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-						suono.run();
+						suono.start();
 					}
 
 					// Se socket
@@ -232,7 +218,7 @@ public class SystemTrayMenu {
 						Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 						history(ftpUploader.getLink());
 						clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-						suono.run();
+						suono.start();
 					}
 
 					// Se socket
@@ -299,7 +285,7 @@ public class SystemTrayMenu {
 					Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					suono.run();
+					suono.start();
 				}
 
 			} else {
@@ -387,7 +373,7 @@ public class SystemTrayMenu {
 					Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					suono.run();
+					suono.start();
 				}
 
 			} else {
@@ -400,7 +386,7 @@ public class SystemTrayMenu {
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 					f.delete();
-					suono.run();
+					suono.start();
 				}
 			}
 

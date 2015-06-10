@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public class Environment {
 
-	private static OS os;
+	private OS os;
 
 	public enum OS {
 		LINUX, WINDOWS, OSX, UNKNOWN
@@ -15,15 +15,18 @@ public class Environment {
 		os = getEnvironment();
 	}
 
-	private static OS getEnvironment() {
+	private OS getEnvironment() {
 		String osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 
-		if (osName.contains("linux"))
+		if (osName.contains("linux")) {
 			return os = OS.LINUX;
-		else if (osName.contains("mac"))
+		}
+		else if (osName.contains("mac")) {
 			return os = OS.OSX;
-		else if (osName.contains("windows"))
+		}
+		else if (osName.contains("windows")) {
 			return os = OS.WINDOWS;
+		}
 
 		return OS.UNKNOWN;
 	}

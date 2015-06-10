@@ -23,7 +23,7 @@ public class FtpUploader extends FTPClient {
 	private String link;
 	private String filePath;
 
-	private static FtpUploader instance;
+	private FtpUploader instance;
 
 	// Per gli screen parziali
 	public FtpUploader(Rectangle r) {
@@ -86,12 +86,12 @@ public class FtpUploader extends FTPClient {
 	public boolean send() {
 		// ftpClient = new FTPClient();
 
-		System.out.println("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
+		Main.myLog("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
 		if (Main.config.getFtpesEnabled()) {
 			try {
 
 				// Setting up tls connection
-				System.out.println("[FtpUploader] AcceptAllCertificates: " + Main.config.getAcceptAllCertificates());
+				Main.myLog("[FtpUploader] AcceptAllCertificates: " + Main.config.getAcceptAllCertificates());
 				if (Main.config.getAcceptAllCertificates()) {
 
 					TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
@@ -120,7 +120,7 @@ public class FtpUploader extends FTPClient {
 					this.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
 				}
 
-				System.out.println("[FtpUploader] SetSecurity: SECURITY_FTPES");
+				Main.myLog("[FtpUploader] SetSecurity: SECURITY_FTPES");
 				this.setSecurity(FTPClient.SECURITY_FTPES);
 
 			} catch (NoSuchAlgorithmException | KeyManagementException e) {
@@ -226,7 +226,7 @@ public class FtpUploader extends FTPClient {
 		}
 
 		public void aborted() {
-			System.out.println("Connessione ftp abortita");
+			Main.myLog("Connessione ftp abortita");
 		}
 
 		public void failed() {
@@ -238,7 +238,7 @@ public class FtpUploader extends FTPClient {
 		try {
 			this.abortCurrentDataTransfer(true);
 			this.disconnect(true);
-			System.out.println("Mi disconnetto dallo spazio ftp");
+			Main.myLog("Mi disconnetto dallo spazio ftp");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}

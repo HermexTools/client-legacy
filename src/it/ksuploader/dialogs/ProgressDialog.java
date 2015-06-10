@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Arrays;
 
-@SuppressWarnings("serial")
-public class ProgressDialog extends JDialog {
+
+public final class ProgressDialog extends JDialog {
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
 	private Object callerUploader;
@@ -88,7 +88,7 @@ public class ProgressDialog extends JDialog {
 		xButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("CHIUDOOOOOOOOOOO");
+				Main.myLog("CHIUDOOOOOOOOOOO");
 				stoppedUploaderClose();
 				dispose();
 			}
@@ -146,10 +146,10 @@ public class ProgressDialog extends JDialog {
 	public void stoppedUploaderClose() {
 		try {
 			if (callerUploader instanceof Uploader) {
-				System.out.println("Chiusura di uploader");
+				Main.myLog("Chiusura di uploader");
 				((Uploader) callerUploader).stopUpload();
 			} else if (callerUploader instanceof FtpUploader) {
-				System.out.println("Chiusura di ftpuploader");
+				Main.myLog("Chiusura di ftpuploader");
 				((FtpUploader) callerUploader).stopUpload();
 			}
 		} catch (Exception e) {

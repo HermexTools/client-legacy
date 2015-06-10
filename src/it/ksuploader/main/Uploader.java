@@ -2,11 +2,7 @@ package it.ksuploader.main;
 
 import it.ksuploader.utils.Environment;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.FileChannel;
@@ -25,7 +21,6 @@ public class Uploader {
 	public Uploader(String filePath) {
 
 		this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
-		this.socketChannel = socketChannel;
 		this.filePath = filePath;
 	}
 
