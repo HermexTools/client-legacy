@@ -43,8 +43,7 @@ public class SystemTrayMenu {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
 			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
