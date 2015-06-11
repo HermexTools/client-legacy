@@ -72,7 +72,7 @@ public class Uploader implements Observer{
 						break;
 					}
 
-					Main.progressDialog.setWait();
+
 
 					// return link
 					Main.myLog("[Uploader] Waiting link...");
@@ -129,6 +129,8 @@ public class Uploader implements Observer{
 			aFile.close();
 			Main.myLog("[Uploader] File closed.");
 
+			Main.progressDialog.setWait();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
@@ -146,6 +148,7 @@ public class Uploader implements Observer{
 			dis.close();
 			socketChannel.close();
 			new File(Main.so.getTempDir(), "KStemp.zip").delete();
+            Main.progressDialog.setMessage("Stopped...");
 		} catch (IOException e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));

@@ -237,6 +237,7 @@ public class FtpUploader extends FTPClient implements Observer{
 		try {
 			this.abortCurrentDataTransfer(true);
 			this.disconnect(true);
+			Main.progressDialog.setMessage("Stopped...");
 			Main.myLog("Mi disconnetto dallo spazio ftp");
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
