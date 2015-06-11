@@ -1,7 +1,6 @@
 package it.ksuploader.main;
 
 import it.ksuploader.dialogs.SettingsDialog;
-import it.ksuploader.utils.DirectRobot;
 import it.ksuploader.utils.MyKeyListener;
 import it.ksuploader.utils.Sound;
 import it.ksuploader.utils.Zipper;
@@ -166,7 +165,7 @@ public class SystemTrayMenu {
                         File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
                         try {
 
-                            img = new DirectRobot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
+                            img = new Robot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
                                     partialScreen.getSelection().y, partialScreen.getSelection().width,
                                     partialScreen.getSelection().height);
 
@@ -180,7 +179,6 @@ public class SystemTrayMenu {
                             }
 
                             img.flush();
-
 
                             Uploader uploader = new Uploader(tempFile.getPath());
 
@@ -216,7 +214,7 @@ public class SystemTrayMenu {
 
                     // Se FTP
                     if (Main.config.getFtpEnabled()) {
-                        FtpUploader ftpUploader = new FtpUploader(new DirectRobot().createScreenCapture(myScreen));
+                        FtpUploader ftpUploader = new FtpUploader(new Robot().createScreenCapture(myScreen));
                         res = ftpUploader.send();
                         if (res) {
                             Main.dialog.show("Upload Completed!", ftpUploader.getLink());
@@ -231,9 +229,9 @@ public class SystemTrayMenu {
                         File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
 
                         try {
-                            ImageIO.write(new DirectRobot().createScreenCapture(myScreen), "png", tempFile);
+                            ImageIO.write(new Robot().createScreenCapture(myScreen), "png", tempFile);
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new DirectRobot().createScreenCapture(myScreen), "png",
+                                ImageIO.write(new Robot().createScreenCapture(myScreen), "png",
                                         new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + ""
                                                 + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[Uploader] Screen saved");

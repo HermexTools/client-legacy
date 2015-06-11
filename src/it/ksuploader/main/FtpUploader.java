@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.utils.DirectRobot;
 import it.sauronsoftware.ftp4j.*;
 
 import javax.imageio.ImageIO;
@@ -34,7 +33,7 @@ public class FtpUploader extends FTPClient implements Observer{
 				screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 			}
 
-			BufferedImage img = new DirectRobot().createScreenCapture(screenRect).getSubimage(r.x, r.y, r.width, r.height);
+			BufferedImage img = new Robot().createScreenCapture(screenRect).getSubimage(r.x, r.y, r.width, r.height);
 
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
 			File toWrite = new File(Main.so.getTempDir() + "/" + fileName + ".png");
