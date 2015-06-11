@@ -19,14 +19,12 @@ public class Main {
 	public static Environment so = new Environment();
 	public static LoadConfig config = new LoadConfig();
 	public static NotificationDialog dialog = new NotificationDialog();
-	public static ProgressDialog progressDialog = ProgressDialog.getInstance();
+	public static ProgressDialog progressDialog = new ProgressDialog();
 	public static MyKeyListener keyListener;
 	public static Logger log = Logger.getLogger("KSULog");
-	//public static PrintWriter log;
 	public static SystemTrayMenu st;
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
-		//log = new PrintWriter(so.getInstallDir().getPath() + "//log.txt");
         FileHandler fh = new FileHandler(so.getInstallDir().getPath() + "//KSULog.txt");
         fh.setFormatter(new SimpleFormatter());
         log.addHandler(fh);

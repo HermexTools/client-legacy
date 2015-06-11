@@ -1,6 +1,5 @@
 package it.ksuploader.main;
 
-import it.ksuploader.utils.Environment;
 import it.sauronsoftware.ftp4j.*;
 
 import javax.imageio.ImageIO;
@@ -17,17 +16,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
-public class FtpUploader extends FTPClient {
+public class FtpUploader extends FTPClient implements Observer{
 	private String link;
 	private String filePath;
 
-	private FtpUploader instance;
-
 	// Per gli screen parziali
 	public FtpUploader(Rectangle r) {
-		instance = this;
 		try {
 
 			Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -38,7 +36,7 @@ public class FtpUploader extends FTPClient {
 			BufferedImage img = new Robot().createScreenCapture(screenRect).getSubimage(r.x, r.y, r.width, r.height);
 
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
+			File toWrite = new File(Main.so.getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(img, "png", toWrite);
 
 			if (Main.config.isSaveEnabled()) {
@@ -57,16 +55,14 @@ public class FtpUploader extends FTPClient {
 
 	// Per gli screen completi
 	public FtpUploader(BufferedImage bi) {
-		instance = this;
 		try {
 
 			String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
-			File toWrite = new File(new Environment().getTempDir() + "/" + fileName + ".png");
+			File toWrite = new File(Main.so.getTempDir() + "/" + fileName + ".png");
 			ImageIO.write(bi, "png", toWrite);
 
 			if (Main.config.isSaveEnabled()) {
-				ImageIO.write(bi, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
-						+ fileName + ".png"));
+				ImageIO.write(bi, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + fileName + ".png"));
 				Main.myLog("[Uploader] Screen saved");
 			}
 
@@ -79,12 +75,12 @@ public class FtpUploader extends FTPClient {
 
 	// Per i file
 	public FtpUploader(String filePath) {
-		instance = this;
 		this.filePath = filePath;
 	}
 
 	public boolean send() {
 		// ftpClient = new FTPClient();
+        Main.progressDialog.addObserver(this);
 
 		Main.myLog("[FtpUploader] FtpesEnabled: " + Main.config.getFtpesEnabled());
 		if (Main.config.getFtpesEnabled()) {
@@ -165,14 +161,12 @@ public class FtpUploader extends FTPClient {
 
 		// Upload
 		try {
-			Main.progressDialog.setUploader(this);
 			this.upload(new File(filePath), new MyTransferListener());
 			Main.myLog("[FtpUploader] File uploaded");
-		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException
-				| FTPDataTransferException | FTPAbortedException e1) {
+		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException | FTPDataTransferException | FTPAbortedException e1) {
 			e1.printStackTrace();
 			Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
-			Main.dialog.show("Upload error", "Error during the file upload");
+			Main.dialog.show("Upload aborted", "Upload was stopped!");
 			return false;
 		}
 
@@ -205,6 +199,11 @@ public class FtpUploader extends FTPClient {
 		return link;
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+		stopUpload();
+	}
+
 	private class MyTransferListener implements FTPDataTransferListener {
 
 		long tot_trasf = 0; // in bytes
@@ -215,7 +214,7 @@ public class FtpUploader extends FTPClient {
 		public void transferred(int length) {
 
 			Main.progressDialog.setMessage("Uploading...");
-			Main.progressDialog.setUploader(this);
+			//Main.progressDialog.setUploader(this);
 			int percentage_sent = (int) ((100 * (tot_trasf += length)) / new File(filePath).length());
 			Main.myLog("[FtpUploader] Sent: " + percentage_sent + "%");
 			Main.progressDialog.set(percentage_sent);

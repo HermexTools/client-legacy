@@ -68,17 +68,13 @@ public class Environment {
 	}
     
     public String getStartUpFolder(){
-        String f = null;
         switch (os) {
 		case LINUX:
-			f = "~/.config/autostart";
-			return f;
+			return "~/.config/autostart";
 		case WINDOWS:
-            f = System.getenv("Appdata")+"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
-			return f;
+			return System.getenv("Appdata")+"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
 		case OSX:
-
-			return f;
+			return null;
 		default:
 			return null;
 

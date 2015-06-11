@@ -1,34 +1,22 @@
 package it.ksuploader.dialogs;
 
-import it.ksuploader.main.FtpUploader;
 import it.ksuploader.main.Main;
-import it.ksuploader.main.Uploader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Arrays;
+import java.util.Observable;
 
 
-public class ProgressDialog extends JDialog {
+public class ProgressDialog extends Observable {
 	private JProgressBar progressBar;
 	private JLabel headingLabel;
-	private Object callerUploader;
+    private JDialog dialogFrame;
 
-	private static ProgressDialog instance;
+	public ProgressDialog() {
 
-	public static ProgressDialog getInstance() {
-		if (instance == null) {
-			instance = new ProgressDialog();
-		}
-		return instance;
-	}
-
-	private ProgressDialog() {
-
-		// dialogFrame = new JDialog();
+		dialogFrame = new JDialog();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -37,8 +25,8 @@ public class ProgressDialog extends JDialog {
 			Main.myLog(ex.toString());
 		}
 
-		setSize(200, 50);
-		setLayout(new GridBagLayout());
+        dialogFrame.setSize(200, 50);
+        dialogFrame.setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -53,8 +41,8 @@ public class ProgressDialog extends JDialog {
 		f = new Font(f.getFontName(), Font.BOLD, f.getSize());
 		headingLabel.setFont(f);
 		headingLabel.setOpaque(false);
-		add(headingLabel, constraints);
-		setUndecorated(true);
+        dialogFrame.add(headingLabel, constraints);
+        dialogFrame.setUndecorated(true);
 
 		// Bottone
 		constraints.gridx = 1;
@@ -65,7 +53,7 @@ public class ProgressDialog extends JDialog {
 		JButton xButton = new JButton("X");
 		xButton.setMargin(new Insets(1, 4, 1, 4));
 		xButton.setFocusable(false);
-		add(xButton, constraints);
+        dialogFrame.add(xButton, constraints);
 
 		// Progress bar
 		constraints.gridx = 0;
@@ -83,48 +71,51 @@ public class ProgressDialog extends JDialog {
 		progressBar.setMinimumSize(dim);
 		progressBar.setStringPainted(true);
 		progressBar.setBorderPainted(true);
-		add(progressBar, constraints);
+        dialogFrame.add(progressBar, constraints);
 
-		xButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Main.myLog("CHIUDOOOOOOOOOOO");
-				stoppedUploaderClose();
-				dispose();
-			}
-		});
+		xButton.addActionListener(e -> {
+            Main.myLog("Chiudo upload in corso");
+            //stoppedUploaderClose();
+            setChanged();
+            notifyObservers();
+			this.destroy();
+        });
 	}
 
 	private void autoPosition() {
 		// Per il posizionamento in basso a destra
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// altezza taskbar
-		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(this.getGraphicsConfiguration());
-		this.setLocation(scrSize.width - 5 - this.getWidth(), scrSize.height - 5 - toolHeight.bottom - this.getHeight());
+		Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(dialogFrame.getGraphicsConfiguration());
+        dialogFrame.setLocation(scrSize.width - 5 - dialogFrame.getWidth(), scrSize.height - 5 - toolHeight.bottom - dialogFrame.getHeight());
 	}
 
 	public void destroy() {
-		new Thread() {
+        /*
+        StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+        StackTraceElement e = stacktrace[2];//maybe this number needs to be corrected
+        String methodName = e.getMethodName();
+        System.out.println("--------------------------" + methodName);
+
+        */
+        new Thread() {
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(500);
 					for (float i = 1.00f; i >= 0; i -= 0.01f) {
-						setOpacity(i);
+                        dialogFrame.setOpacity(i);
 						Thread.sleep(15);
 					}
-					dispose();
+                    dialogFrame.setVisible(false);
+                    dialogFrame.setOpacity(1.00f);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 				}
-			};
+			}
 		}.start();
 
-	}
-
-	public void setUploader(Object callerUploader) {
-		this.callerUploader = callerUploader;
 	}
 
 	public void set(int n) {
@@ -135,27 +126,12 @@ public class ProgressDialog extends JDialog {
 	public void setMessage(String headingLabel) {
 		this.headingLabel.setText(headingLabel);
 		autoPosition();
-		this.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
-		this.setVisible(true);
+        dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
+        dialogFrame.setVisible(true);
 	}
 
 	public void setWait() {
 		headingLabel.setText("Waiting link...");
-	}
-
-	public void stoppedUploaderClose() {
-		try {
-			if (callerUploader instanceof Uploader) {
-				Main.myLog("Chiusura di uploader");
-				((Uploader) callerUploader).stopUpload();
-			} else if (callerUploader instanceof FtpUploader) {
-				Main.myLog("Chiusura di ftpuploader");
-				((FtpUploader) callerUploader).stopUpload();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-		}
 	}
 
 }

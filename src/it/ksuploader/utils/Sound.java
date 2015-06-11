@@ -2,7 +2,10 @@ package it.ksuploader.utils;
 
 import it.ksuploader.main.Main;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -19,8 +22,7 @@ public class Sound extends Thread {
 		try {
 			audioInputStream = AudioSystem.getAudioInputStream(clickUrl);
 
-			AudioFormat format = audioInputStream.getFormat();
-			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
 			Clip clip;
 			clip = (Clip) AudioSystem.getLine(info);
 			if (clip.isRunning()) {

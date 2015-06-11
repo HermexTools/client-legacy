@@ -74,7 +74,6 @@ public class PartialScreen extends JPanel implements NativeKeyListener {
 		frame = new JDialog();
 		frame.setModal(true);
 		frame.setUndecorated(true);
-		//frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		try {
 			frame.setCursor(tk.createCustomCursor(ImageIO.read(getClass().getResource("/res/cursor.png")),
                     new Point(16, 16),

@@ -1,6 +1,6 @@
 package it.ksuploader.main;
 
-import it.ksuploader.utils.Environment;
+
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -9,8 +9,10 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.UnresolvedAddressException;
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Uploader {
+public class Uploader implements Observer{
 	private SocketChannel socketChannel;
 	private String link;
 	private String filePath;
@@ -109,8 +111,8 @@ public class Uploader {
 
 			long bytesSent = 0;
 
-			// Main.progressDialog = new ProgressDialog();
-			Main.progressDialog.setUploader(this);
+			//Main.progressDialog.setUploader(this);
+			Main.progressDialog.addObserver(this);
 			Main.progressDialog.setMessage("Uploading...");
 
 			// send the file
@@ -143,7 +145,7 @@ public class Uploader {
 			dos.close();
 			dis.close();
 			socketChannel.close();
-			new File(new Environment().getTempDir(), "KStemp.zip").delete();
+			new File(Main.so.getTempDir(), "KStemp.zip").delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
@@ -167,4 +169,8 @@ public class Uploader {
 		return socketChannel;
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+        stopUpload();
+	}
 }

@@ -122,13 +122,13 @@ public class MyKeyListener {
 					if (keyHashScreen.equals(hashKeyGlobal)) {
 						System.out.println("Via cattura parziale");
 						clearKeyComb();
-						st.sendPartialScreen();
+						st.uploadPartialScreen();
 					}
 
 					if (keyHashCScreen.equals(hashKeyGlobal)) {
 						System.out.println("Via cattura globale");
 						clearKeyComb();
-						st.sendCompleteScreen();
+						st.uploadCompleteScreen();
 					}
 
 					if (keyHashFile.equals(hashKeyGlobal)) {
