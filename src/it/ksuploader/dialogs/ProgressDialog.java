@@ -75,10 +75,11 @@ public class ProgressDialog extends Observable {
 
 		xButton.addActionListener(e -> {
             Main.myLog("Chiudo upload in corso");
-            //stoppedUploaderClose();
-            setChanged();
-            notifyObservers();
+            this.setChanged();
+            this.notifyObservers();
+			this.deleteObservers();
 			this.destroy();
+
         });
 	}
 
