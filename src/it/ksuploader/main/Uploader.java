@@ -31,8 +31,6 @@ public class Uploader implements Observer{
 			dos = new DataOutputStream(socketChannel.socket().getOutputStream());
 			dis = new DataInputStream(socketChannel.socket().getInputStream());
 
-			// socketChannel.socket().setSoTimeout(10000);
-
 			// send auth
 			Main.myLog("[Uploader] Sending auth");
 			dos.writeUTF(Main.config.getPass());
@@ -90,6 +88,7 @@ public class Uploader implements Observer{
 				return false;
 			}
 
+			dos.flush();
 			dos.close();
 			dis.close();
 			socketChannel.close();
@@ -111,7 +110,6 @@ public class Uploader implements Observer{
 
 			long bytesSent = 0;
 
-			//Main.progressDialog.setUploader(this);
 			Main.progressDialog.addObserver(this);
 			Main.progressDialog.setMessage("Uploading...");
 
@@ -123,6 +121,7 @@ public class Uploader implements Observer{
 				Main.myLog("[Uploader] Sent: " + 100 * bytesSent / fileLength + "%");
 				Main.progressDialog.set((int) (100 * bytesSent / fileLength));
 			}
+
 			inChannel.close();
 
 			Main.myLog("[Uploader] End of file reached..");

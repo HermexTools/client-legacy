@@ -1,5 +1,6 @@
 package it.ksuploader.main;
 
+
 import it.ksuploader.dialogs.SettingsDialog;
 import it.ksuploader.utils.MyKeyListener;
 import it.ksuploader.utils.Sound;
@@ -12,7 +13,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,6 +47,13 @@ public class SystemTrayMenu {
 			ex.printStackTrace();
 			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
+
+        selFile = new JFileChooser();
+        selFile.setMultiSelectionEnabled(true);
+        selFile.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        Action details = selFile.getActionMap().get("viewTypeDetails");
+        details.actionPerformed(null);
+
 		this.configPanel = new SettingsDialog();
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
@@ -161,24 +168,22 @@ public class SystemTrayMenu {
                             myScreen = myScreen.union(gd.getDefaultConfiguration().getBounds());
                         }
 
-                        BufferedImage img;
                         File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
                         try {
 
-                            img = new Robot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
-                                    partialScreen.getSelection().y, partialScreen.getSelection().width,
-                                    partialScreen.getSelection().height);
 
-                            ImageIO.write(img, "png", tempFile);
+                            ImageIO.write(new Robot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
+                                    partialScreen.getSelection().y, partialScreen.getSelection().width,
+                                    partialScreen.getSelection().height), "png", tempFile);
 
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(img, "png",
-                                        new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+                                ImageIO.write(new Robot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
+                                        partialScreen.getSelection().y, partialScreen.getSelection().width,
+                                        partialScreen.getSelection().height), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
                                                 + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[Uploader] Screen saved");
                             }
 
-                            img.flush();
 
                             Uploader uploader = new Uploader(tempFile.getPath());
 
@@ -262,11 +267,7 @@ public class SystemTrayMenu {
 	public void sendFile() {
 
 		try {
-			selFile = new JFileChooser();
-			selFile.setMultiSelectionEnabled(true);
-			selFile.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-            Action details = selFile.getActionMap().get("viewTypeDetails");
-            details.actionPerformed(null);
+
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 new SwingWorker() {
                     @Override
