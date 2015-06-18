@@ -20,16 +20,16 @@ public class Uploader implements Observer{
 	private DataInputStream dis;
 
 	// Per i file
-	public Uploader(String filePath) {
+	public Uploader() {
 
 		this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
-		this.filePath = filePath;
 	}
 
 	public boolean send(String type) {
 		try {
-			dos = new DataOutputStream(socketChannel.socket().getOutputStream());
-			dis = new DataInputStream(socketChannel.socket().getInputStream());
+			this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+			this.dos = new DataOutputStream(socketChannel.socket().getOutputStream());
+			this.dis = new DataInputStream(socketChannel.socket().getInputStream());
 
 			// send auth
 			Main.myLog("[Uploader] Sending auth");
@@ -169,6 +169,10 @@ public class Uploader implements Observer{
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 		return socketChannel;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	@Override

@@ -30,6 +30,7 @@ public class SystemTrayMenu {
 	private PopupMenu popupMenu;
 	private static JFileChooser selFile;
 	private final Sound suono;
+    private Uploader uploader;
 	private TrayIcon trayIcon;
 
 	private SettingsDialog configPanel;
@@ -57,6 +58,7 @@ public class SystemTrayMenu {
 		this.configPanel = new SettingsDialog();
 		this.suono = new Sound();
 		this.uploads = new MenuItem[5];
+        this.uploader = new Uploader();
 
 		for (int i = 0; i < uploads.length; i++) {
 			uploads[i] = new MenuItem();
@@ -188,7 +190,7 @@ public class SystemTrayMenu {
                             }
 
 
-                            Uploader uploader = new Uploader(tempFile.getPath());
+                            uploader.setFilePath(tempFile.getPath());
 
                             boolean res;
                             res = uploader.send("img");
@@ -245,7 +247,7 @@ public class SystemTrayMenu {
                                 Main.myLog("[Uploader] MyScreen saved");
                             }
 
-                            Uploader uploader = new Uploader(tempFile.getPath());
+                            uploader.setFilePath(tempFile.getPath());
                             res = uploader.send("img");
                             if (res) {
                                 Main.dialog.show("Upload Completed!", uploader.getLink());
@@ -301,18 +303,16 @@ public class SystemTrayMenu {
 
                         } else {
 
-                            Uploader uploader = null;
-
                             if (selFile.getSelectedFiles()[0].getName().toLowerCase().endsWith(".png") && selFile.getSelectedFiles().length == 1) {
-                                uploader = new Uploader(selFile.getSelectedFiles()[0].getPath());
+                                uploader.setFilePath(selFile.getSelectedFiles()[0].getPath());
                                 res = uploader.send("img");
 
                             } else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-                                uploader = new Uploader(new Zipper(selFile.getSelectedFiles()).toZip("socket"));
+                                uploader.setFilePath(new Zipper(selFile.getSelectedFiles()).toZip("socket"));
                                 res = uploader.send("file");
 
                             } else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
-                                uploader = new Uploader(selFile.getSelectedFiles()[0].getPath());
+                                uploader.setFilePath(selFile.getSelectedFiles()[0].getPath());
                                 res = uploader.send("file");
                             }
 
@@ -377,8 +377,7 @@ public class SystemTrayMenu {
 
 			} else {
 
-				Uploader uploader;
-				uploader = new Uploader(f.getPath());
+                uploader.setFilePath(f.getPath());
 				res = uploader.send("txt");
 				if (res) {
 					Main.dialog.show("Upload Completed!", uploader.getLink());
