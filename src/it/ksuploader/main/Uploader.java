@@ -21,8 +21,14 @@ public class Uploader implements Observer{
 
 	// Per i file
 	public Uploader() {
-
 		this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+		try {
+			this.dos = new DataOutputStream(socketChannel.socket().getOutputStream());
+			this.dis = new DataInputStream(socketChannel.socket().getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public boolean send(String type) {
@@ -89,9 +95,6 @@ public class Uploader implements Observer{
 			}
 
 			dos.flush();
-			dos.close();
-			dis.close();
-			socketChannel.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,10 +140,6 @@ public class Uploader implements Observer{
 
 	}
 
-	public String getLink() {
-		return link;
-	}
-
 	public void stopUpload() {
 		try {
 			dos.close();
@@ -161,7 +160,7 @@ public class Uploader implements Observer{
 			socketChannel = SocketChannel.open();
 			SocketAddress socketAddress = new InetSocketAddress(ip, port);
 			socketChannel.connect(socketAddress);
-			Main.myLog("[Uploader] Connected, now sending the file...");
+			Main.myLog("[Uploader] Reloaded socket");
 
 		} catch (IOException | UnresolvedAddressException e) {
 			e.printStackTrace();
@@ -171,8 +170,40 @@ public class Uploader implements Observer{
 		return socketChannel;
 	}
 
+	public void reloadSocket(){
+		try {
+			dos.close();
+			dis.close();
+			socketChannel.close();
+
+			this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
+			this.dos = new DataOutputStream(socketChannel.socket().getOutputStream());
+			this.dis = new DataInputStream(socketChannel.socket().getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+			Main.dialog.connectionError();
+			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+		}
+
+	}
+
+    public void closeSocket(){
+        try {
+            dos.close();
+            dis.close();
+            socketChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+        }
+    }
+
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public String getLink() {
+		return link;
 	}
 
 	@Override

@@ -110,11 +110,13 @@ public class SystemTrayMenu {
 				settings.addActionListener(e -> {
 					configPanel.loadCurrentConfig();
 					configPanel.setVisible(true);
+					uploader.reloadSocket();
 				});
 
 				esci.addActionListener(e -> {
 					getSystemTray().remove(trayIcon);
 					Main.startUpCheck(Main.config.isStartUpEnabled());
+                    uploader.closeSocket();
 					System.exit(0);
 				});
 
@@ -167,7 +169,7 @@ public class SystemTrayMenu {
                             Main.dialog.show("Screenshot Caricato!", ftpUploader.getLink());
                             history(ftpUploader.getLink());
                             clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-                            suono.start();
+                            suono.run();
                         }
 
                         // Se socket
@@ -230,7 +232,7 @@ public class SystemTrayMenu {
                             Main.dialog.show("Upload Completed!", ftpUploader.getLink());
                             history(ftpUploader.getLink());
                             clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-                            suono.start();
+                            suono.run();
                         }
 
                         // Se socket
@@ -298,7 +300,7 @@ public class SystemTrayMenu {
                                 Main.dialog.show("Upload Completed!", ftpUploader.getLink());
                                 history(ftpUploader.getLink());
                                 clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-                                suono.start();
+                                suono.run();
                             }
 
                         } else {
@@ -372,7 +374,7 @@ public class SystemTrayMenu {
 					Main.dialog.show("Upload Completed!", ftpUploader.getLink());
 					history(ftpUploader.getLink());
 					clpbrd.setContents(new StringSelection(ftpUploader.getLink()), null);
-					suono.start();
+					suono.run();
 				}
 
 			} else {
@@ -384,7 +386,7 @@ public class SystemTrayMenu {
 					history(uploader.getLink());
 					clpbrd.setContents(new StringSelection(uploader.getLink()), null);
 					f.delete();
-					suono.start();
+					suono.run();
 				}
 			}
 

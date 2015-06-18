@@ -51,6 +51,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		setTitle("Settings");
 		setBounds(100, 100, 480, 330);
 		setResizable(false);
+		setModal(true);
 		getContentPane().setLayout(null);
 
 		GlobalScreen.setEventDispatcher(new SwingDispatchService());
@@ -297,7 +298,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			this.startUpEnabled.setSelected(Main.config.isStartUpEnabled());
 		} catch (Exception e) {
 			e.printStackTrace();
-			new NotificationDialog().show("Config error", "Error during the config loading");
+			Main.dialog.show("Config error", "Error during the config loading");
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 
