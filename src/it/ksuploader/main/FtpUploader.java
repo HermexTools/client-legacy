@@ -42,7 +42,7 @@ public class FtpUploader extends FTPClient implements Observer{
 			if (Main.config.isSaveEnabled()) {
 				ImageIO.write(img, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
 						+ fileName + ".png"));
-				Main.myLog("[Uploader] Screen saved");
+				Main.myLog("[Uploader] MyScreen saved");
 			}
 
 			this.filePath = toWrite.getPath();
@@ -63,7 +63,7 @@ public class FtpUploader extends FTPClient implements Observer{
 
 			if (Main.config.isSaveEnabled()) {
 				ImageIO.write(bi, "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + fileName + ".png"));
-				Main.myLog("[Uploader] Screen saved");
+				Main.myLog("[Uploader] MyScreen saved");
 			}
 
 			this.filePath = toWrite.getPath();

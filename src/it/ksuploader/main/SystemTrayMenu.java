@@ -94,7 +94,14 @@ public class SystemTrayMenu {
 
 				// Gestione voci menu
 				catturaArea.addActionListener(e -> uploadPartialScreen());
-				catturaDesktop.addActionListener(e -> uploadCompleteScreen());
+				catturaDesktop.addActionListener(e ->  {
+					try {
+						Thread.sleep(320);
+						uploadCompleteScreen();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				});
 				caricaFile.addActionListener(e -> sendFile());
 				clipboard.addActionListener(e -> sendClipboard());
 
@@ -139,11 +146,11 @@ public class SystemTrayMenu {
         new SwingWorker() {
             @Override
             protected Void doInBackground(){
-                PartialScreen partialScreen = new PartialScreen();
+                MyScreen partialScreen = new MyScreen();
 
                 // Nel caso in cui lo screen fosse annullato o 5x5
-                if (partialScreen.getSelection() == null || partialScreen.getSelection().width <= 5
-                        || partialScreen.getSelection().height <= 5) {
+                if (partialScreen.getScreenSelection() == null || partialScreen.getScreenSelection().width <= 5
+                        || partialScreen.getScreenSelection().height <= 5) {
 
                     // Annullo
                     Main.dialog.show("Caricamento annullato!", ":(");
@@ -151,7 +158,7 @@ public class SystemTrayMenu {
 
                     // Se FTP
                     if (Main.config.getFtpEnabled()) {
-                        FtpUploader ftpUploader = new FtpUploader(partialScreen.getSelection());
+                        FtpUploader ftpUploader = new FtpUploader(partialScreen.getScreenSelection());
                         boolean res = false;
                         res = ftpUploader.send();
                         if (res) {
@@ -163,25 +170,21 @@ public class SystemTrayMenu {
 
                         // Se socket
                     } else {
-                        Rectangle myScreen = new Rectangle(0, 0, 0, 0);
-                        for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-                            myScreen = myScreen.union(gd.getDefaultConfiguration().getBounds());
-                        }
 
                         File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
                         try {
 
 
-                            ImageIO.write(new Robot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
-                                    partialScreen.getSelection().y, partialScreen.getSelection().width,
-                                    partialScreen.getSelection().height), "png", tempFile);
+                            ImageIO.write(new Robot().createScreenCapture(partialScreen.getScreenBounds()).getSubimage(partialScreen.getScreenSelection().x,
+                                    partialScreen.getScreenSelection().y, partialScreen.getScreenSelection().width,
+                                    partialScreen.getScreenSelection().height), "png", tempFile);
 
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new Robot().createScreenCapture(myScreen).getSubimage(partialScreen.getSelection().x,
-                                        partialScreen.getSelection().y, partialScreen.getSelection().width,
-                                        partialScreen.getSelection().height), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+                                ImageIO.write(new Robot().createScreenCapture(partialScreen.getScreenBounds()).getSubimage(partialScreen.getScreenSelection().x,
+                                        partialScreen.getScreenSelection().y, partialScreen.getScreenSelection().width,
+                                        partialScreen.getScreenSelection().height), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
                                                 + new Random().nextInt(999) + ".png"));
-                                Main.myLog("[Uploader] Screen saved");
+                                Main.myLog("[Uploader] MyScreen saved");
                             }
 
 
@@ -239,7 +242,7 @@ public class SystemTrayMenu {
                                 ImageIO.write(new Robot().createScreenCapture(myScreen), "png",
                                         new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + ""
                                                 + new Random().nextInt(999) + ".png"));
-                                Main.myLog("[Uploader] Screen saved");
+                                Main.myLog("[Uploader] MyScreen saved");
                             }
 
                             Uploader uploader = new Uploader(tempFile.getPath());
