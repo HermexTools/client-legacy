@@ -5,13 +5,11 @@ import org.jnativehook.SwingDispatchService;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
-import java.io.IOException;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
@@ -72,13 +70,9 @@ public class MyScreen extends JPanel implements NativeKeyListener {
 		frame = new JDialog();
 		frame.setModal(true);
 		frame.setUndecorated(true);
-		try {
-			frame.setCursor(tk.createCustomCursor(ImageIO.read(getClass().getResource("/res/cursor.png")),
-                    new Point(16, 16),
-					"img"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		frame.setCursor(tk.createCustomCursor(new ImageIcon(getClass().getResource("/res/cursor.png")).getImage(),
+				new Point(16, 16),
+				"img"));
 		frame.setBackground(new Color(0, 0, 0, 0));
 		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		frame.setLayout(new BorderLayout());

@@ -69,7 +69,7 @@ public class SystemTrayMenu {
 				clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 				SystemTray systemTray = getSystemTray();
 
-				trayIcon = new TrayIcon(ImageIO.read(getClass().getResource("/res/icon.png")), "KSUploader");
+				trayIcon = new TrayIcon(new ImageIcon(getClass().getResource("/res/icon.png")).getImage(), "KSUploader");
 				trayIcon.setImageAutoSize(true);
 
 				popupMenu = new PopupMenu();
@@ -122,7 +122,7 @@ public class SystemTrayMenu {
 
 				trayIcon.setPopupMenu(popupMenu);
 				systemTray.add(trayIcon);
-			} catch (IOException | AWTException ex) {
+			} catch (AWTException ex) {
 				ex.printStackTrace();
 				Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 			}
