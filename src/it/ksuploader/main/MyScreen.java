@@ -19,8 +19,8 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 public class MyScreen extends JPanel implements NativeKeyListener {
 
 	private Rectangle selectionBounds;
-	public Point fromClickPoint = null;
-	public Point toClickPoint;
+	private Point fromClickPoint = null;
+	private Point toClickPoint;
 	private JDialog frame;
     private static Color c = new Color(255, 255, 255, 128);
 
@@ -89,7 +89,7 @@ public class MyScreen extends JPanel implements NativeKeyListener {
 		frame.setVisible(true);
 	}
 
-	public Rectangle getScreenBounds() {
+	public static Rectangle getScreenBounds() {
         Rectangle myScreen = new Rectangle(0, 0, 0, 0);
         for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
             myScreen = myScreen.union(gd.getDefaultConfiguration().getBounds());
@@ -116,22 +116,19 @@ public class MyScreen extends JPanel implements NativeKeyListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(c);
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+		g.setColor(c);
 
 		Area fill = new Area(new Rectangle(new Point(0, 0), this.getSize()));
-		if (selectionBounds != null) {
-			fill.subtract(new Area(selectionBounds));
-		}
-		g2d.fill(fill);
-		if (selectionBounds != null) {
-			g2d.setColor(Color.RED);
-			g2d.draw(selectionBounds);
-		}
+		fill.subtract(new Area(selectionBounds));
+
+		((Graphics2D) g).fill(fill);
+		g.setColor(Color.RED);
+		((Graphics2D) g).draw(fill);//draw(selectionBounds);
 
         fill = null;
-		g2d.dispose();
+		g.dispose();
 	}
 
 	@Override

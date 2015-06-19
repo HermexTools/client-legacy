@@ -179,14 +179,10 @@ public class SystemTrayMenu {
                         try {
 
 
-                            ImageIO.write(new Robot().createScreenCapture(partialScreen.getScreenBounds()).getSubimage(partialScreen.getScreenSelection().x,
-                                    partialScreen.getScreenSelection().y, partialScreen.getScreenSelection().width,
-                                    partialScreen.getScreenSelection().height), "png", tempFile);
+                            ImageIO.write(new Robot().createScreenCapture(partialScreen.getScreenSelection()), "png", tempFile);
 
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new Robot().createScreenCapture(partialScreen.getScreenBounds()).getSubimage(partialScreen.getScreenSelection().x,
-                                        partialScreen.getScreenSelection().y, partialScreen.getScreenSelection().width,
-                                        partialScreen.getScreenSelection().height), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+                                ImageIO.write(new Robot().createScreenCapture(partialScreen.getScreenSelection()), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
                                                 + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[Uploader] MyScreen saved");
                             }
@@ -217,16 +213,12 @@ public class SystemTrayMenu {
         new SwingWorker() {
             @Override
             protected Void doInBackground(){
-                Rectangle myScreen = new Rectangle(0, 0, 0, 0);
-                for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
-                    myScreen = myScreen.union(gd.getDefaultConfiguration().getBounds());
-                }
                 try {
                     boolean res;
 
                     // Se FTP
                     if (Main.config.getFtpEnabled()) {
-                        FtpUploader ftpUploader = new FtpUploader(new Robot().createScreenCapture(myScreen));
+                        FtpUploader ftpUploader = new FtpUploader(new Robot().createScreenCapture(MyScreen.getScreenBounds()));
                         res = ftpUploader.send();
                         if (res) {
                             Main.dialog.show("Upload Completed!", ftpUploader.getLink());
@@ -241,9 +233,9 @@ public class SystemTrayMenu {
                         File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
 
                         try {
-                            ImageIO.write(new Robot().createScreenCapture(myScreen), "png", tempFile);
+                            ImageIO.write(new Robot().createScreenCapture(MyScreen.getScreenBounds()), "png", tempFile);
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new Robot().createScreenCapture(myScreen), "png",
+                                ImageIO.write(new Robot().createScreenCapture(MyScreen.getScreenBounds()), "png",
                                         new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000 + ""
                                                 + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[Uploader] MyScreen saved");
