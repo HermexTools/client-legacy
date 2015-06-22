@@ -264,7 +264,6 @@ public class SystemTrayMenu {
     }
 
 	public void sendFile() {
-
 		try {
 
 			if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
