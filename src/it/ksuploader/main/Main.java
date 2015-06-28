@@ -1,7 +1,6 @@
 package it.ksuploader.main;
 
-import it.ksuploader.dialogs.NotificationDialog;
-import it.ksuploader.dialogs.ProgressDialog;
+import it.ksuploader.dialogs.PopupDialog;
 import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.LoadConfig;
 import it.ksuploader.utils.MyKeyListener;
@@ -17,9 +16,8 @@ import java.util.logging.SimpleFormatter;
 
 public class Main {
 	public static Environment so = new Environment();
+	public static PopupDialog dialog = new PopupDialog();
 	public static LoadConfig config = new LoadConfig();
-	public static NotificationDialog dialog = new NotificationDialog();
-	public static ProgressDialog progressDialog = new ProgressDialog();
 	public static MyKeyListener keyListener;
 	public static Logger log = Logger.getLogger("KSULog");
 	public static SystemTrayMenu st;

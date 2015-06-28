@@ -47,7 +47,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 				| UnsupportedLookAndFeelException ex) {
 			Main.myLog(ex.toString());
 		}
-		setDefaultCloseOperation(HIDE_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Settings");
 		setBounds(100, 100, 480, 330);
 		setResizable(false);
@@ -207,7 +207,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
                     srvPassw.getText(), srvPort.getText(), srvAddr.getText(), saveEnabled.isSelected() + "",
                     saveDir.getSelectedFile().getPath(), startUpEnabled.isSelected() + "",
                     ftpesEnabled.isSelected() + "", acceptCertificates.isSelected() + "");
-            setVisible(false);
+            dispose();
         });
 
 		JButton cancelButton = new JButton("Cancel");
@@ -298,7 +298,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 			this.startUpEnabled.setSelected(Main.config.isStartUpEnabled());
 		} catch (Exception e) {
 			e.printStackTrace();
-			Main.dialog.show("Config error", "Error during the config loading");
+			Main.dialog.show("Config error", "Error during the config loading", false);
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
 

@@ -41,11 +41,11 @@ public class Zipper {
 					byte[] bytes = new byte[1024];
 					long count = 0;
 					int length;
-					Main.progressDialog.setMessage("Zipping...");
+					Main.dialog.show("Zipping...", "", false);
 					while ((length = fis.read(bytes)) >= 0) {
 						zos.write(bytes, 0, length);
 						count += length;
-						Main.progressDialog.set((int) (count * 100 / f.length()));
+						Main.dialog.set((int) (count * 100 / f.length()));
 					}
 					zos.closeEntry();
 				}
@@ -91,11 +91,11 @@ public class Zipper {
 		byte[] buffer = new byte[1024];
 		long count = 0;
 		int length;
-		Main.progressDialog.setMessage("Zipping...");
+		Main.dialog.show("Zipping...","", false);
 		while ((length = in.read(buffer)) >= 0) {
 			out.write(buffer, 0, length);
 			count += length;
-			Main.progressDialog.set((int) (count * 100 / len));
+			Main.dialog.set((int) (count * 100 / len));
 		}
 	}
 

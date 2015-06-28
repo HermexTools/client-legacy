@@ -1,11 +1,13 @@
 package it.ksuploader.utils;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Locale;
 
 public class Environment {
 
 	private OS os;
+	private Rectangle screen;
 
 	public enum OS {
 		LINUX, WINDOWS, OSX, UNKNOWN
@@ -13,6 +15,11 @@ public class Environment {
 
 	public Environment() {
 		os = getEnvironment();
+		this.screen = new Rectangle();
+		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+			this.screen = this.screen.union(gd.getDefaultConfiguration().getBounds());
+		}
+
 	}
 
 	private OS getEnvironment() {
@@ -81,5 +88,9 @@ public class Environment {
 		}
         
     }
+
+	public Rectangle getScreenBounds() {
+		return this.screen;
+	}
 
 }

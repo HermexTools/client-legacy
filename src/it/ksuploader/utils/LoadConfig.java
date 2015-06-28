@@ -1,6 +1,6 @@
 package it.ksuploader.utils;
 
-import it.ksuploader.dialogs.NotificationDialog;
+
 import it.ksuploader.main.Main;
 
 import java.io.*;
@@ -228,7 +228,7 @@ public class LoadConfig extends Properties {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			new NotificationDialog().show("Config error", "Error during the config loading!");
+			Main.dialog.show("Config error", "Error during the config loading!", false);
 			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
 		}
 
