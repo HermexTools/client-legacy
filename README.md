@@ -35,7 +35,7 @@ It contains:
 * `save_dir`: the folder where all images will be saved, use a . to say "where the client is located".
 * `ftpes_enabled`: enable or disable (with "true" or "false") the FTPES.
 * `accept_all_certificates`: choose to accept all certificates or not (true/false).
-* `open_at_startup_enabled`: enable the autorun at os boot (NOT IMPLEMENTED YET).
+* `open_at_startup_enabled`: enable the autorun at os boot (Only windows).
 
 >Attention: all config properties must be not null, even if you don't use one of them.
 
