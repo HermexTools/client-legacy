@@ -184,13 +184,19 @@ public class SystemTrayMenu {
 									+ new Random().nextInt(999) + ".png");
 
 							if (Main.config.isSaveEnabled()) {
-								ImageIO.write(new Robot().createScreenCapture(partialScreen.selectionBounds),
-										"png",
-										tempFile);
+								ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
+												partialScreen.selectionBounds.x,
+												partialScreen.selectionBounds.y,
+												partialScreen.selectionBounds.width,
+												partialScreen.selectionBounds.height), "png", tempFile);
 								Main.myLog("[SocketUploader] MyScreen saved");
 							}
 
-							ImageIO.write(new Robot().createScreenCapture(partialScreen.selectionBounds), "png", tempFile);
+							ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
+									partialScreen.selectionBounds.x,
+									partialScreen.selectionBounds.y,
+									partialScreen.selectionBounds.width,
+									partialScreen.selectionBounds.height), "png", tempFile);
 
 							ftpup.setFilePath(tempFile);
 
@@ -213,10 +219,18 @@ public class SystemTrayMenu {
                         try {
 
 
-                            ImageIO.write(new Robot().createScreenCapture(partialScreen.selectionBounds), "png", tempFile);
+                            ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
+									partialScreen.selectionBounds.x,
+									partialScreen.selectionBounds.y,
+									partialScreen.selectionBounds.width,
+									partialScreen.selectionBounds.height), "png", tempFile);
 
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new Robot().createScreenCapture(partialScreen.selectionBounds), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+                                ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
+										partialScreen.selectionBounds.x,
+										partialScreen.selectionBounds.y,
+										partialScreen.selectionBounds.width,
+										partialScreen.selectionBounds.height), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
                                                 + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[SocketUploader] MyScreen saved");
                             }

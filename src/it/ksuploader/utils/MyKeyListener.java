@@ -71,6 +71,7 @@ public class MyKeyListener {
 		fromKeyToName.put(NativeKeyEvent.VC_Y, "Y");
 		fromKeyToName.put(NativeKeyEvent.VC_Z, "Z");
 		fromKeyToName.put(NativeKeyEvent.VC_SPACE, "SPACE");
+		fromKeyToName.put(0, "<");
 
 		gkl = new NativeKeyListener() {
 
