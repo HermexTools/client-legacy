@@ -39,14 +39,6 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 	private final JButton btnClipboard;
 
 	public SettingsDialog() {
-
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
-			Main.myLog(ex.toString());
-		}
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Settings");
 		setBounds(100, 100, 480, 330);

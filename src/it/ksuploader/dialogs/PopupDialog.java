@@ -2,13 +2,8 @@ package it.ksuploader.dialogs;
 
 import it.ksuploader.main.Main;
 
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
@@ -16,13 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Observable;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class PopupDialog extends Observable {
 	private JDialog dialogFrame;
@@ -41,6 +29,7 @@ public class PopupDialog extends Observable {
 		}
 
 		dialogFrame.setSize(200, 50);
+		dialogFrame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		dialogFrame.setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -67,6 +56,7 @@ public class PopupDialog extends Observable {
 		constraints.weighty = 0;
 
 		JButton xButton = new JButton("X");
+		xButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		xButton.setMargin(new Insets(1, 4, 1, 4));
 		xButton.setFocusable(false);
 		dialogFrame.add(xButton, constraints);

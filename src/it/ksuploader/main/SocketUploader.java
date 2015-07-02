@@ -116,7 +116,7 @@ public class SocketUploader implements Observer{
 			Main.dialog.show("Uploading...", "", false);
 
 			// send the file
-			long bfSize = Math.min(16384, fileLength); // 128kB buffer
+			long bfSize = Math.min(32768, fileLength); // 128kB buffer
 			while (bytesSent < fileLength) {
 				bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
 
