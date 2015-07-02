@@ -24,7 +24,7 @@ import java.util.Random;
 import static java.awt.SystemTray.getSystemTray;
 import static java.awt.SystemTray.isSupported;
 
-public class SystemTrayMenu {
+public class SystemTrayMenu{
 
 	private Clipboard clpbrd;
 	private PopupMenu popupMenu;
@@ -188,7 +188,8 @@ public class SystemTrayMenu {
 												partialScreen.selectionBounds.x,
 												partialScreen.selectionBounds.y,
 												partialScreen.selectionBounds.width,
-												partialScreen.selectionBounds.height), "png", tempFile);
+												partialScreen.selectionBounds.height), "png", new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+										+ new Random().nextInt(999) + ".png"));
 								Main.myLog("[SocketUploader] MyScreen saved");
 							}
 
@@ -273,7 +274,8 @@ public class SystemTrayMenu {
 							if (Main.config.isSaveEnabled()) {
 								ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()),
 										"png",
-										tempFile);
+										new File(Main.config.getSaveDir() + "/" + System.currentTimeMillis() / 1000
+												+ new Random().nextInt(999) + ".png"));
 								Main.myLog("[SocketUploader] MyScreen saved");
 							}
 							ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()), "png", tempFile);
