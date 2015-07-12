@@ -118,7 +118,6 @@ public class SystemTrayMenu{
 				esci.addActionListener(e -> {
 					getSystemTray().remove(trayIcon);
 					Main.startUpCheck(Main.config.isStartUpEnabled());
-                    socketUploader.closeSocket();
 					System.exit(0);
 				});
 
@@ -134,7 +133,6 @@ public class SystemTrayMenu{
 	private void FtpSocketSwitch() {
 		Main.dialog.cleanObservers();
 		if (Main.config.getFtpEnabled()){
-			this.socketUploader.closeSocket();
 			this.socketUploader = null;
 			this.ftpup = new FtpUploader();
 			Main.dialog.addObserver(this.ftpup);

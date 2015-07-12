@@ -19,16 +19,7 @@ public class SocketUploader implements Observer{
 	private DataOutputStream dos;
 	private DataInputStream dis;
 
-	// Per i file
 	public SocketUploader() {
-		this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
-		try {
-			this.dos = new DataOutputStream(socketChannel.socket().getOutputStream());
-			this.dis = new DataInputStream(socketChannel.socket().getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	public boolean send(String type) {
@@ -61,19 +52,19 @@ public class SocketUploader implements Observer{
 					dos.writeLong(fileLength);
 					srvResponse = dis.readUTF();
 					switch (srvResponse) {
-					case "START_TRANSFER":
-						sendFile(file, fileLength);
+						case "START_TRANSFER":
+							sendFile(file, fileLength);
 
-						break;
-					case "FILE_TOO_LARGE":
-						Main.myLog("[SocketUploader] File too large");
-						Main.dialog.fileTooLarge();
+							break;
+						case "FILE_TOO_LARGE":
+							Main.myLog("[SocketUploader] File too large");
+							Main.dialog.fileTooLarge();
 
-						break;
-					case "SERVER_FULL":
-						Main.myLog("[SocketUploader] Server Full");
-						Main.dialog.serverFull();
-						break;
+							break;
+						case "SERVER_FULL":
+							Main.myLog("[SocketUploader] Server Full");
+							Main.dialog.serverFull();
+							break;
 					}
 
 
@@ -95,9 +86,18 @@ public class SocketUploader implements Observer{
 			}
 
 			dos.flush();
-
+			dos.close();
+			dis.close();
+			socketChannel.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				dos.close();
+				dis.close();
+				socketChannel.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			return false;
 		}
 
@@ -168,17 +168,6 @@ public class SocketUploader implements Observer{
 		}
 		return socketChannel;
 	}
-
-    public void closeSocket(){
-        try {
-            dos.close();
-            dis.close();
-            socketChannel.close();
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-        }
-    }
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
