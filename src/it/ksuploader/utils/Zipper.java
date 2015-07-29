@@ -1,14 +1,14 @@
 package it.ksuploader.utils;
 
 import it.ksuploader.main.Main;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.progress.ProgressMonitor;
+import net.lingala.zip4j.util.Zip4jConstants;
 
-import java.io.*;
-import java.net.URI;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.io.File;
 import java.util.Random;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class Zipper {
 
@@ -29,82 +29,36 @@ public class Zipper {
 			else
 				fileName = System.currentTimeMillis() / 1000 + new Random().nextInt(999) + ".zip";
 
-			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(Main.so.getTempDir() + "/" + fileName));
+			ZipFile zp = new ZipFile(Main.so.getTempDir() + "/" + fileName);
+			zp.setRunInThread(true);
 
+			ZipParameters zipParameters = new ZipParameters();
+			zipParameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+			zipParameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_ULTRA);
 
 			for (File f : this.file) {
 				if (f.isDirectory()){
-					zipDirectory(f, zos);
-				} else {
-					FileInputStream fis = new FileInputStream(f);
-					zos.putNextEntry(new ZipEntry(f.getName()));
-					byte[] bytes = new byte[1024];
-					long count = 0;
-					int length;
-					Main.dialog.show("Zipping...", "", false);
-					while ((length = fis.read(bytes)) >= 0) {
-						zos.write(bytes, 0, length);
-						count += length;
-						Main.dialog.set((int) (count * 100 / f.length()));
+					zp.addFolder(f, zipParameters);
+					ProgressMonitor pm = zp.getProgressMonitor();
+
+					while (pm.getState() == ProgressMonitor.STATE_BUSY) {
+						Main.dialog.set(pm.getPercentDone());
 					}
-					zos.closeEntry();
+				} else {
+					zp.addFile(f, zipParameters);
+					ProgressMonitor pm = zp.getProgressMonitor();
+
+					while (pm.getState() == ProgressMonitor.STATE_BUSY) {
+						Main.dialog.set(pm.getPercentDone());
+					}
 				}
 			}
-			zos.flush();
-			zos.close();
 
 			Main.myLog("[Zipper] Zipping finished: " + fileName);
 
-		} catch (IOException e) {
+		} catch (ZipException e) {
 			e.printStackTrace();
 		}
 		return Main.so.getTempDir() + "/" + fileName;
-	}
-
-	private void zipDirectory(File directory, ZipOutputStream zout){
-		try {
-			URI base = directory.toURI();
-			Deque<File> queue = new LinkedList<>();
-			queue.push(directory);
-				while (!queue.isEmpty()) {
-					directory = queue.pop();
-					for (File kid : directory.listFiles()) {
-						String name = base.relativize(kid.toURI()).getPath();
-						if (kid.isDirectory()) {
-							queue.push(kid);
-							name = name.endsWith("/") ? name : name + "/";
-							zout.putNextEntry(new ZipEntry(name));
-						} else {
-							zout.putNextEntry(new ZipEntry(name));
-							copy(kid, zout);
-							zout.closeEntry();
-						}
-					}
-				}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private void copy(InputStream in, OutputStream out, long len) throws IOException {
-		byte[] buffer = new byte[1024];
-		long count = 0;
-		int length;
-		Main.dialog.show("Zipping...","", false);
-		while ((length = in.read(buffer)) >= 0) {
-			out.write(buffer, 0, length);
-			count += length;
-			Main.dialog.set((int) (count * 100 / len));
-		}
-	}
-
-	private void copy(File file, OutputStream out) throws IOException {
-		InputStream in = new FileInputStream(file);
-		try {
-			copy(in, out, file.length());
-		} finally {
-			in.close();
-		}
 	}
 }
