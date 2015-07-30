@@ -24,7 +24,7 @@ import java.util.Random;
 import static java.awt.SystemTray.getSystemTray;
 import static java.awt.SystemTray.isSupported;
 
-public class SystemTrayMenu{
+public class SystemTrayMenu {
 
 	private Clipboard clpbrd;
 	private PopupMenu popupMenu;
@@ -243,9 +243,9 @@ public class SystemTrayMenu{
                                 Main.dialog.show("Upload Completed!", socketUploader.getLink(), true);
                                 history(socketUploader.getLink());
                                 clpbrd.setContents(new StringSelection(socketUploader.getLink()), null);
-                                tempFile.delete();
                                 suono.run();
                             }
+							tempFile.delete();
                         } catch (IOException | AWTException e) {
                             e.printStackTrace();
                         }
@@ -311,9 +311,9 @@ public class SystemTrayMenu{
                                 Main.dialog.show("Upload Completed!", socketUploader.getLink(), true);
                                 history(socketUploader.getLink());
                                 clpbrd.setContents(new StringSelection(socketUploader.getLink()), null);
-                                tempFile.delete();
                                 suono.run();
                             }
+							tempFile.delete();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -338,53 +338,55 @@ public class SystemTrayMenu{
                 new SwingWorker() {
                     @Override
                     protected Void doInBackground(){
-                        boolean res = false;
-                        if (Main.config.getFtpEnabled()) {
-                            // Se non finisce con .zip O ci sono più file
+						boolean res = false;
+						if (Main.config.getFtpEnabled()) {
+							// Se non finisce con .zip O ci sono più file
 
-                            if (selFile.getSelectedFiles()[0].getName().toLowerCase().endsWith(".png") && selFile.getSelectedFiles().length == 1) {
-                                ftpup.setFilePath(selFile.getSelectedFiles()[0].getPath());
+							if (selFile.getSelectedFiles()[0].getName().toLowerCase().endsWith(".png") && selFile.getSelectedFiles().length == 1) {
+								ftpup.setFilePath(selFile.getSelectedFiles()[0].getPath());
 
-                            } else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
+							} else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
 								ftpup.setFilePath(new Zipper(selFile.getSelectedFiles()).toZip("ftp"));
 
-                                // Altrimenti se finisce con .zip O è uno solo
-                            } else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
+								// Altrimenti se finisce con .zip O è uno solo
+							} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
 								ftpup.setFilePath(selFile.getSelectedFiles()[0].getPath());
-                            }
+							}
 
-                            res = ftpup.send();
-                            if (res) {
-                                Main.dialog.show("Upload Completed!", ftpup.getLink(), true);
-                                history(ftpup.getLink());
-                                clpbrd.setContents(new StringSelection(ftpup.getLink()), null);
-                                suono.run();
-                            }
+							res = ftpup.send();
+							if (res) {
+								Main.dialog.show("Upload Completed!", ftpup.getLink(), true);
+								history(ftpup.getLink());
+								clpbrd.setContents(new StringSelection(ftpup.getLink()), null);
+								suono.run();
+							}
 
-                        } else {
+						} else {
 
-                            if (selFile.getSelectedFiles()[0].getName().toLowerCase().endsWith(".png") && selFile.getSelectedFiles().length == 1) {
-                                socketUploader.setFilePath(selFile.getSelectedFiles()[0].getPath());
-                                res = socketUploader.send("img");
+							if (selFile.getSelectedFiles()[0].getName().toLowerCase().endsWith(".png") && selFile.getSelectedFiles().length == 1) {
+								socketUploader.setFilePath(selFile.getSelectedFiles()[0].getPath());
+								res = socketUploader.send("img");
 
-                            } else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-                                socketUploader.setFilePath(new Zipper(selFile.getSelectedFiles()).toZip("socket"));
-                                res = socketUploader.send("file");
+							} else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
+								socketUploader.setFilePath(new Zipper(selFile.getSelectedFiles()).toZip("socket"));
+								res = socketUploader.send("file");
 
-                            } else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
-                                socketUploader.setFilePath(selFile.getSelectedFiles()[0].getPath());
-                                res = socketUploader.send("file");
-                            }
+							} else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
+								socketUploader.setFilePath(selFile.getSelectedFiles()[0].getPath());
+								res = socketUploader.send("file");
+							}
 
-                            if (res) {
-                                Main.dialog.show("Upload Completed!", socketUploader.getLink(), true);
-                                history(socketUploader.getLink());
-                                clpbrd.setContents(new StringSelection(socketUploader.getLink()), null);
-                                new File(Main.so.getTempDir(), "KStemp.zip").delete();
-                                suono.run();
-                            }
+							if (res) {
+								Main.dialog.show("Upload Completed!", socketUploader.getLink(), true);
+								history(socketUploader.getLink());
+								clpbrd.setContents(new StringSelection(socketUploader.getLink()), null);
+								suono.run();
+							}
+							File f = new File(Main.so.getTempDir(), "KStemp.zip");
+							f.delete();
 
-                        }
+						}
+
                         return null;
                     }
                 }.execute();
@@ -442,9 +444,9 @@ public class SystemTrayMenu{
 					Main.dialog.show("Upload Completed!", socketUploader.getLink(), true);
 					history(socketUploader.getLink());
 					clpbrd.setContents(new StringSelection(socketUploader.getLink()), null);
-					f.delete();
 					suono.run();
 				}
+				f.delete();
 			}
 
 		} catch (UnsupportedFlavorException | IOException ex) {

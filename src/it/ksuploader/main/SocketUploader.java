@@ -18,6 +18,8 @@ public class SocketUploader implements Observer{
 	private String filePath;
 	private DataOutputStream dos;
 	private DataInputStream dis;
+	private RandomAccessFile aFile;
+	private FileChannel inChannel;
 
 	public SocketUploader() {
 	}
@@ -66,9 +68,6 @@ public class SocketUploader implements Observer{
 							Main.dialog.serverFull();
 							break;
 					}
-
-
-
 					// return link
 					Main.myLog("[SocketUploader] Waiting link...");
 					this.link = dis.readUTF();
@@ -85,62 +84,59 @@ public class SocketUploader implements Observer{
 				return false;
 			}
 
+			inChannel.close();
+			aFile.close();
 			dos.flush();
 			dos.close();
 			dis.close();
 			socketChannel.close();
-		} catch (Exception e) {
+
+		} catch (IOException e) {
 			e.printStackTrace();
 			try {
+				inChannel.close();
+				aFile.close();
 				dos.close();
 				dis.close();
 				socketChannel.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				return false;
 			}
 			return false;
 		}
-
 		return true;
 	}
 
-	public void sendFile(File file, long fileLength) {
-		RandomAccessFile aFile;
-		try {
+	public void sendFile(File file, long fileLength) throws IOException {
+		aFile = new RandomAccessFile(file, "r");
+		inChannel = aFile.getChannel();
 
-			aFile = new RandomAccessFile(file, "r");
-			final FileChannel inChannel = aFile.getChannel();
+		long bytesSent = 0;
 
-			long bytesSent = 0;
+		Main.dialog.show("Uploading...", "", false);
 
-			Main.dialog.show("Uploading...", "", false);
+		// send the file
+		long bfSize = Math.min(32768, fileLength); // 128kB buffer
+		while (bytesSent < fileLength) {
+			bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
 
-			// send the file
-			long bfSize = Math.min(32768, fileLength); // 128kB buffer
-			while (bytesSent < fileLength) {
-				bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
-
-				Main.myLog("[SocketUploader] Sent: " + 100 * bytesSent / fileLength + "%");
-				Main.dialog.set((int) (100 * bytesSent / fileLength));
-			}
-
-			inChannel.close();
-
-			Main.myLog("[SocketUploader] End of file reached..");
-			aFile.close();
-			Main.myLog("[SocketUploader] File closed.");
-
-			Main.dialog.setWait();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+			Main.myLog("[SocketUploader] Sent: " + 100 * bytesSent / fileLength + "%");
+			Main.dialog.set((int) (100 * bytesSent / fileLength));
 		}
+		inChannel.close();
 
+		Main.myLog("[SocketUploader] End of file reached..");
+		aFile.close();
+		Main.myLog("[SocketUploader] File closed.");
+
+		Main.dialog.setWait();
 	}
 
 	public void stopUpload() {
 		try {
+			inChannel.close();
+			aFile.close();
 			dos.close();
 			dis.close();
 			socketChannel.close();
