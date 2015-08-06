@@ -114,6 +114,7 @@ public class SocketUploader implements Observer{
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 			try {
 				inChannel.close();
 				aFile.close();
@@ -122,6 +123,7 @@ public class SocketUploader implements Observer{
 				socketChannel.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
 				return false;
 			}
 			return false;

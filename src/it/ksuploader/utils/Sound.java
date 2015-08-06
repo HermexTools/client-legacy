@@ -23,8 +23,7 @@ public class Sound extends Thread {
 			audioInputStream = AudioSystem.getAudioInputStream(clickUrl);
 
 			DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
-			Clip clip;
-			clip = (Clip) AudioSystem.getLine(info);
+			Clip clip = (Clip) AudioSystem.getLine(info);
 			if (clip.isRunning()) {
 				clip.close();
 			}

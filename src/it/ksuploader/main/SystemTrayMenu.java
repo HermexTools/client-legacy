@@ -117,7 +117,7 @@ public class SystemTrayMenu {
 
 				esci.addActionListener(e -> {
 					getSystemTray().remove(trayIcon);
-					Main.startUpCheck(Main.config.isStartUpEnabled());
+					Main.startUpCheck();
 					System.exit(0);
 				});
 

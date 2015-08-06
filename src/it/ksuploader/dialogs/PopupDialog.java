@@ -17,6 +17,7 @@ public class PopupDialog extends Observable {
 	private JLabel headingLabel;
 	private JProgressBar progressBar;
 	private JLabel messageLabel;
+	private JButton xButton;
 	private MouseAdapter m;
 
 	public PopupDialog() {
@@ -55,7 +56,7 @@ public class PopupDialog extends Observable {
 		constraints.weightx = 0;
 		constraints.weighty = 0;
 
-		JButton xButton = new JButton("X");
+		xButton = new JButton("X");
 		xButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		xButton.setMargin(new Insets(1, 4, 1, 4));
 		xButton.setFocusable(false);
@@ -199,5 +200,8 @@ public class PopupDialog extends Observable {
 				}
 			}
 		}.start();
+	}
+	public void setButtonClickable(boolean b){
+		this.xButton.setEnabled(b);
 	}
 }

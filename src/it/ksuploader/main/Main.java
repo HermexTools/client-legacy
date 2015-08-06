@@ -4,9 +4,9 @@ import it.ksuploader.dialogs.PopupDialog;
 import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.LoadConfig;
 import it.ksuploader.utils.MyKeyListener;
-import net.jimmc.jshortcut.JShellLink;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -29,25 +29,37 @@ public class Main {
         log.setUseParentHandlers(false);
 		keyListener = new MyKeyListener();
 		st = new SystemTrayMenu();
-		startUpCheck(config.isStartUpEnabled());
+		startUpCheck();
+
 	}
 
-	public static void startUpCheck(boolean active) {
-		myLog("[Main] removing shortcut" + new File(Main.so.getStartUpFolder(), "KSUploader.lnk").delete());
-		if (active) {
-			try {
-				JShellLink shortcut = new JShellLink();
-				shortcut.setPath(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath());
-				shortcut.setName("KSUploader_autostart");
-				shortcut.setFolder(Main.so.getStartUpFolder());
-				shortcut.save();
-				myLog("[Main] Shortcut created");
-			} catch (URISyntaxException ex) {
-				ex.printStackTrace();
-				myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+	private static void startUpChecker(String name, String where, String target, String icon) {
+		try {
+			myLog("[Main] removing shortcut :" + new File(Main.so.getStartUpFolder(), name).delete());
+			FileWriter fw = new FileWriter(where + "\\" + name);
+			fw.write("[InternetShortcut]\n");
+			fw.write("URL=file://" + target + "\n");
+			fw.write("IDList=\n");
+			fw.write("HotKey=0\n");
+			if (!icon.equals("")) {
+				fw.write("IconFile=" + icon + "\n");
 			}
+			fw.flush();
+			fw.close();
+			myLog("[Main] Shortcut created");
+		} catch (IOException e){
+			e.printStackTrace();
+			myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+		}
+	}
+
+	public static void startUpCheck() {
+		myLog("[Main] removing shortcut :" + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
+		if (config.isStartUpEnabled()) {
+			startUpChecker("KSUploader_autostart.url", Main.so.getStartUpFolder(), Main.class.getProtectionDomain().getCodeSource().getLocation().getPath(),"");
+			System.out.println(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 		} else {
-			myLog("[Main] removing shortcut" + new File(Main.so.getStartUpFolder(), "KSUploader.lnk").delete());
+			myLog("[Main] removing shortcut" + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
 		}
 
 	}

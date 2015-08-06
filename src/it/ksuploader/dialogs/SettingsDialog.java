@@ -91,7 +91,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 		startUpEnabled.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.startUpCheck(startUpEnabled.isSelected());
+				Main.startUpCheck();
 			}
 		});
 
