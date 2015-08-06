@@ -1,7 +1,5 @@
 package it.ksuploader.main;
 
-
-
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -55,7 +53,30 @@ public class SocketUploader implements Observer{
 					srvResponse = dis.readUTF();
 					switch (srvResponse) {
 						case "START_TRANSFER":
-							sendFile(file, fileLength);
+
+							aFile = new RandomAccessFile(file, "r");
+							inChannel = aFile.getChannel();
+
+							long bytesSent = 0;
+
+							Main.dialog.show("Uploading...", "", false);
+
+							// send the file
+							long bfSize = Math.min(32768, fileLength); // 128kB buffer
+							while (bytesSent < fileLength) {
+								bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
+
+								Main.myLog("[SocketUploader] Sent: " + 100 * bytesSent / fileLength + "%");
+								Main.dialog.set((int) (100 * bytesSent / fileLength));
+							}
+
+							inChannel.close();
+
+							Main.myLog("[SocketUploader] End of file reached..");
+							aFile.close();
+							Main.myLog("[SocketUploader] File closed.");
+
+							Main.dialog.setWait();
 
 							break;
 						case "FILE_TOO_LARGE":
@@ -86,9 +107,9 @@ public class SocketUploader implements Observer{
 
 			inChannel.close();
 			aFile.close();
+			dis.close();
 			dos.flush();
 			dos.close();
-			dis.close();
 			socketChannel.close();
 
 		} catch (IOException e) {
@@ -108,31 +129,6 @@ public class SocketUploader implements Observer{
 		return true;
 	}
 
-	public void sendFile(File file, long fileLength) throws IOException {
-		aFile = new RandomAccessFile(file, "r");
-		inChannel = aFile.getChannel();
-
-		long bytesSent = 0;
-
-		Main.dialog.show("Uploading...", "", false);
-
-		// send the file
-		long bfSize = Math.min(32768, fileLength); // 128kB buffer
-		while (bytesSent < fileLength) {
-			bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
-
-			Main.myLog("[SocketUploader] Sent: " + 100 * bytesSent / fileLength + "%");
-			Main.dialog.set((int) (100 * bytesSent / fileLength));
-		}
-		inChannel.close();
-
-		Main.myLog("[SocketUploader] End of file reached..");
-		aFile.close();
-		Main.myLog("[SocketUploader] File closed.");
-
-		Main.dialog.setWait();
-	}
-
 	public void stopUpload() {
 		try {
 			inChannel.close();
@@ -149,20 +145,18 @@ public class SocketUploader implements Observer{
 	}
 
 	private SocketChannel createChannel(String ip, int port) {
-
-		SocketChannel socketChannel = null;
 		try {
-			socketChannel = SocketChannel.open();
+			SocketChannel sc = SocketChannel.open();
 			SocketAddress socketAddress = new InetSocketAddress(ip, port);
-			socketChannel.connect(socketAddress);
+			sc.connect(socketAddress);
 			Main.myLog("[SocketUploader] Reloaded socket");
-
+			return sc;
 		} catch (IOException | UnresolvedAddressException e) {
 			e.printStackTrace();
 			Main.dialog.connectionError();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+			return null;
 		}
-		return socketChannel;
 	}
 
 	public void setFilePath(String filePath) {
