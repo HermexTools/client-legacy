@@ -33,12 +33,13 @@ public class MyScreen extends JPanel{
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (startPoint.x + startPoint.y < e.getX() + e.getY()) {
-                    selectionBounds.setBounds(startPoint.x + 1, startPoint.y + 1, e.getX() - startPoint.x - 1,
-                            e.getY() - startPoint.y - 1);
+                    selectionBounds.setBounds(startPoint.x ++, startPoint.y ++, e.getX() - startPoint.x --,
+                            e.getY() - startPoint.y --);
                 } else {
                     selectionBounds.setBounds(e.getX() + 1, e.getX() + 1, startPoint.x - e.getX() - 1,
                             startPoint.y - e.getX() - 1);
                 }
+                panel.removeAll();
                 panel.dispose();
 
             }
@@ -70,6 +71,7 @@ public class MyScreen extends JPanel{
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     Main.myLog("Escape pressed during selection");
+                    panel.removeAll();
                     panel.dispose();
                 }
             }

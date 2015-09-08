@@ -69,7 +69,6 @@ public class SystemTrayMenu {
 			try {
 				clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 				SystemTray systemTray = getSystemTray();
-
 				trayIcon = new TrayIcon(new ImageIcon(getClass().getResource("/res/icon.png")).getImage(), "KSUploader");
 				trayIcon.setImageAutoSize(true);
 
@@ -135,10 +134,12 @@ public class SystemTrayMenu {
 		if (Main.config.getFtpEnabled()){
 			this.socketUploader = null;
 			this.ftpup = new FtpUploader();
+			Main.dialog.cleanObservers();
 			Main.dialog.addObserver(this.ftpup);
 		} else {
 			this.ftpup = null;
 			this.socketUploader = new SocketUploader();
+			Main.dialog.cleanObservers();
 			Main.dialog.addObserver(this.socketUploader);
 		}
 	}
@@ -171,7 +172,7 @@ public class SystemTrayMenu {
                         || partialScreen.selectionBounds.height <= 5) {
 
                     // Annullo
-                    Main.dialog.show("Caricamento annullato!", ":(", false);
+                    Main.dialog.show("Upload Cancelled!", ":(", false);
 					Main.dialog.destroy();
                 } else {
 					// Se FTP

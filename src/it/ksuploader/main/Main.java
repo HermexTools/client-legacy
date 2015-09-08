@@ -57,7 +57,6 @@ public class Main {
 		myLog("[Main] removing shortcut :" + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
 		if (config.isStartUpEnabled()) {
 			startUpChecker("KSUploader_autostart.url", Main.so.getStartUpFolder(), Main.class.getProtectionDomain().getCodeSource().getLocation().getPath(),"");
-			System.out.println(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 		} else {
 			myLog("[Main] removing shortcut" + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
 		}
