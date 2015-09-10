@@ -121,6 +121,7 @@ public class SystemTrayMenu {
 				});
 
 				trayIcon.setPopupMenu(popupMenu);
+				trayIcon.addActionListener(e -> uploadPartialScreen());
 				systemTray.add(trayIcon);
 			} catch (AWTException ex) {
 				ex.printStackTrace();
