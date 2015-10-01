@@ -58,7 +58,7 @@ public class SocketUploader implements Observer{
 							inChannel = aFile.getChannel();
 
 							long bytesSent = 0;
-							long bfSize = Math.min(32768, fileLength);
+							long bfSize = Math.min(4096, fileLength);
 							Main.myLog("Transfer started.");
 
 							Main.dialog.show("Uploading...", "", false);
