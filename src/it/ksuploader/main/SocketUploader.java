@@ -25,7 +25,7 @@ public class SocketUploader implements Observer{
 	public boolean send(String type) {
 		try {
 			this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
-			this.dos = new DataOutputStream(socketChannel.socket().getOutputStream());
+			this.dos = new DataOutputStream(socketChannel != null ? socketChannel.socket().getOutputStream() : null);
 			this.dis = new DataInputStream(socketChannel.socket().getInputStream());
 
 			// send auth
@@ -58,18 +58,17 @@ public class SocketUploader implements Observer{
 							inChannel = aFile.getChannel();
 
 							long bytesSent = 0;
+							long bfSize = Math.min(4096, fileLength);
+							Main.myLog("Transfer started.");
 
 							Main.dialog.show("Uploading...", "", false);
+							Main.dialog.set(0);
 
-							// send the file
-							long bfSize = Math.min(32768, fileLength); // 128kB buffer
 							while (bytesSent < fileLength) {
 								bytesSent += inChannel.transferTo(bytesSent, bfSize, socketChannel);
-
-								Main.myLog("[SocketUploader] Sent: " + 100 * bytesSent / fileLength + "%");
 								Main.dialog.set((int) (100 * bytesSent / fileLength));
 							}
-
+							Main.myLog("Transfer ended.");
 							inChannel.close();
 
 							Main.myLog("[SocketUploader] End of file reached..");
@@ -104,29 +103,21 @@ public class SocketUploader implements Observer{
 				Main.dialog.wrongPassword();
 				return false;
 			}
-
-			inChannel.close();
-			aFile.close();
-			dis.close();
-			dos.flush();
-			dos.close();
-			socketChannel.close();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 			Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
+			return false;
+		} finally {
 			try {
 				inChannel.close();
 				aFile.close();
-				dos.close();
 				dis.close();
+				dos.flush();
+				dos.close();
 				socketChannel.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				Main.myErr(Arrays.toString(e1.getStackTrace()).replace(",", "\n"));
-				return false;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			return false;
 		}
 		return true;
 	}

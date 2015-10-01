@@ -10,13 +10,13 @@ import java.awt.geom.Area;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
-public class MyScreen extends JPanel{
+public class MyScreen extends JPanel {
 
     public Rectangle selectionBounds;
     private static Color c = new Color(255, 255, 255, 128);
     private Point startPoint = null;
 
-    public MyScreen(){
+    public MyScreen() {
         this.selectionBounds = new Rectangle();
         JDialog panel = new JDialog();
 
@@ -33,8 +33,8 @@ public class MyScreen extends JPanel{
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (startPoint.x + startPoint.y < e.getX() + e.getY()) {
-                    selectionBounds.setBounds(startPoint.x ++, startPoint.y ++, e.getX() - startPoint.x --,
-                            e.getY() - startPoint.y --);
+                    selectionBounds.setBounds(startPoint.x++, startPoint.y++, e.getX() - startPoint.x--,
+                            e.getY() - startPoint.y--);
                 } else {
                     selectionBounds.setBounds(e.getX() + 1, e.getX() + 1, startPoint.x - e.getX() - 1,
                             startPoint.y - e.getX() - 1);

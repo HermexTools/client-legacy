@@ -153,9 +153,9 @@ public class SystemTrayMenu {
 	}
 
 	private String loadKey(int keyNumber[]) {
-		StringBuffer ret = new StringBuffer("(");
+		StringBuilder ret = new StringBuilder("(");
 		for (int e : keyNumber) {
-			ret.append(MyKeyListener.fromKeyToName.get(e) + "+");
+			ret.append(MyKeyListener.fromKeyToName.get(e)).append("+");
 		}
 		ret.replace(0,ret.length(),ret.substring(0, ret.length() - 1));
 		ret.append(")");

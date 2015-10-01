@@ -16,6 +16,7 @@ public class Sound extends Thread {
 	public Sound() {
 	}
 
+	@Override
 	public void run() {
 		AudioInputStream audioInputStream;
 

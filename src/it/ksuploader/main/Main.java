@@ -27,10 +27,9 @@ public class Main {
         fh.setFormatter(new SimpleFormatter());
         log.addHandler(fh);
         log.setUseParentHandlers(false);
+		startUpCheck();
 		keyListener = new MyKeyListener();
 		st = new SystemTrayMenu();
-		startUpCheck();
-
 	}
 
 	private static void startUpChecker(String name, String where, String target, String icon) {
