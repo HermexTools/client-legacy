@@ -161,6 +161,13 @@ public class MyKeyListener {
 
         };
 
+        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        logger.setLevel(Level.OFF);
+        Handler[] handlers = Logger.getLogger("").getHandlers();
+        for (Handler handler : handlers) {
+            handler.setLevel(Level.OFF);
+        }
+
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
@@ -169,13 +176,6 @@ public class MyKeyListener {
         }
 
         GlobalScreen.addNativeKeyListener(gkl);
-
-        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-        logger.setLevel(Level.OFF);
-        Handler[] handlers = Logger.getLogger("").getHandlers();
-        for (Handler handler : handlers) {
-            handler.setLevel(Level.OFF);
-        }
         loadKeys();
     }
 
