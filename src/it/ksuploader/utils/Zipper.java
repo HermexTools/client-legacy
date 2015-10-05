@@ -16,19 +16,14 @@ import java.util.zip.ZipOutputStream;
 
 public class Zipper {
 
-    private final File[] file;
 
-    public Zipper(File[] file) {
-        this.file = file;
-    }
-
-    public String toZip(String method) {
+    public static String toZip(String method,File[] files) {
         String fileName = null;
         ZipOutputStream zos = null;
         FileInputStream fis = null;
         try {
 
-            Main.myLog("[Zipper] file.length: " + file.length);
+            Main.myLog("[Zipper] file.length: " + files.length);
 
             if (method.equals("socket")) // socket or ftp
                 fileName = "KStemp.zip";
@@ -37,9 +32,9 @@ public class Zipper {
 
             zos = new ZipOutputStream(new FileOutputStream(Main.so.getTempDir() + "/" + fileName));
             Main.dialog.setButtonClickable(false);
-            for (File f : this.file) {
+            for (File f : files) {
                 if (f.isDirectory()) {
-                    zipDirectory(f, zos);
+                    addDirectory(zos, f);
                 } else {
                     fis = new FileInputStream(f);
                     zos.putNextEntry(new ZipEntry(f.getName()));
@@ -56,7 +51,7 @@ public class Zipper {
                     zos.closeEntry();
                 }
             }
-            Main.myLog("[Zipper] Zipping finished: " + fileName);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,51 +63,42 @@ public class Zipper {
                 zos.flush();
                 zos.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
             }
         }
+        Main.myLog("[Zipper] Zipping finished: " + fileName);
         return Main.so.getTempDir() + "/" + fileName;
     }
 
-    private void zipDirectory(File directory, ZipOutputStream zout) {
-        FileInputStream in = null;
-        try {
-            URI base = directory.toURI();
-            Deque<File> queue = new LinkedList<>();
-            queue.push(directory);
-            while (!queue.isEmpty()) {
-                directory = queue.pop();
-                for (File kid : directory.listFiles()) {
-                    String name = base.relativize(kid.toURI()).getPath();
-                    if (kid.isDirectory()) {
-                        queue.push(kid);
-                        name = name.endsWith("/") ? name : name + "/";
-                        zout.putNextEntry(new ZipEntry(name));
-                    } else {
-                        zout.putNextEntry(new ZipEntry(name));
-                        in = new FileInputStream(kid);
-                        byte[] buffer = new byte[1024];
-                        long count = 0;
-                        int length;
-                        Main.dialog.show("Zipping...", "", false);
-                        while ((length = in.read(buffer)) >= 0) {
-                            zout.write(buffer, 0, length);
-                            count += length;
-                            Main.dialog.set((int) (count * 100 / kid.length()));
-                        }
-                        in.close();
-                        zout.closeEntry();
-                    }
-                }
+    private static void addDirectory(ZipOutputStream zout, File fileSource) {
+        File[] lfiles = fileSource.listFiles();
+
+        for (File file1 : lfiles) {
+            if (file1.isDirectory()) {
+                addDirectory(zout, file1);
+                continue;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
-        } finally {
             try {
-                in.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+
+                byte[] buffer = new byte[1024];
+
+                FileInputStream fin = new FileInputStream(file1);
+
+                zout.putNextEntry(new ZipEntry(file1.getName()));
+
+                int length;
+                long count = 0;
+
+                while ((length = fin.read(buffer)) > 0) {
+                    zout.write(buffer, 0, length);
+                    count += length;
+                    Main.dialog.set((int) (count * 100 / file1.length()));
+                }
+                zout.closeEntry();
+                fin.close();
+
+            } catch (IOException e) {
+                Main.myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
             }
         }
 
