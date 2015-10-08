@@ -84,9 +84,9 @@ public class PopupDialog extends Observable {
         dialogFrame.add(progressBar, constraints);
 
         xButton.addActionListener(e -> {
+            this.destroy();
             this.setChanged();
             this.notifyObservers();
-            this.destroy();
         });
 
         // Click nel JDialog per mandare all'url
