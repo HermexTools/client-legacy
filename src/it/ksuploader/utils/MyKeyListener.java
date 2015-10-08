@@ -135,13 +135,13 @@ public class MyKeyListener {
                     if (keyHashFile.equals(hashKeyGlobal)) {
                         System.out.println("Via file");
                         clearKeyComb();
-                        st.sendFile();
+                        st.uploadFile();
                     }
 
                     if (keyHashClipboard.equals(hashKeyGlobal)) {
                         System.out.println("Via clipboard");
                         clearKeyComb();
-                        st.sendClipboard();
+                        st.uploadClipboard();
                     }
                 }
 

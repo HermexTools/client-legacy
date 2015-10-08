@@ -104,8 +104,8 @@ public class SystemTrayMenu {
                         e1.printStackTrace();
                     }
                 });
-                caricaFile.addActionListener(e -> sendFile());
-                clipboard.addActionListener(e -> sendClipboard());
+                caricaFile.addActionListener(e -> uploadFile());
+                clipboard.addActionListener(e -> uploadClipboard());
 
                 settings.addActionListener(e -> {
                     SettingsDialog configPanel = new SettingsDialog();
@@ -143,6 +143,22 @@ public class SystemTrayMenu {
             Main.dialog.cleanObservers();
             Main.dialog.addObserver(this.socketUploader);
         }
+    }
+
+    private void history(String link) {
+        popupMenu.remove(uploads[uploads.length - 1]);
+
+        System.arraycopy(uploads, 0, uploads, 1, uploads.length - 1);
+        uploads[0] = new MenuItem(link);
+        uploads[0].addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(new URI(e.getActionCommand()));
+            } catch (URISyntaxException | IOException ex) {
+                ex.printStackTrace();
+                Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+            }
+        });
+        popupMenu.insert(uploads[0], 2);
     }
 
     public void updateKeys() {
@@ -329,7 +345,7 @@ public class SystemTrayMenu {
         }.execute();
     }
 
-    public void sendFile() {
+    public void uploadFile() {
         try {
             JFileChooser selFile = new JFileChooser();
             selFile.setMultiSelectionEnabled(true);
@@ -337,7 +353,7 @@ public class SystemTrayMenu {
             Action details = selFile.getActionMap().get("viewTypeDetails");
             details.actionPerformed(null);
             if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                new SwingWorker() {
+                new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() {
                         boolean res = false;
@@ -348,8 +364,9 @@ public class SystemTrayMenu {
                                 ftpup.setFilePath(selFile.getSelectedFiles()[0].getPath());
 
                             } else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-                                ftpup.setFilePath(Zipper.toZip("ftp", selFile.getSelectedFiles()));
-
+                                Main.dialog.setButtonClickable(false);
+                                ftpup.setFilePath(Zipper.toZip("ftp", selFile.getSelectedFiles(), selFile.getSelectedFiles()[0].getParentFile().getPath()));
+                                Main.dialog.setButtonClickable(true);
                                 // Altrimenti se finisce con .zip O è uno solo
                             } else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
                                 ftpup.setFilePath(selFile.getSelectedFiles()[0].getPath());
@@ -370,7 +387,8 @@ public class SystemTrayMenu {
                                 res = socketUploader.send("img");
 
                             } else if (!selFile.getSelectedFiles()[0].getName().endsWith(".zip") || selFile.getSelectedFiles().length > 1) {
-                                socketUploader.setFilePath(Zipper.toZip("socket", selFile.getSelectedFiles()));
+                                Main.dialog.setButtonClickable(false);
+                                socketUploader.setFilePath(Zipper.toZip("socket", selFile.getSelectedFiles(), selFile.getSelectedFiles()[0].getParentFile().getPath()));
                                 res = socketUploader.send("file");
 
                             } else if (selFile.getSelectedFiles()[0].getName().endsWith(".zip") && selFile.getSelectedFiles().length == 1) {
@@ -399,28 +417,11 @@ public class SystemTrayMenu {
         }
     }
 
-    private void history(String link) {
-        popupMenu.remove(uploads[uploads.length - 1]);
-
-        System.arraycopy(uploads, 0, uploads, 1, uploads.length - 1);
-        uploads[0] = new MenuItem(link);
-        uploads[0].addActionListener(e -> {
-            try {
-                Desktop.getDesktop().browse(new URI(e.getActionCommand()));
-            } catch (URISyntaxException | IOException ex) {
-                ex.printStackTrace();
-                Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
-            }
-        });
-        popupMenu.insert(uploads[0], 2);
-    }
-
-    public void sendClipboard() {
+    public void uploadClipboard() {
         boolean res;
         try {
 
-            String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
-                    .getData(DataFlavor.stringFlavor);
+            String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
             String fileName = System.currentTimeMillis() / 1000 + "" + new Random().nextInt(999);
             File f = new File(Main.so.getTempDir() + "/" + fileName + ".txt");
             Main.myLog(f.getPath());

@@ -155,7 +155,7 @@ public class PopupDialog extends Observable {
     }
 
     public void set(int n) {
-        gridProgressBar();
+        this.gridProgressBar();
         progressBar.setValue(n);
         progressBar.setString(n + " %");
     }
