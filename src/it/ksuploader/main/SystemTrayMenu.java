@@ -38,6 +38,7 @@ public class SystemTrayMenu {
     private MenuItem catturaDesktop;
     private MenuItem caricaFile;
     private MenuItem clipboard;
+    private boolean capturing;
 
     public SystemTrayMenu() {
         try {
@@ -179,10 +180,15 @@ public class SystemTrayMenu {
     }
 
     public void uploadPartialScreen() {
+        if (capturing) {
+            return;
+        }
         SwingUtilities.invokeLater(() -> new Thread() {
             @Override
             public void run() {
+                capturing = true;
                 MyScreen partialScreen = new MyScreen();
+                capturing = false;
                 if (partialScreen.selectionBounds == null || partialScreen.selectionBounds.width <= 5 || partialScreen.selectionBounds.height <= 5) {
                     Main.dialog.show("Upload Cancelled!", ":(", false);
                     Main.dialog.destroy();
@@ -262,6 +268,9 @@ public class SystemTrayMenu {
     }
 
     public void uploadCompleteScreen() {
+        if (capturing) {
+            return;
+        }
         SwingUtilities.invokeLater(() -> new Thread() {
             @Override
             public void run() {
