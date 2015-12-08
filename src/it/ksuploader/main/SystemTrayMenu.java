@@ -189,7 +189,7 @@ public class SystemTrayMenu {
                 capturing = true;
                 MyScreen partialScreen = new MyScreen();
                 capturing = false;
-                if (partialScreen.selectionBounds == null || partialScreen.selectionBounds.width <= 5 || partialScreen.selectionBounds.height <= 5) {
+                if (partialScreen.isValidScreen()) {
                     Main.dialog.show("Upload Cancelled!", ":(", false);
                     Main.dialog.destroy();
                 } else {
@@ -199,21 +199,12 @@ public class SystemTrayMenu {
                             File tempFile = new File(Main.so.getTempDir() + File.separator + System.currentTimeMillis() / 1000 + new Random().nextInt(999) + ".png");
 
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
-                                        partialScreen.selectionBounds.x,
-                                        partialScreen.selectionBounds.y,
-                                        partialScreen.selectionBounds.width,
-                                        partialScreen.selectionBounds.height), "png", new File(Main.config.getSaveDir() + File.separator + System.currentTimeMillis() / 1000
+                                ImageIO.write(partialScreen.getImage(), "png", new File(Main.config.getSaveDir() + File.separator + System.currentTimeMillis() / 1000
                                         + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[SocketUploader] MyScreen saved");
                             }
 
-                            ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
-                                    partialScreen.selectionBounds.x,
-                                    partialScreen.selectionBounds.y,
-                                    partialScreen.selectionBounds.width,
-                                    partialScreen.selectionBounds.height), "png", tempFile);
-
+                            ImageIO.write(partialScreen.getImage(), "png", tempFile);
                             ftpup.setFilePath(tempFile);
 
                             boolean res;
@@ -225,28 +216,20 @@ public class SystemTrayMenu {
                                 tempFile.delete();
                                 suono.run();
                             }
-                        } catch (AWTException | IOException e) {
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                     } else {
 
                         File tempFile = new File(Main.so.getTempDir() + "/ksutemp.png");
                         try {
-                            ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
-                                    partialScreen.selectionBounds.x,
-                                    partialScreen.selectionBounds.y,
-                                    partialScreen.selectionBounds.width,
-                                    partialScreen.selectionBounds.height), "png", tempFile);
-
                             if (Main.config.isSaveEnabled()) {
-                                ImageIO.write(new Robot().createScreenCapture(Main.so.getScreenBounds()).getSubimage(
-                                        partialScreen.selectionBounds.x,
-                                        partialScreen.selectionBounds.y,
-                                        partialScreen.selectionBounds.width,
-                                        partialScreen.selectionBounds.height), "png", new File(Main.config.getSaveDir() + File.separator + System.currentTimeMillis() / 1000
+                                ImageIO.write(partialScreen.getImage(), "png", new File(Main.config.getSaveDir() + File.separator + System.currentTimeMillis() / 1000
                                         + new Random().nextInt(999) + ".png"));
                                 Main.myLog("[SocketUploader] MyScreen saved");
                             }
+
+                            ImageIO.write(partialScreen.getImage(), "png", tempFile);
                             socketUploader.setFilePath(tempFile.getPath());
 
                             boolean res;
@@ -256,9 +239,9 @@ public class SystemTrayMenu {
                                 history(socketUploader.getLink());
                                 clpbrd.setContents(new StringSelection(socketUploader.getLink()), null);
                                 suono.run();
+                                tempFile.delete();
                             }
-                            tempFile.delete();
-                        } catch (IOException | AWTException e) {
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }

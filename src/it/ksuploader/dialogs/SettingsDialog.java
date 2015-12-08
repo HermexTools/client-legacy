@@ -322,6 +322,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
             this.srvPort.setEnabled(false);
             Main.myLog("[Settings] Server disabled, ftp enabled");
         }
+        Main.startUpCheck();
     }
 
     /*
