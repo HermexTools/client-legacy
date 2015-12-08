@@ -88,7 +88,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
         startUpEnabled.setBounds(237, 33, 150, 23);
         getContentPane().add(startUpEnabled);
 
-        startUpEnabled.addActionListener(e -> Main.startUpCheck());
+        //startUpEnabled.addActionListener(e -> Main.startUpCheck());
 
         JPanel panel = new JPanel();
         panel.setBounds(0, 63, 474, 238);
@@ -194,6 +194,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
                     srvPassw.getText(), srvPort.getText(), srvAddr.getText(), saveEnabled.isSelected() + "",
                     saveDir.getSelectedFile().getPath(), startUpEnabled.isSelected() + "",
                     ftpesEnabled.isSelected() + "", acceptCertificates.isSelected() + "");
+            Main.startUpCheck();
             dispose();
         });
 
@@ -322,7 +323,6 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
             this.srvPort.setEnabled(false);
             Main.myLog("[Settings] Server disabled, ftp enabled");
         }
-        Main.startUpCheck();
     }
 
     /*

@@ -34,7 +34,6 @@ public class Main {
 
 	private static void startUpChecker(String name, String where, String target, String icon) {
 		try {
-			myLog("[Main] removing shortcut :" + new File(Main.so.getStartUpFolder(), name).delete());
 			FileWriter fw = new FileWriter(where + "\\" + name);
 			fw.write("[InternetShortcut]\n");
 			fw.write("URL=file://" + target + "\n");
@@ -53,13 +52,10 @@ public class Main {
 	}
 
 	public static void startUpCheck() {
-		myLog("[Main] removing shortcut :" + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
+		myLog("[Main] removing shortcut: " + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
 		if (config.isStartUpEnabled()) {
 			startUpChecker("KSUploader_autostart.url", Main.so.getStartUpFolder(), Main.class.getProtectionDomain().getCodeSource().getLocation().getPath(),"");
-		} else {
-			myLog("[Main] removing shortcut" + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
 		}
-
 	}
 
 	public static void myLog(String s) {
