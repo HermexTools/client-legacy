@@ -183,7 +183,7 @@ public class SystemTrayMenu {
         if (capturing) {
             return;
         }
-        SwingUtilities.invokeLater(() -> new Thread() {
+        new Thread() {
             @Override
             public void run() {
                 capturing = true;
@@ -247,14 +247,14 @@ public class SystemTrayMenu {
                     }
                 }
             }
-        }.start());
+        }.start();
     }
 
     public void uploadCompleteScreen() {
         if (capturing) {
             return;
         }
-        SwingUtilities.invokeLater(() -> new Thread() {
+        new Thread() {
             @Override
             public void run() {
                 try {
@@ -318,7 +318,7 @@ public class SystemTrayMenu {
                     Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
                 }
             }
-        }.start());
+        }.start();
     }
 
     public void uploadFile() {
@@ -329,7 +329,7 @@ public class SystemTrayMenu {
             Action details = selFile.getActionMap().get("viewTypeDetails");
             details.actionPerformed(null);
             if (selFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                SwingUtilities.invokeLater(() -> new Thread() {
+                new Thread() {
                     @Override
                     public void run() {
                         boolean res = false;
@@ -381,7 +381,7 @@ public class SystemTrayMenu {
 
                         }
                     }
-                }.start());
+                }.start();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -390,7 +390,7 @@ public class SystemTrayMenu {
     }
 
     public void uploadClipboard() {
-        SwingUtilities.invokeLater(() -> new Thread() {
+        new Thread() {
             @Override
             public void run() {
                 boolean res;
@@ -432,6 +432,6 @@ public class SystemTrayMenu {
                     Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
                 }
             }
-        }.start());
+        }.start();
     }
 }
