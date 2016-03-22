@@ -5,6 +5,7 @@ import it.ksuploader.utils.Environment;
 import it.ksuploader.utils.LoadConfig;
 import it.ksuploader.utils.MyKeyListener;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class Main {
 	public static PopupDialog dialog = new PopupDialog();
 	public static LoadConfig config = new LoadConfig();
 	public static MyKeyListener keyListener;
-	public static Logger log = Logger.getLogger("KSULog");
+	private static Logger log = Logger.getLogger("KSULog");
 	public static SystemTrayMenu st;
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
@@ -29,7 +30,8 @@ public class Main {
         log.setUseParentHandlers(false);
 		startUpCheck();
 		keyListener = new MyKeyListener();
-		st = new SystemTrayMenu();
+		SwingUtilities.invokeLater(() -> st = new SystemTrayMenu());
+
 	}
 
 	private static void startUpChecker(String name, String where, String target, String icon) {

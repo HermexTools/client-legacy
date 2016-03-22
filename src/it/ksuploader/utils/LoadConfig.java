@@ -10,408 +10,388 @@ import java.util.Properties;
 @SuppressWarnings("serial")
 public class LoadConfig extends Properties {
 
-    private String ip;
-    private String pass;
-    private String saveDir;
-    private String ftpAddr;
-    private String ftpUser;
-    private String ftpPass;
-    private String ftpDir;
-    private String ftpWebUrl;
+	private String ip, pass, saveDir, ftpAddr, ftpUser, ftpPass, ftpDir, ftpWebUrl, tmp[];
+	private boolean saveEnabled, ftpEnabled, ftpesEnabled, startUpEnabled, acceptAllCertificates;
+	private int port, ftpPort, keyScreen[], keyCScreen[], keyFile[], keyClip[];
 
-    private boolean saveEnabled;
-    private boolean ftpEnabled;
-    private boolean ftpesEnabled;
-    private boolean startUpEnabled;
-    private boolean acceptAllCertificates;
+	public LoadConfig() {
+		try {
+			System.out.println("[LoadConfig] " + Main.so.getInstallDir().getPath() + "/client.properties");
 
-    private int port;
-    private int ftpPort;
-    private int keyScreen[];
-    private int keyCScreen[];
-    private int keyFile[];
-    private int keyClip[];
+			if (!new File(Main.so.getInstallDir().getPath(), "client.properties").exists()) {
+				this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "/client.properties"), null);
+			}
 
-    private String[] tmp;
+			InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath() + "//client.properties");
+			this.load(inputStream);
+			inputStream.close();
 
-    public LoadConfig() {
-        try {
-            System.out.println("[LoadConfig] " + Main.so.getInstallDir().getPath() + "/client.properties");
+			boolean correct_config = false;
 
-            if (!new File(Main.so.getInstallDir().getPath(), "client.properties").exists()) {
-                this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "/client.properties"), null);
-            }
+			// Server address
+			if (this.getProperty("server_address") == null || this.getProperty("server_address").isEmpty()) {
+				this.setProperty("server_address", "localhost");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default server_address");
+			}
+			this.ip = this.getProperty("server_address");
 
-            InputStream inputStream = new FileInputStream(Main.so.getInstallDir().getPath() + "//client.properties");
-            this.load(inputStream);
-            inputStream.close();
+			// Socket password
+			if (this.getProperty("password") == null || this.getProperty("password").isEmpty()) {
+				this.setProperty("password", "pass");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default password");
+			}
+			this.pass = this.getProperty("password");
 
-            boolean correct_config = false;
+			// FTP enabled
+			if (this.getProperty("ftp_enabled") == null || this.getProperty("ftp_enabled").isEmpty()) {
+				this.setProperty("ftp_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_enabled");
+			}
+			this.ftpEnabled = Boolean.valueOf(this.getProperty("ftp_enabled"));
 
-            // Server address
-            if (this.getProperty("server_address") == null || this.getProperty("server_address").isEmpty()) {
-                this.setProperty("server_address", "localhost");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default server_address");
-            }
-            this.ip = this.getProperty("server_address");
+			// Socket port
+			if (this.getProperty("port") == null || this.getProperty("port").isEmpty()) {
+				this.setProperty("port", "4030");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default port");
+			}
+			this.port = Integer.parseInt(this.getProperty("port"));
 
-            // Socket password
-            if (this.getProperty("password") == null || this.getProperty("password").isEmpty()) {
-                this.setProperty("password", "pass");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default password");
-            }
-            this.pass = this.getProperty("password");
+			// FTP address
+			if (this.getProperty("ftp_address") == null || this.getProperty("ftp_address").isEmpty()) {
+				this.setProperty("ftp_address", "ftp.mydomain.com");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_address");
+			}
+			this.ftpAddr = this.getProperty("ftp_address");
 
-            // FTP enabled
-            if (this.getProperty("ftp_enabled") == null || this.getProperty("ftp_enabled").isEmpty()) {
-                this.setProperty("ftp_enabled", "false");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_enabled");
-            }
-            this.ftpEnabled = Boolean.valueOf(this.getProperty("ftp_enabled"));
+			// FTP user
+			if (this.getProperty("ftp_user") == null || this.getProperty("ftp_user").isEmpty()) {
+				this.setProperty("ftp_user", "user");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_user");
+			}
+			this.ftpUser = this.getProperty("ftp_user");
 
-            // Socket port
-            if (this.getProperty("port") == null || this.getProperty("port").isEmpty()) {
-                this.setProperty("port", "4030");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default port");
-            }
-            this.port = Integer.parseInt(this.getProperty("port"));
+			// FTP password
+			if (this.getProperty("ftp_password") == null || this.getProperty("ftp_password").isEmpty()) {
+				this.setProperty("ftp_password", "pass");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_password");
+			}
+			this.ftpPass = this.getProperty("ftp_password");
 
-            // FTP address
-            if (this.getProperty("ftp_address") == null || this.getProperty("ftp_address").isEmpty()) {
-                this.setProperty("ftp_address", "ftp.mydomain.com");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_address");
-            }
-            this.ftpAddr = this.getProperty("ftp_address");
+			// FTP port
+			if (this.getProperty("ftp_port") == null || this.getProperty("ftp_port").isEmpty()) {
+				this.setProperty("ftp_port", "21");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_port");
+			}
+			this.ftpPort = Integer.parseInt(this.getProperty("ftp_port"));
 
-            // FTP user
-            if (this.getProperty("ftp_user") == null || this.getProperty("ftp_user").isEmpty()) {
-                this.setProperty("ftp_user", "user");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_user");
-            }
-            this.ftpUser = this.getProperty("ftp_user");
+			// FTP directory
+			if (this.getProperty("ftp_directory") == null || this.getProperty("ftp_directory").isEmpty()) {
+				this.setProperty("ftp_directory", "subFolder/anotherFolder");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_directory");
+			}
+			this.ftpDir = this.getProperty("ftp_directory");
 
-            // FTP password
-            if (this.getProperty("ftp_password") == null || this.getProperty("ftp_password").isEmpty()) {
-                this.setProperty("ftp_password", "pass");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_password");
-            }
-            this.ftpPass = this.getProperty("ftp_password");
+			// FTP weburl
+			if (this.getProperty("ftp_weburl") == null || this.getProperty("ftp_weburl").isEmpty()) {
+				this.setProperty("ftp_weburl", "http://mydomain.com/");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftp_weburl");
+			}
+			this.ftpWebUrl = this.getProperty("ftp_weburl");
 
-            // FTP port
-            if (this.getProperty("ftp_port") == null || this.getProperty("ftp_port").isEmpty()) {
-                this.setProperty("ftp_port", "21");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_port");
-            }
-            this.ftpPort = Integer.parseInt(this.getProperty("ftp_port"));
+			// Save enabled
+			if (this.getProperty("save_enabled") == null || this.getProperty("save_enabled").isEmpty()) {
+				this.setProperty("save_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default save_enabled");
+			}
+			this.saveEnabled = Boolean.valueOf(this.getProperty("save_enabled"));
 
-            // FTP directory
-            if (this.getProperty("ftp_directory") == null || this.getProperty("ftp_directory").isEmpty()) {
-                this.setProperty("ftp_directory", "subFolder/anotherFolder");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_directory");
-            }
-            this.ftpDir = this.getProperty("ftp_directory");
+			// Save directory
+			if (this.getProperty("save_dir") == null || this.getProperty("save_dir").isEmpty()) {
+				this.setProperty("save_dir", ".");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default save_dir");
+			}
+			this.saveDir = this.getProperty("save_dir");
 
-            // FTP weburl
-            if (this.getProperty("ftp_weburl") == null || this.getProperty("ftp_weburl").isEmpty()) {
-                this.setProperty("ftp_weburl", "http://mydomain.com/");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftp_weburl");
-            }
-            this.ftpWebUrl = this.getProperty("ftp_weburl");
+			// FTPES enabled
+			if (this.getProperty("ftpes_enabled") == null || this.getProperty("ftpes_enabled").isEmpty()) {
+				this.setProperty("ftpes_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default ftpes_enabled");
+			}
+			this.ftpesEnabled = Boolean.valueOf(this.getProperty("ftpes_enabled"));
 
-            // Save enabled
-            if (this.getProperty("save_enabled") == null || this.getProperty("save_enabled").isEmpty()) {
-                this.setProperty("save_enabled", "false");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default save_enabled");
-            }
-            this.saveEnabled = Boolean.valueOf(this.getProperty("save_enabled"));
+			// StartUp enabled
+			if (this.getProperty("open_at_startup_enabled") == null
+					|| this.getProperty("open_at_startup_enabled").isEmpty()) {
+				this.setProperty("open_at_startup_enabled", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default open_at_startup_enabled");
+			}
+			this.startUpEnabled = Boolean.valueOf(this.getProperty("open_at_startup_enabled"));
 
-            // Save directory
-            if (this.getProperty("save_dir") == null || this.getProperty("save_dir").isEmpty()) {
-                this.setProperty("save_dir", ".");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default save_dir");
-            }
-            this.saveDir = this.getProperty("save_dir");
+			// accept all certificates
+			if (this.getProperty("accept_all_certificates") == null
+					|| this.getProperty("accept_all_certificates").isEmpty()) {
+				this.setProperty("accept_all_certificates", "false");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default accept_all_certificates");
+			}
+			this.acceptAllCertificates = Boolean.valueOf(this.getProperty("accept_all_certificates"));
 
-            // FTPES enabled
-            if (this.getProperty("ftpes_enabled") == null || this.getProperty("ftpes_enabled").isEmpty()) {
-                this.setProperty("ftpes_enabled", "false");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default ftpes_enabled");
-            }
-            this.ftpesEnabled = Boolean.valueOf(this.getProperty("ftpes_enabled"));
+			// Keys for partial screen
+			if (this.getProperty("key_screen") == null || this.getProperty("key_screen").isEmpty()) {
+				this.setProperty("key_screen", "56+2");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_screen");
+			}
+			tmp = null;
+			tmp = this.getProperty("key_screen").split("[+]");
+			this.keyScreen = new int[tmp.length];
+			for (int i = 0; i < tmp.length; i++) {
+				this.keyScreen[i] = Integer.parseInt(tmp[i]);
+			}
 
-            // StartUp enabled
-            if (this.getProperty("open_at_startup_enabled") == null
-                    || this.getProperty("open_at_startup_enabled").isEmpty()) {
-                this.setProperty("open_at_startup_enabled", "false");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default open_at_startup_enabled");
-            }
-            this.startUpEnabled = Boolean.valueOf(this.getProperty("open_at_startup_enabled"));
+			// Keys for complete screen
+			if (this.getProperty("key_cscreen") == null || this.getProperty("key_cscreen").isEmpty()) {
+				this.setProperty("key_cscreen", "56+3");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_cscreen");
+			}
+			tmp = null;
+			tmp = this.getProperty("key_cscreen").split("[+]");
+			this.keyCScreen = new int[tmp.length];
+			for (int i = 0; i < tmp.length; i++) {
+				this.keyCScreen[i] = Integer.parseInt(tmp[i]);
+			}
 
-            // accept all certificates
-            if (this.getProperty("accept_all_certificates") == null
-                    || this.getProperty("accept_all_certificates").isEmpty()) {
-                this.setProperty("accept_all_certificates", "false");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default accept_all_certificates");
-            }
-            this.acceptAllCertificates = Boolean.valueOf(this.getProperty("accept_all_certificates"));
+			// Keys for files
+			if (this.getProperty("key_file") == null || this.getProperty("key_file").isEmpty()) {
+				this.setProperty("key_file", "56+4");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_file");
+			}
+			tmp = null;
+			tmp = this.getProperty("key_file").split("[+]");
+			this.keyFile = new int[tmp.length];
+			for (int i = 0; i < tmp.length; i++) {
+				this.keyFile[i] = Integer.parseInt(tmp[i]);
+			}
 
-            // Keys for partial screen
-            if (this.getProperty("key_screen") == null || this.getProperty("key_screen").isEmpty()) {
-                this.setProperty("key_screen", "56+2");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default key_screen");
-            }
-            tmp = null;
-            tmp = this.getProperty("key_screen").split("[+]");
-            this.keyScreen = new int[tmp.length];
-            for (int i = 0; i < tmp.length; i++) {
-                this.keyScreen[i] = Integer.parseInt(tmp[i]);
-            }
+			// keys for clipboard
+			if (this.getProperty("key_clipboard") == null || this.getProperty("key_clipboard").isEmpty()) {
+				this.setProperty("key_clipboard", "56+5");
+				correct_config = true;
+				System.out.println("[LoadConfig] Setting default key_clipboard");
+			}
+			tmp = null;
+			tmp = this.getProperty("key_clipboard").split("[+]");
+			this.keyClip = new int[tmp.length];
+			for (int i = 0; i < tmp.length; i++) {
+				this.keyClip[i] = Integer.parseInt(tmp[i]);
+			}
 
-            // Keys for complete screen
-            if (this.getProperty("key_cscreen") == null || this.getProperty("key_cscreen").isEmpty()) {
-                this.setProperty("key_cscreen", "56+3");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default key_cscreen");
-            }
-            tmp = null;
-            tmp = this.getProperty("key_cscreen").split("[+]");
-            this.keyCScreen = new int[tmp.length];
-            for (int i = 0; i < tmp.length; i++) {
-                this.keyCScreen[i] = Integer.parseInt(tmp[i]);
-            }
+			if (correct_config) {
+				this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+			}
 
-            // Keys for files
-            if (this.getProperty("key_file") == null || this.getProperty("key_file").isEmpty()) {
-                this.setProperty("key_file", "56+4");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default key_file");
-            }
-            tmp = null;
-            tmp = this.getProperty("key_file").split("[+]");
-            this.keyFile = new int[tmp.length];
-            for (int i = 0; i < tmp.length; i++) {
-                this.keyFile[i] = Integer.parseInt(tmp[i]);
-            }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			Main.dialog.show("Config error", "Error during the config loading!", false);
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+		}
 
-            // keys for clipboard
-            if (this.getProperty("key_clipboard") == null || this.getProperty("key_clipboard").isEmpty()) {
-                this.setProperty("key_clipboard", "56+5");
-                correct_config = true;
-                System.out.println("[LoadConfig] Setting default key_clipboard");
-            }
-            tmp = null;
-            tmp = this.getProperty("key_clipboard").split("[+]");
-            this.keyClip = new int[tmp.length];
-            for (int i = 0; i < tmp.length; i++) {
-                this.keyClip[i] = Integer.parseInt(tmp[i]);
-            }
+	}
 
-            if (correct_config) {
-                this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
-            }
+	public void storeNewConfig(String ftpWeburl, String ftpDir, String ftport, String ftpPass, String ftpUser,
+	                           String ftpAddr, String ftpEnabled, String srvPass, String srvPort, String srvAddr, String saveEnabled,
+	                           String saveDir, String startUp, String ftpes, String allCertificates) {
+		try {
+			this.setProperty("ftp_weburl", ftpWeburl);
+			this.setProperty("ftp_directory", ftpDir);
+			this.setProperty("ftp_port", ftport);
+			this.setProperty("ftp_password", ftpPass);
+			this.setProperty("ftp_user", ftpUser);
+			this.setProperty("ftp_address", ftpAddr);
+			this.setProperty("ftp_enabled", ftpEnabled);
+			this.setProperty("ftpes_enabled", ftpes);
+			this.setProperty("password", srvPass);
+			this.setProperty("port", srvPort);
+			this.setProperty("server_address", srvAddr);
+			this.setProperty("save_enabled", saveEnabled);
+			this.setProperty("save_dir", saveDir);
+			this.setProperty("open_at_startup_enabled", startUp);
+			this.setProperty("accept_all_certificates", allCertificates);
+			this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Main.dialog.show("Config error", "Error during the config loading!", false);
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
-        }
+			this.ip = this.getProperty("server_address");
+			this.pass = this.getProperty("password");
+			this.ftpEnabled = Boolean.valueOf(this.getProperty("ftp_enabled"));
+			this.port = Integer.parseInt(this.getProperty("port"));
+			this.ftpAddr = this.getProperty("ftp_address");
+			this.ftpUser = this.getProperty("ftp_user");
+			this.ftpPass = this.getProperty("ftp_password");
+			this.ftpPort = Integer.parseInt(this.getProperty("ftp_port"));
+			this.ftpDir = this.getProperty("ftp_directory");
+			this.ftpWebUrl = this.getProperty("ftp_weburl");
+			this.saveEnabled = Boolean.valueOf(this.getProperty("save_enabled"));
+			this.saveDir = this.getProperty("save_dir");
+			this.startUpEnabled = Boolean.valueOf(this.getProperty("open_at_startup_enabled"));
+			this.ftpesEnabled = Boolean.valueOf(this.getProperty("ftpes_enabled"));
+			this.acceptAllCertificates = Boolean.valueOf(this.getProperty("accept_all_certificates"));
 
-    }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
+		}
 
-    public void storeNewConfig(String ftpWeburl, String ftpDir, String ftport, String ftpPass, String ftpUser,
-                               String ftpAddr, String ftpEnabled, String srvPass, String srvPort, String srvAddr, String saveEnabled,
-                               String saveDir, String startUp, String ftpes, String allCertificates) {
-        try {
-            this.setProperty("ftp_weburl", ftpWeburl);
-            this.setProperty("ftp_directory", ftpDir);
-            this.setProperty("ftp_port", ftport);
-            this.setProperty("ftp_password", ftpPass);
-            this.setProperty("ftp_user", ftpUser);
-            this.setProperty("ftp_address", ftpAddr);
-            this.setProperty("ftp_enabled", ftpEnabled);
-            this.setProperty("ftpes_enabled", ftpes);
-            this.setProperty("password", srvPass);
-            this.setProperty("port", srvPort);
-            this.setProperty("server_address", srvAddr);
-            this.setProperty("save_enabled", saveEnabled);
-            this.setProperty("save_dir", saveDir);
-            this.setProperty("open_at_startup_enabled", startUp);
-            this.setProperty("accept_all_certificates", allCertificates);
-            this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+	}
 
-            this.ip = this.getProperty("server_address");
-            this.pass = this.getProperty("password");
-            this.ftpEnabled = Boolean.valueOf(this.getProperty("ftp_enabled"));
-            this.port = Integer.parseInt(this.getProperty("port"));
-            this.ftpAddr = this.getProperty("ftp_address");
-            this.ftpUser = this.getProperty("ftp_user");
-            this.ftpPass = this.getProperty("ftp_password");
-            this.ftpPort = Integer.parseInt(this.getProperty("ftp_port"));
-            this.ftpDir = this.getProperty("ftp_directory");
-            this.ftpWebUrl = this.getProperty("ftp_weburl");
-            this.saveEnabled = Boolean.valueOf(this.getProperty("save_enabled"));
-            this.saveDir = this.getProperty("save_dir");
-            this.startUpEnabled = Boolean.valueOf(this.getProperty("open_at_startup_enabled"));
-            this.ftpesEnabled = Boolean.valueOf(this.getProperty("ftpes_enabled"));
-            this.acceptAllCertificates = Boolean.valueOf(this.getProperty("accept_all_certificates"));
+	public boolean getFtpEnabled() {
+		return ftpEnabled;
+	}
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Main.myErr(Arrays.toString(ex.getStackTrace()).replace(",", "\n"));
-        }
+	public String getFtpAddr() {
+		return ftpAddr;
+	}
 
-    }
+	public String getFtpUser() {
+		return ftpUser;
+	}
 
-    public boolean getFtpEnabled() {
-        return ftpEnabled;
-    }
+	public String getFtpPass() {
+		return ftpPass;
+	}
 
-    public String getFtpAddr() {
-        return ftpAddr;
-    }
+	public int getFtpPort() {
+		return ftpPort;
+	}
 
-    public String getFtpUser() {
-        return ftpUser;
-    }
+	public String getFtpDir() {
+		return ftpDir;
+	}
 
-    public String getFtpPass() {
-        return ftpPass;
-    }
+	public String getFtpWebUrl() {
+		return ftpWebUrl;
+	}
 
-    public int getFtpPort() {
-        return ftpPort;
-    }
+	public String getIp() {
+		return ip;
+	}
 
-    public String getFtpDir() {
-        return ftpDir;
-    }
+	public String getPass() {
+		return pass;
+	}
 
-    public String getFtpWebUrl() {
-        return ftpWebUrl;
-    }
+	public int getPort() {
+		return port;
+	}
 
-    public String getIp() {
-        return ip;
-    }
+	public boolean isSaveEnabled() {
+		return saveEnabled;
+	}
 
-    public String getPass() {
-        return pass;
-    }
+	public String getSaveDir() {
+		return saveDir;
+	}
 
-    public int getPort() {
-        return port;
-    }
+	public boolean getFtpesEnabled() {
+		return ftpesEnabled;
+	}
 
-    public boolean isSaveEnabled() {
-        return saveEnabled;
-    }
+	public boolean isStartUpEnabled() {
+		return startUpEnabled;
+	}
 
-    public String getSaveDir() {
-        return saveDir;
-    }
+	public boolean getAcceptAllCertificates() {
+		return acceptAllCertificates;
+	}
 
-    public boolean getFtpesEnabled() {
-        return ftpesEnabled;
-    }
+	public int[] getKeyScreen() {
+		return keyScreen;
+	}
 
-    public boolean isStartUpEnabled() {
-        return startUpEnabled;
-    }
+	public int[] getKeyCScreen() {
+		return keyCScreen;
+	}
 
-    public boolean getAcceptAllCertificates() {
-        return acceptAllCertificates;
-    }
+	public int[] getKeyFile() {
+		return keyFile;
+	}
 
-    public int[] getKeyScreen() {
-        return keyScreen;
-    }
+	public int[] getKeyClipboard() {
+		return keyClip;
+	}
 
-    public int[] getKeyCScreen() {
-        return keyCScreen;
-    }
+	public void setScreenKeys(String comb) {
+		this.setProperty("key_screen", comb);
+		try {
+			this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = this.getProperty("key_screen").split("[+]");
+		this.keyScreen = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyScreen[i] = Integer.parseInt(tmp[i]);
+		}
+	}
 
-    public int[] getKeyFile() {
-        return keyFile;
-    }
+	public void setCScreenKeys(String comb) {
+		this.setProperty("key_cscreen", comb);
+		try {
+			this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = this.getProperty("key_cscreen").split("[+]");
+		this.keyCScreen = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyCScreen[i] = Integer.parseInt(tmp[i]);
+		}
+	}
 
-    public int[] getKeyClipboard() {
-        return keyClip;
-    }
+	public void setFileKeys(String comb) {
+		this.setProperty("key_file", comb);
+		try {
+			this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = this.getProperty("key_file").split("[+]");
+		this.keyFile = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyFile[i] = Integer.parseInt(tmp[i]);
+		}
+	}
 
-    public void setScreenKeys(String comb) {
-        this.setProperty("key_screen", comb);
-        try {
-            this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        tmp = null;
-        tmp = this.getProperty("key_screen").split("[+]");
-        this.keyScreen = new int[tmp.length];
-        for (int i = 0; i < tmp.length; i++) {
-            this.keyScreen[i] = Integer.parseInt(tmp[i]);
-        }
-    }
-
-    public void setCScreenKeys(String comb) {
-        this.setProperty("key_cscreen", comb);
-        try {
-            this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        tmp = null;
-        tmp = this.getProperty("key_cscreen").split("[+]");
-        this.keyCScreen = new int[tmp.length];
-        for (int i = 0; i < tmp.length; i++) {
-            this.keyCScreen[i] = Integer.parseInt(tmp[i]);
-        }
-    }
-
-    public void setFileKeys(String comb) {
-        this.setProperty("key_file", comb);
-        try {
-            this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        tmp = null;
-        tmp = this.getProperty("key_file").split("[+]");
-        this.keyFile = new int[tmp.length];
-        for (int i = 0; i < tmp.length; i++) {
-            this.keyFile[i] = Integer.parseInt(tmp[i]);
-        }
-    }
-
-    public void setClipboardKeys(String comb) {
-        this.setProperty("key_clipboard", comb);
-        try {
-            this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        tmp = null;
-        tmp = this.getProperty("key_clipboard").split("[+]");
-        this.keyClip = new int[tmp.length];
-        for (int i = 0; i < tmp.length; i++) {
-            this.keyClip[i] = Integer.parseInt(tmp[i]);
-        }
-    }
+	public void setClipboardKeys(String comb) {
+		this.setProperty("key_clipboard", comb);
+		try {
+			this.store(new FileOutputStream(Main.so.getInstallDir().getPath() + "//client.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tmp = null;
+		tmp = this.getProperty("key_clipboard").split("[+]");
+		this.keyClip = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++) {
+			this.keyClip[i] = Integer.parseInt(tmp[i]);
+		}
+	}
 
 }
