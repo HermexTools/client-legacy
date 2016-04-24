@@ -24,14 +24,13 @@ public class Main {
 	public static SystemTrayMenu st;
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
-        FileHandler fh = new FileHandler(so.getInstallDir().getPath() + "//KSULog.txt");
-        fh.setFormatter(new SimpleFormatter());
-        log.addHandler(fh);
-        log.setUseParentHandlers(false);
+		FileHandler fh = new FileHandler(so.getInstallDir().getPath() + "//KSULog.txt");
+		fh.setFormatter(new SimpleFormatter());
+		log.addHandler(fh);
+		log.setUseParentHandlers(false);
 		startUpCheck();
 		keyListener = new MyKeyListener();
 		SwingUtilities.invokeLater(() -> st = new SystemTrayMenu());
-
 	}
 
 	private static void startUpChecker(String name, String where, String target, String icon) {
@@ -47,7 +46,7 @@ public class Main {
 			fw.flush();
 			fw.close();
 			myLog("[Main] Shortcut created");
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 			myErr(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 		}
@@ -56,16 +55,16 @@ public class Main {
 	public static void startUpCheck() {
 		myLog("[Main] removing shortcut: " + new File(Main.so.getStartUpFolder(), "KSUploader_autostart.url").delete());
 		if (config.isStartUpEnabled()) {
-			startUpChecker("KSUploader_autostart.url", Main.so.getStartUpFolder(), Main.class.getProtectionDomain().getCodeSource().getLocation().getPath(),"");
+			startUpChecker("KSUploader_autostart.url", Main.so.getStartUpFolder(), Main.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "");
 		}
 	}
 
 	public static void myLog(String s) {
-        System.out.println(s);
-        log.info(s);
+		System.out.println(s);
+		log.info(s);
 	}
 
-	public static void myErr(String s){
+	public static void myErr(String s) {
 		log.severe(s);
 	}
 

@@ -121,25 +121,21 @@ public class MyKeyListener {
                     myLog("[MyKeyListener] Combination released");
 
                     if (keyHashScreen.equals(hashKeyGlobal)) {
-                        System.out.println("Via cattura parziale");
                         clearKeyComb();
                         st.uploadPartialScreen();
                     }
 
                     if (keyHashCScreen.equals(hashKeyGlobal)) {
-                        System.out.println("Via cattura globale");
                         clearKeyComb();
                         st.uploadCompleteScreen();
                     }
 
                     if (keyHashFile.equals(hashKeyGlobal)) {
-                        System.out.println("Via file");
                         clearKeyComb();
                         st.uploadFile();
                     }
 
                     if (keyHashClipboard.equals(hashKeyGlobal)) {
-                        System.out.println("Via clipboard");
                         clearKeyComb();
                         st.uploadClipboard();
                     }
@@ -171,7 +167,7 @@ public class MyKeyListener {
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
-            myLog("Impossibile inizializzare NativeHook");
+            myLog("Unable to initialize NativeHook");
             myLog(ex.getMessage());
         }
 
