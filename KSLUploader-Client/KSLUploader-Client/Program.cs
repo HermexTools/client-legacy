@@ -16,7 +16,9 @@ namespace KSLUploader_Client
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            SystemTray st = new SystemTray();
+            Application.Run();
         }
     }
 }
