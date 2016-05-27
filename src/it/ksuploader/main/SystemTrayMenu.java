@@ -189,7 +189,7 @@ public class SystemTrayMenu {
                 capturing = true;
                 MyScreen partialScreen = new MyScreen();
                 capturing = false;
-                if (partialScreen.isValidScreen()) {
+                if (!partialScreen.isValidScreen()) {
                     Main.dialog.show("Upload Cancelled!", ":(", false);
                     Main.dialog.destroy();
                 } else {

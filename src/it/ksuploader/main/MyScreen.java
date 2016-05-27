@@ -126,6 +126,6 @@ public class MyScreen extends JPanel {
 	}
 
 	public boolean isValidScreen() {
-		return (selectionBounds == null || selectionBounds.width <= 2 || selectionBounds.height <= 2);
+		return !(selectionBounds == null || selectionBounds.width <= 2 || selectionBounds.height <= 2);
 	}
 }
