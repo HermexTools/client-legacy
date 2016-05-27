@@ -27,6 +27,9 @@ public class MyScreen extends JPanel {
 		this.selectionBounds = new Rectangle();
 		JDialog panel = new JDialog();
 
+		panel.setUndecorated(true);
+		panel.setOpacity(0.5f);
+
 		MouseAdapter mouseHandler = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -39,13 +42,6 @@ public class MyScreen extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (startPoint.x + startPoint.y < e.getX() + e.getY()) {
-					selectionBounds.setBounds(startPoint.x++, startPoint.y++, e.getX() - startPoint.x--,
-							e.getY() - startPoint.y--);
-				} else {
-					selectionBounds.setBounds(e.getX() + 1, e.getX() + 1, startPoint.x - e.getX() - 1,
-							startPoint.y - e.getX() - 1);
-				}
 				panel.removeAll();
 				panel.dispose();
 
@@ -123,6 +119,6 @@ public class MyScreen extends JPanel {
 	}
 
 	public boolean isValidScreen() {
-		return (selectionBounds == null || selectionBounds.width <= 2 || selectionBounds.height <= 2);
+		return !(selectionBounds == null || selectionBounds.width <= 2 || selectionBounds.height <= 2);
 	}
 }

@@ -19,7 +19,7 @@ Open KSUploader.jar, right-click on icon in the system tray, settings, and setup
 
 OR
 
-Open and edit the `client.properties` file saved in `Appdata\Roaming\.ksuploader` on Windows, in your user home in the folder `.ksuploader` on Linux, then launch the client again.
+Open and edit the `client.properties` file saved in `Appdata\Roaming\.ksuploader` on Windows, in your user home in the folder `.ksuploader` on Linux or in `~/Library/Application Support/.ksuploader` on OS X, then launch the client again.
 It contains:
 * `server_address`: the address where there is the server, you can use a domain (example.com) or an ip.
 * `password`: the password of the server that will be used during the authentication check.
