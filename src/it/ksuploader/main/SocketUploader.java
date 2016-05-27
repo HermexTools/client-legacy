@@ -104,12 +104,11 @@ public class SocketUploader implements Observer {
 			return false;
 		} finally {
 			try {
-				inChannel.close();
-				aFile.close();
-				dis.close();
-				dos.flush();
-				dos.close();
-				socketChannel.close();
+				if (inChannel != null) inChannel.close();
+				if (aFile != null) aFile.close();
+				if (dis != null) dis.close();
+				if (dos != null && socketChannel != null) dos.close();
+				if (socketChannel != null) socketChannel.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -119,11 +118,11 @@ public class SocketUploader implements Observer {
 
 	public void stopUpload() {
 		try {
-			inChannel.close();
-			aFile.close();
-			dos.close();
-			dis.close();
-			socketChannel.close();
+			if (inChannel != null) inChannel.close();
+			if (aFile != null) aFile.close();
+			if (dos != null && socketChannel != null) dos.close();
+			if (dis != null) dis.close();
+			if (socketChannel != null) socketChannel.close();
 			new File(Main.so.getTempDir(), "KStemp.zip").delete();
 			Main.dialog.show("Stopped...", "", false);
 		} catch (IOException e) {
