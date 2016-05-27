@@ -27,6 +27,9 @@ public class MyScreen extends JPanel {
 		this.selectionBounds = new Rectangle();
 		JDialog panel = new JDialog();
 
+		panel.setUndecorated(true);
+		panel.setOpacity(0.5f);
+
 		MouseAdapter mouseHandler = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
