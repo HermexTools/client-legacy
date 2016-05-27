@@ -5,7 +5,6 @@ import it.ksuploader.main.Main;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -142,14 +141,7 @@ public class PopupDialog extends Observable {
 		messageLabel.setText(message);
 		dialogFrame.setAlwaysOnTop(true);
 
-		if (message.length() > 30) {
-			int width = (message.length() * 6);
-			dialogFrame.setSize(width, 50);
-			dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, width, 50, 20, 20));
-		} else {
-			dialogFrame.setSize(200, 50);
-			dialogFrame.setShape(new RoundRectangle2D.Double(1, 1, 200, 50, 20, 20));
-		}
+		dialogFrame.pack();
 		this.autoPosition();
 	}
 
