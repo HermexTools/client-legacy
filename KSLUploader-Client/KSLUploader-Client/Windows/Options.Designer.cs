@@ -28,17 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Options));
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "KSLU";
-            this.notifyIcon1.Visible = true;
-            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
             // Options
             // 
@@ -47,14 +37,10 @@
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "Options";
             this.Text = "Options";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Options_FormClosing);
-            this.Resize += new System.EventHandler(this.Options_Resize);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }

@@ -15,21 +15,15 @@ namespace KSLUploader_Client.Windows
         public Options()
         {
             InitializeComponent();
-            Hide();
         }
         
+        /*
         private void Options_Resize(object sender, EventArgs e)
         {
             if(FormWindowState.Minimized==WindowState)
             {
                 Hide();
             }
-        }
-
-        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
-        {
-            Show();
-            WindowState = FormWindowState.Normal;
         }
 
         private void Options_FormClosing(object sender, FormClosingEventArgs e)
@@ -39,6 +33,6 @@ namespace KSLUploader_Client.Windows
                 e.Cancel = true;
                 Hide();
             }
-        }
+        }*/
     }
 }

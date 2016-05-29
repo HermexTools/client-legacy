@@ -8,45 +8,65 @@ using KSLUploader_Client.Windows;
 
 namespace KSLUploader_Client
 {
-    static class Program
+    public static class Program
     {
-        /// <summary>
-        /// Punto di ingresso principale dell'applicazione.
-        /// </summary>
+        //punto di ingresso principale dell'applicazione
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MyCustomApplicationContext());
+            Application.Run(new ProgramContext());
         }
     }
 
-    public class MyCustomApplicationContext : ApplicationContext
+    public class ProgramContext : ApplicationContext
     {
         private NotifyIcon trayIcon;
 
-        public MyCustomApplicationContext()
+        public ProgramContext()
         {
 
-            Bitmap mybitmap = Properties.Resources.AppIcon;
-            
-            // Initialize Tray Icon
-            trayIcon = new NotifyIcon()
+            //inizializzazione della tray icon
+            trayIcon = new NotifyIcon();
+
+            //nome dell'icona
+            trayIcon.Text = "KSLU";
+
+            //icona
+            trayIcon.Icon = Icon.FromHandle(Properties.Resources.AppIcon.GetHicon());
+
+            //menu contestuale dell'icona
+            trayIcon.ContextMenu = new ContextMenu(new MenuItem[]
             {
-                Icon = Icon.FromHandle(mybitmap.GetHicon()),
-                ContextMenu = new ContextMenu(new MenuItem[] {
+                new MenuItem("Settings", Settings),
                 new MenuItem("Exit", Exit)
-            }),
-                Visible = true
-            };
+            });
+
+            //faccio cose se clicco 2 volte sull'icona
+            trayIcon.MouseDoubleClick += MouseClick;
+
+            //rendi visibile l'icona
+            trayIcon.Visible = true;
         }
 
-        void Exit(object sender, EventArgs e)
+        private void MouseClick(object sender, MouseEventArgs e)
         {
-            // Hide tray icon, otherwise it will remain shown until user mouses over it
+            MessageBox.Show("Hai cliccato 1 volta sull'icona! Woooooo");            
+        }
+        
+        private void Settings(object sender, EventArgs e)
+        {
+            //apro la finestra delle impostazioni
+            new Options().ShowDialog();
+        }
+
+        private void Exit(object sender, EventArgs e)
+        {
+            //nascondo l'icona dal tray, altrimenti rimane lì fino a quando non ci si passa col mouse
             trayIcon.Visible = false;
 
+            //chiudo l'applicazione
             Application.Exit();
         }
     }
