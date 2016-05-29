@@ -37,11 +37,15 @@ namespace KSLUploader_Client
             trayIcon.Icon = Icon.FromHandle(Properties.Resources.AppIcon.GetHicon());
 
             //menu contestuale dell'icona
-            trayIcon.ContextMenu = new ContextMenu(new MenuItem[]
-            {
-                new MenuItem("Settings", Settings),
-                new MenuItem("Exit", Exit)
-            });
+            ContextMenuStrip smenu = new ContextMenuStrip();
+            smenu.Items.Add("KSLU v0.0.1 Beta", null, null);
+            smenu.Items.Add("-");
+            smenu.Items.Add("Settings", Properties.Resources.Settings, Settings);
+            smenu.Items.Add("-");
+            smenu.Items.Add("Quit",Properties.Resources.Quit, Quit);
+
+            smenu.Items[0].Enabled = false;
+            trayIcon.ContextMenuStrip = smenu;
 
             //faccio cose se clicco 2 volte sull'icona
             trayIcon.MouseDoubleClick += MouseClick;
@@ -49,25 +53,43 @@ namespace KSLUploader_Client
             //rendi visibile l'icona
             trayIcon.Visible = true;
         }
-
+                
         private void MouseClick(object sender, MouseEventArgs e)
         {
-            MessageBox.Show("Hai cliccato 1 volta sull'icona! Woooooo");            
+            MessageBox.Show("Hai cliccato 2 volte sull'icona! Woooooo");            
         }
         
         private void Settings(object sender, EventArgs e)
         {
-            //apro la finestra delle impostazioni
-            new Options().ShowDialog();
+            if(!CheckFormIsOpened("Settings"))
+            {
+                //apro la finestra delle impostazioni
+                new Settings().ShowDialog();
+            }
         }
 
-        private void Exit(object sender, EventArgs e)
+        private void Quit(object sender, EventArgs e)
         {
             //nascondo l'icona dal tray, altrimenti rimane lì fino a quando non ci si passa col mouse
             trayIcon.Visible = false;
 
             //chiudo l'applicazione
             Application.Exit();
+        }
+
+        private bool CheckFormIsOpened(string name)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach(Form frm in fc)
+            {
+                if(frm.Text == name)
+                {
+                    frm.Focus();
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
