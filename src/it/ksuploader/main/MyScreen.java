@@ -85,7 +85,7 @@ public class MyScreen extends JPanel {
 		panel.setModal(true);
 		panel.setUndecorated(true);
 		panel.setOpacity(0.5f);
-		panel.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(MyScreen.class.getResource("/res/cursor.png").getFile()),
+		panel.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(MyScreen.class.getResource("/cursor.png")).getImage(),
 				new Point(16, 16),
 				"img"));
 		panel.setBackground(new Color(0, 0, 0, 0));

@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class Sound extends Thread {
 
-	private static final URL clickUrl = Sound.class.getResource("/res/complete.wav");
+	private static final URL clickUrl = Sound.class.getResource("/complete.wav");
 
 	public Sound() {
 	}
