@@ -6,3 +6,12 @@ C:\Users\Sergio\Source\Repos\KSUploader-client\KSLUploader-Client\KSLUploader-Cl
 C:\Users\Sergio\Source\Repos\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.csproj.GenerateResource.Cache
 C:\Users\Sergio\Source\Repos\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.exe
 C:\Users\Sergio\Source\Repos\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.pdb
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\bin\Debug\KSLUploader-Client.exe.config
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.exe
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.pdb
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\bin\Debug\KSLUploader-Client.exe
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\bin\Debug\KSLUploader-Client.pdb
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.csprojResolveAssemblyReference.cache
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader_Client.Properties.Resources.resources
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader-Client.csproj.GenerateResource.Cache
+C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-Client\KSLUploader-Client\obj\Debug\KSLUploader_Client.Windows.Options.resources
