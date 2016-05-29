@@ -70,7 +70,7 @@ public class SystemTrayMenu {
             try {
                 clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                 SystemTray systemTray = getSystemTray();
-                trayIcon = new TrayIcon(new ImageIcon(getClass().getResource("/res/icon.png")).getImage(), "KSUploader");
+                trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(SystemTrayMenu.class.getResource("/res/icon.png").getFile()), "KSUploader");
                 trayIcon.setImageAutoSize(true);
 
                 popupMenu = new PopupMenu();

@@ -27,12 +27,10 @@ public class MyScreen extends JPanel {
 		this.selectionBounds = new Rectangle();
 		JDialog panel = new JDialog();
 
-		panel.setUndecorated(true);
-		panel.setOpacity(0.5f);
-
 		MouseAdapter mouseHandler = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+
 			}
 
 			@Override
@@ -44,6 +42,10 @@ public class MyScreen extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				panel.removeAll();
 				panel.dispose();
+				if(SwingUtilities.isRightMouseButton(e)){
+					Main.myLog("Right click pressed during selection");
+					selectionBounds = null;
+				}
 
 			}
 
@@ -82,7 +84,8 @@ public class MyScreen extends JPanel {
 		panel.addKeyListener(keyHandler);
 		panel.setModal(true);
 		panel.setUndecorated(true);
-		panel.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(getClass().getResource("/res/cursor.png")).getImage(),
+		panel.setOpacity(0.5f);
+		panel.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(MyScreen.class.getResource("/res/cursor.png").getFile()),
 				new Point(16, 16),
 				"img"));
 		panel.setBackground(new Color(0, 0, 0, 0));
