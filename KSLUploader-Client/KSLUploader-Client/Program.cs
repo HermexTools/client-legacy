@@ -10,7 +10,7 @@ namespace KSLUploader_Client
 {
     public static class Program
     {
-        //punto di ingresso principale dell'applicazione
+        //application entry point
         [STAThread]
         static void Main()
         {
@@ -26,17 +26,16 @@ namespace KSLUploader_Client
 
         public ProgramContext()
         {
-
-            //inizializzazione della tray icon
+            //tray icon initialization
             trayIcon = new NotifyIcon();
 
-            //nome dell'icona
+            //tray icon name
             trayIcon.Text = "KSLU";
 
-            //icona
+            //tray icon image
             trayIcon.Icon = Icon.FromHandle(Properties.Resources.AppIcon.GetHicon());
 
-            //menu contestuale dell'icona
+            //tray icon context menu
             ContextMenuStrip smenu = new ContextMenuStrip();
             smenu.Items.Add("KSLU v0.0.1 Beta", null, null);
             smenu.Items.Add("-");
@@ -47,33 +46,33 @@ namespace KSLUploader_Client
             smenu.Items[0].Enabled = false;
             trayIcon.ContextMenuStrip = smenu;
 
-            //faccio cose se clicco 2 volte sull'icona
+            //tray icon double click event
             trayIcon.MouseDoubleClick += MouseClick;
 
-            //rendi visibile l'icona
+            //show the tray icon
             trayIcon.Visible = true;
         }
                 
         private void MouseClick(object sender, MouseEventArgs e)
         {
-            MessageBox.Show("Hai cliccato 2 volte sull'icona! Woooooo");            
+            MessageBox.Show("Double click! Woooooo");            
         }
         
         private void Settings(object sender, EventArgs e)
         {
             if(!CheckFormIsOpened("Settings"))
             {
-                //apro la finestra delle impostazioni
+                //open the settings window
                 new Settings().ShowDialog();
             }
         }
 
         private void Quit(object sender, EventArgs e)
         {
-            //nascondo l'icona dal tray, altrimenti rimane lì fino a quando non ci si passa col mouse
+            //cleanup so that the icon will be removed when the application is closed
             trayIcon.Visible = false;
 
-            //chiudo l'applicazione
+            //close app
             Application.Exit();
         }
 
