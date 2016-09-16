@@ -130,8 +130,13 @@ namespace KSLUploader_Client
         private void CaptureDesktop()
         {
             //Thread.Sleep(250);
-            
 
+            Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            using(Graphics g = Graphics.FromImage(bmp))
+            {
+                g.CopyFromScreen(0, 0, 0, 0, Screen.PrimaryScreen.Bounds.Size);
+                bmp.Save("screenshot_"+DateTime.Now.Ticks+".png");  // saves the image
+            }
         }
 
         #endregion
