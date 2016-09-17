@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -34,6 +35,19 @@ namespace KSLUploader_Client
             //tray icon image
             trayIcon.Icon = Icon.FromHandle(Properties.Resources.AppIcon.GetHicon());
 
+
+            //monitors submenu
+            ToolStripMenuItem monitors = new ToolStripMenuItem("Capture Monitor");
+            int i = 1;
+            foreach(var screen in Screen.AllScreens)
+            {
+                string monitor = i + ". " + screen.Bounds.Width + "x" + screen.Bounds.Height;
+
+                monitors.DropDownItems.Add(monitor,null,delegate { CaptureScreen(screen); });
+                i++;
+            }
+
+
             //tray icon context menu
             ContextMenuStrip smenu = new ContextMenuStrip();
             smenu.Items.Add("KSLU v0.0.1 Beta", null, null);
@@ -41,6 +55,7 @@ namespace KSLUploader_Client
             smenu.Items.Add("-");
 
             smenu.Items.Add("Capture Desktop", null, CaptureDesktopEvent);
+            smenu.Items.Add(monitors);
 
             smenu.Items.Add("-");
             smenu.Items.Add("Settings", Properties.Resources.Settings, Settings);
@@ -49,7 +64,7 @@ namespace KSLUploader_Client
 
             //disable first element in menu
             smenu.Items[0].Enabled = false;
-
+            
             //add context menu on tray icon
             trayIcon.ContextMenuStrip = smenu;
 
@@ -57,11 +72,11 @@ namespace KSLUploader_Client
             trayIcon.MouseDoubleClick += TrayIconDoubleClick;
 
             //show the tray icon
-            trayIcon.Visible = true;
+            trayIcon.Visible = true;            
         }
-        
+
         #region TRAYICON EVENTS
-        
+
         private void TrayIconDoubleClick(object sender, MouseEventArgs e)
         {
             CaptureDesktop();
@@ -127,15 +142,23 @@ namespace KSLUploader_Client
 
         #region PROGRAM EVENTS
 
+        private void CaptureScreen(Screen screen)
+        {
+            Bitmap bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
+            using(Graphics g = Graphics.FromImage(bmp))
+            {
+                g.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size);
+                bmp.Save("screenshot_" + DateTime.Now.Ticks + ".png");
+            }
+        }
+
         private void CaptureDesktop()
         {
-            //Thread.Sleep(250);
-
             Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             using(Graphics g = Graphics.FromImage(bmp))
             {
                 g.CopyFromScreen(0, 0, 0, 0, Screen.PrimaryScreen.Bounds.Size);
-                bmp.Save("screenshot_"+DateTime.Now.Ticks+".png");  // saves the image
+                bmp.Save("screenshot_"+DateTime.Now.Ticks+".png");
             }
         }
 
