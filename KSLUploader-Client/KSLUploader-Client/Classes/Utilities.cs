@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KSLUploader_Client.Tools
+namespace KSLUploader.Tools
 {
     public class Utilities
     {

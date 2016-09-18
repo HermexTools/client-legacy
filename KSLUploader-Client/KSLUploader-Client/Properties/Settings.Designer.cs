@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KSLUploader_client.Properties
+namespace KSLUploader.Properties
 {
 
 
