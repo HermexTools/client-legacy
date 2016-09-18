@@ -53,6 +53,9 @@
             this.splitContainer7 = new System.Windows.Forms.SplitContainer();
             this.ftp_certificate = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.save_image = new System.Windows.Forms.CheckBox();
             this.open_startup = new System.Windows.Forms.CheckBox();
@@ -77,9 +80,18 @@
             this.splitContainer14 = new System.Windows.Forms.SplitContainer();
             this.label13 = new System.Windows.Forms.Label();
             this.shortcut_clipboard = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.splitContainer15 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer16 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer17 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer18 = new System.Windows.Forms.SplitContainer();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -109,6 +121,9 @@
             this.splitContainer7.Panel2.SuspendLayout();
             this.splitContainer7.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer8)).BeginInit();
             this.splitContainer8.Panel1.SuspendLayout();
@@ -138,7 +153,19 @@
             this.splitContainer14.Panel1.SuspendLayout();
             this.splitContainer14.Panel2.SuspendLayout();
             this.splitContainer14.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer15)).BeginInit();
+            this.splitContainer15.Panel2.SuspendLayout();
+            this.splitContainer15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer16)).BeginInit();
+            this.splitContainer16.Panel2.SuspendLayout();
+            this.splitContainer16.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer17)).BeginInit();
+            this.splitContainer17.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer18)).BeginInit();
+            this.splitContainer18.SuspendLayout();
             this.SuspendLayout();
             // 
             // use_ftp
@@ -179,7 +206,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(286, 266);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(364, 255);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
             // splitContainer1
@@ -220,7 +247,7 @@
             this.ftp_address.Location = new System.Drawing.Point(0, 5);
             this.ftp_address.Margin = new System.Windows.Forms.Padding(0);
             this.ftp_address.Name = "ftp_address";
-            this.ftp_address.Size = new System.Drawing.Size(192, 20);
+            this.ftp_address.Size = new System.Drawing.Size(196, 20);
             this.ftp_address.TabIndex = 0;
             // 
             // splitContainer2
@@ -261,7 +288,7 @@
             this.ftp_port.Location = new System.Drawing.Point(0, 5);
             this.ftp_port.Margin = new System.Windows.Forms.Padding(0);
             this.ftp_port.Name = "ftp_port";
-            this.ftp_port.Size = new System.Drawing.Size(192, 20);
+            this.ftp_port.Size = new System.Drawing.Size(196, 20);
             this.ftp_port.TabIndex = 0;
             // 
             // splitContainer3
@@ -302,7 +329,7 @@
             this.ftp_directory.Location = new System.Drawing.Point(0, 5);
             this.ftp_directory.Margin = new System.Windows.Forms.Padding(0);
             this.ftp_directory.Name = "ftp_directory";
-            this.ftp_directory.Size = new System.Drawing.Size(192, 20);
+            this.ftp_directory.Size = new System.Drawing.Size(196, 20);
             this.ftp_directory.TabIndex = 0;
             // 
             // splitContainer4
@@ -343,7 +370,7 @@
             this.ftp_weburl.Location = new System.Drawing.Point(0, 5);
             this.ftp_weburl.Margin = new System.Windows.Forms.Padding(0);
             this.ftp_weburl.Name = "ftp_weburl";
-            this.ftp_weburl.Size = new System.Drawing.Size(192, 20);
+            this.ftp_weburl.Size = new System.Drawing.Size(196, 20);
             this.ftp_weburl.TabIndex = 0;
             // 
             // splitContainer5
@@ -384,7 +411,7 @@
             this.ftp_user.Location = new System.Drawing.Point(0, 5);
             this.ftp_user.Margin = new System.Windows.Forms.Padding(0);
             this.ftp_user.Name = "ftp_user";
-            this.ftp_user.Size = new System.Drawing.Size(192, 20);
+            this.ftp_user.Size = new System.Drawing.Size(196, 20);
             this.ftp_user.TabIndex = 0;
             // 
             // splitContainer6
@@ -425,7 +452,7 @@
             this.ftp_password.Location = new System.Drawing.Point(0, 5);
             this.ftp_password.Margin = new System.Windows.Forms.Padding(0);
             this.ftp_password.Name = "ftp_password";
-            this.ftp_password.Size = new System.Drawing.Size(192, 20);
+            this.ftp_password.Size = new System.Drawing.Size(196, 20);
             this.ftp_password.TabIndex = 0;
             // 
             // splitContainer7
@@ -458,20 +485,55 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(584, 311);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(384, 332);
             this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(378, 287);
+            this.tabControl1.TabIndex = 7;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.flowLayoutPanel1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(370, 261);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "FTP";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.flowLayoutPanel2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(370, 261);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Socket";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel2
             // 
@@ -486,9 +548,9 @@
             this.flowLayoutPanel2.Controls.Add(this.splitContainer14);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(295, 3);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(286, 266);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(364, 255);
             this.flowLayoutPanel2.TabIndex = 5;
             // 
             // save_image
@@ -551,7 +613,7 @@
             this.server_address.Location = new System.Drawing.Point(0, 5);
             this.server_address.Margin = new System.Windows.Forms.Padding(0);
             this.server_address.Name = "server_address";
-            this.server_address.Size = new System.Drawing.Size(192, 20);
+            this.server_address.Size = new System.Drawing.Size(196, 20);
             this.server_address.TabIndex = 0;
             // 
             // splitContainer9
@@ -592,7 +654,7 @@
             this.server_password.Location = new System.Drawing.Point(0, 5);
             this.server_password.Margin = new System.Windows.Forms.Padding(0);
             this.server_password.Name = "server_password";
-            this.server_password.Size = new System.Drawing.Size(192, 20);
+            this.server_password.Size = new System.Drawing.Size(196, 20);
             this.server_password.TabIndex = 0;
             // 
             // splitContainer10
@@ -633,7 +695,7 @@
             this.server_port.Location = new System.Drawing.Point(0, 5);
             this.server_port.Margin = new System.Windows.Forms.Padding(0);
             this.server_port.Name = "server_port";
-            this.server_port.Size = new System.Drawing.Size(192, 20);
+            this.server_port.Size = new System.Drawing.Size(196, 20);
             this.server_port.TabIndex = 0;
             // 
             // splitContainer11
@@ -808,15 +870,26 @@
             this.shortcut_clipboard.Text = "Change";
             this.shortcut_clipboard.UseVisualStyleBackColor = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.tableLayoutPanel2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(370, 261);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Shortcuts";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
             // flowLayoutPanel3
             // 
-            this.flowLayoutPanel3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.flowLayoutPanel3.AutoSize = true;
             this.flowLayoutPanel3.Controls.Add(this.okButton);
             this.flowLayoutPanel3.Controls.Add(this.cancelButton);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(419, 277);
+            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 296);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(162, 29);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(378, 33);
             this.flowLayoutPanel3.TabIndex = 6;
             // 
             // okButton
@@ -839,12 +912,101 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.splitContainer15, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.splitContainer16, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.splitContainer17, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.splitContainer18, 0, 3);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(68, 30);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 4;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 191);
+            this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // splitContainer15
+            // 
+            this.splitContainer15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer15.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer15.Name = "splitContainer15";
+            // 
+            // splitContainer15.Panel2
+            // 
+            this.splitContainer15.Panel2.Controls.Add(this.button1);
+            this.splitContainer15.Size = new System.Drawing.Size(194, 50);
+            this.splitContainer15.SplitterDistance = 42;
+            this.splitContainer15.TabIndex = 0;
+            // 
+            // splitContainer16
+            // 
+            this.splitContainer16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer16.Location = new System.Drawing.Point(3, 59);
+            this.splitContainer16.Name = "splitContainer16";
+            // 
+            // splitContainer16.Panel2
+            // 
+            this.splitContainer16.Panel2.Controls.Add(this.button2);
+            this.splitContainer16.Size = new System.Drawing.Size(194, 50);
+            this.splitContainer16.SplitterDistance = 42;
+            this.splitContainer16.TabIndex = 1;
+            // 
+            // splitContainer17
+            // 
+            this.splitContainer17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer17.Location = new System.Drawing.Point(3, 115);
+            this.splitContainer17.Name = "splitContainer17";
+            this.splitContainer17.Size = new System.Drawing.Size(194, 37);
+            this.splitContainer17.SplitterDistance = 64;
+            this.splitContainer17.TabIndex = 2;
+            // 
+            // splitContainer18
+            // 
+            this.splitContainer18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer18.Location = new System.Drawing.Point(3, 158);
+            this.splitContainer18.Name = "splitContainer18";
+            this.splitContainer18.Size = new System.Drawing.Size(194, 30);
+            this.splitContainer18.SplitterDistance = 64;
+            this.splitContainer18.TabIndex = 3;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(43, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(53, 20);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(370, 261);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "General";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(584, 311);
+            this.ClientSize = new System.Drawing.Size(384, 332);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -897,6 +1059,9 @@
             this.splitContainer7.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.splitContainer8.Panel1.ResumeLayout(false);
@@ -941,7 +1106,19 @@
             this.splitContainer14.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer14)).EndInit();
             this.splitContainer14.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.splitContainer15.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer15)).EndInit();
+            this.splitContainer15.ResumeLayout(false);
+            this.splitContainer16.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer16)).EndInit();
+            this.splitContainer16.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer17)).EndInit();
+            this.splitContainer17.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer18)).EndInit();
+            this.splitContainer18.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -998,5 +1175,17 @@
         private System.Windows.Forms.SplitContainer splitContainer14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button shortcut_clipboard;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.SplitContainer splitContainer15;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.SplitContainer splitContainer16;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.SplitContainer splitContainer17;
+        private System.Windows.Forms.SplitContainer splitContainer18;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -8,26 +7,19 @@ using KSLUploader_Client.Windows;
 
 namespace KSLUploader_Client
 {
-    public static class Program
-    {
-        //application entry point
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ProgramContext());
-        }
-    }
-
-    public class ProgramContext : ApplicationContext
+    public class SystemTray : ApplicationContext
     {
         private NotifyIcon trayIcon;
 
-        public ProgramContext()
+        private Settings settingsPanel;
+
+        public SystemTray()
         {
             //tray icon initialization
             trayIcon = new NotifyIcon();
+
+            //settings panel instantiation
+            this.settingsPanel = new Settings();
 
             //tray icon name
             trayIcon.Text = "KSLU";
@@ -39,11 +31,11 @@ namespace KSLUploader_Client
             //monitors submenu
             ToolStripMenuItem monitors = new ToolStripMenuItem("Capture Monitor");
             int i = 1;
-            foreach(var screen in Screen.AllScreens)
+            foreach (var screen in Screen.AllScreens)
             {
                 string monitor = i + ". " + screen.Bounds.Width + "x" + screen.Bounds.Height;
 
-                monitors.DropDownItems.Add(monitor,null,delegate { CaptureScreen(screen); });
+                monitors.DropDownItems.Add(monitor, null, delegate { CaptureScreen(screen); });
                 i++;
             }
 
@@ -64,7 +56,7 @@ namespace KSLUploader_Client
 
             //disable first element in menu
             smenu.Items[0].Enabled = false;
-            
+
             //add context menu on tray icon
             trayIcon.ContextMenuStrip = smenu;
 
@@ -72,7 +64,7 @@ namespace KSLUploader_Client
             trayIcon.MouseDoubleClick += TrayIconDoubleClick;
 
             //show the tray icon
-            trayIcon.Visible = true;            
+            trayIcon.Visible = true;
         }
 
         #region TRAYICON EVENTS
@@ -122,10 +114,10 @@ namespace KSLUploader_Client
 
         private void Settings(object sender, EventArgs e)
         {
-            if(!Utilities.CheckFormIsOpened("Settings"))
+            if (!Utilities.CheckFormIsOpened("Settings"))
             {
                 //open the settings window
-                new Settings().ShowDialog();
+                this.settingsPanel.ShowDialog();
             }
         }
 
@@ -145,7 +137,7 @@ namespace KSLUploader_Client
         private void CaptureScreen(Screen screen)
         {
             Bitmap bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
-            using(Graphics g = Graphics.FromImage(bmp))
+            using (Graphics g = Graphics.FromImage(bmp))
             {
                 g.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size);
                 bmp.Save("screenshot_" + DateTime.Now.Ticks + ".png");
@@ -155,10 +147,10 @@ namespace KSLUploader_Client
         private void CaptureDesktop()
         {
             Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-            using(Graphics g = Graphics.FromImage(bmp))
+            using (Graphics g = Graphics.FromImage(bmp))
             {
                 g.CopyFromScreen(0, 0, 0, 0, Screen.PrimaryScreen.Bounds.Size);
-                bmp.Save("screenshot_"+DateTime.Now.Ticks+".png");
+                bmp.Save("screenshot_" + DateTime.Now.Ticks + ".png");
             }
         }
 
