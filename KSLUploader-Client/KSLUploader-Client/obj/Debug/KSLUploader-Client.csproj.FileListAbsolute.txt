@@ -1,2 +1,0 @@
-C:\Users\LucaFisso\Desktop\KSLUploader-client\KSLUploader-client\bin\Debug\KSLUploader-client.exe.config
-C:\Users\LucaFisso\Documents\GitHub\KSUploader-client\KSLUploader-client\KSLUploader-client\bin\Debug\KSLUploader-client.exe.config
