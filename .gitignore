@@ -47,5 +47,5 @@ out/
 .idea/
 *.iml
 
-#KSLUploader-client/KSLUploader-client/bin/
-#KSLUploader-client/KSLUploader-client/obj/
+KSLUploader-client/KSLUploader-client/bin/
+KSLUploader-client/KSLUploader-client/obj/
