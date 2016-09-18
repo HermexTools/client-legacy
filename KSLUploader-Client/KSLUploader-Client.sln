@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSLUploader-Client", "KSLUploader-Client\KSLUploader-Client.csproj", "{F227303F-EE4C-49C7-AEDB-CAD8786DD68C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSLUploader-client", "KSLUploader-client\KSLUploader-client.csproj", "{06B228D4-9D54-4629-8BCE-AD2110390C02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F227303F-EE4C-49C7-AEDB-CAD8786DD68C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F227303F-EE4C-49C7-AEDB-CAD8786DD68C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F227303F-EE4C-49C7-AEDB-CAD8786DD68C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F227303F-EE4C-49C7-AEDB-CAD8786DD68C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06B228D4-9D54-4629-8BCE-AD2110390C02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B228D4-9D54-4629-8BCE-AD2110390C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B228D4-9D54-4629-8BCE-AD2110390C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B228D4-9D54-4629-8BCE-AD2110390C02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
