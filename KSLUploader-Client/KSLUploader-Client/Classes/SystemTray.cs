@@ -11,7 +11,7 @@ namespace KSLUploader
         {
             trayIcon = new NotifyIcon();
             trayIcon.Text = "KSLUploader";
-            trayIcon.Icon = KSLUploader.Properties.Resources.AppIcon;
+            trayIcon.Icon = Properties.Resources.AppIcon;
             trayIcon.MouseDoubleClick += onDoubleClick;
 
             trayIcon.ContextMenuStrip = buildMenu();

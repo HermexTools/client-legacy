@@ -7,7 +7,7 @@
     <ProjectGuid>{06B228D4-9D54-4629-8BCE-AD2110390C02}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KSLUploader_client</RootNamespace>
+    <RootNamespace>KSLUploader</RootNamespace>
     <AssemblyName>KSLUploader-client</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
