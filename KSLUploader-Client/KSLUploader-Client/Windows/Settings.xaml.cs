@@ -23,6 +23,14 @@ namespace KSLUploader.Windows
         public Settings()
         {
             InitializeComponent();
+
+            saveButton.Click += SaveButton_Click;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            //todo: save settings
+            this.Hide();
         }
 
         protected override void OnClosing(CancelEventArgs e)

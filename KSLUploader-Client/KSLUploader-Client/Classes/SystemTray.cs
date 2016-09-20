@@ -59,8 +59,11 @@ namespace KSLUploader
 
         private void SettingsEvent(object sender, EventArgs e)
         {
-            var settingsWindow = new Settings();
-            settingsWindow.Show();
+            if(!App.IsWindowOpen<Settings>())
+            {
+                var settingsWindow = new Settings();
+                settingsWindow.Show();
+            }
         }
 
         private void QuitEvent(object sender, EventArgs e)

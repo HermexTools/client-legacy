@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KSLUploader.Windows"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="300">
+        Title="Settings" Height="350" Width="500" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -37,7 +37,7 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <Button Content="Save" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Width="55" Grid.Row="1" />
+        <Button x:Name="saveButton" Content="Save" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Width="55" Grid.Row="1" />
 
     </Grid>
 </Window>
