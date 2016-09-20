@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using KSLUploader.Windows;
 
@@ -41,7 +42,7 @@ namespace KSLUploader.Classes
             trayMenu.Items.Add(recentItems);            
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Capture Area", Properties.Resources.Area);
-            trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop);
+            trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop, delegate { CaptureDesktop(); });
             trayMenu.Items.Add("Upload File", Properties.Resources.File);
             trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard);
             trayMenu.Items.Add("-");
@@ -74,7 +75,16 @@ namespace KSLUploader.Classes
 
         private void onDoubleClick(object sender, MouseEventArgs e)
         {
-            Console.Write("HELLO WORLD!");
+            CaptureDesktop();
+        }
+
+        #endregion
+
+        #region PROGRAM EVENTS
+
+        private void CaptureDesktop()
+        {
+            Screenshot.CaptureDesktop();
         }
 
         #endregion
