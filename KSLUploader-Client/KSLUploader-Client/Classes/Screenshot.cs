@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace KSLUploader.Classes
 {
     public class Screenshot
     {
-        public static void CaptureDesktop()
+        public static string CaptureDesktop()
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
 
@@ -21,7 +22,7 @@ namespace KSLUploader.Classes
             }
 
             Bitmap image = JoinBitmaps(bitmaps);
-            image.Save("screenshot_" + DateTime.Now.Ticks + ".png");
+            return SaveBitmap(image);
         }
         
 
@@ -68,6 +69,13 @@ namespace KSLUploader.Classes
             }
 
             return outputImage;
+        }
+
+        private static FileInfo SaveBitmap(Bitmap bitmap)
+        {
+            FileInfo f = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".png"));
+            bitmap.Save(f.FullName);
+            return f;
         }
     }
 }

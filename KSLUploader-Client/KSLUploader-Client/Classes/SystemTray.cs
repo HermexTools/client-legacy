@@ -84,7 +84,8 @@ namespace KSLUploader.Classes
 
         private void CaptureDesktop()
         {
-            Screenshot.CaptureDesktop();
+            string path = Screenshot.CaptureDesktop();
+
         }
 
         #endregion
