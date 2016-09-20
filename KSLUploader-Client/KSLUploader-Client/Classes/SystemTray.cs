@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using KSLUploader.Windows;
 
-namespace KSLUploader
+namespace KSLUploader.Classes
 {
     public class SystemTray
     {
