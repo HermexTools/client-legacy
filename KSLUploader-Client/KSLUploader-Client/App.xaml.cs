@@ -23,7 +23,8 @@ namespace KSLUploader
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
                 MessageBox.Show("KSLUploader is already running.", "Error");
-                Current.Shutdown();
+                ExitApplication();
+                return;
             }
 
             base.OnStartup(e);

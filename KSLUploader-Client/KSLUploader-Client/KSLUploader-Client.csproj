@@ -64,8 +64,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\SystemTray.cs" />
+    <Compile Include="Windows\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -117,6 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Windows\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

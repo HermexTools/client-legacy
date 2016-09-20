@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using KSLUploader.Windows;
 
 namespace KSLUploader
 {
@@ -44,17 +45,25 @@ namespace KSLUploader
             trayMenu.Items.Add("Upload File", Properties.Resources.File);
             trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Settings", Properties.Resources.Settings);
+            trayMenu.Items.Add("Settings", Properties.Resources.Settings, SettingsEvent);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Quit", Properties.Resources.Quit, Quit);
+            trayMenu.Items.Add("Quit", Properties.Resources.Quit, QuitEvent);
 
             //return menu
             return trayMenu;
         }
 
+
+
         #region SYSTEMTRAY EVENTS
 
-        private void Quit(object sender, EventArgs e)
+        private void SettingsEvent(object sender, EventArgs e)
+        {
+            var settingsWindow = new Settings();
+            settingsWindow.Show();
+        }
+
+        private void QuitEvent(object sender, EventArgs e)
         {
             trayIcon.Dispose();
             App.ExitApplication();
