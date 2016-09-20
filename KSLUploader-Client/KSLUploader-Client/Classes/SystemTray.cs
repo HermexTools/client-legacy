@@ -10,40 +10,49 @@ namespace KSLUploader
         public SystemTray()
         {
             trayIcon = new NotifyIcon();
+
+            //trayicon name
             trayIcon.Text = "KSLUploader";
+
+            //trayicon icon
             trayIcon.Icon = Properties.Resources.AppIcon;
+
+            //trayicon doubleclick event
             trayIcon.MouseDoubleClick += onDoubleClick;
 
+            //trayicon menu
             trayIcon.ContextMenuStrip = buildMenu();
 
+            //show trayicon
             trayIcon.Visible = true;
         }
 
         private ContextMenuStrip buildMenu()
         {
+            //sub menu -> recent items
+            ToolStripMenuItem recentItems = new ToolStripMenuItem("Recent Items");
+            recentItems.DropDownItems.Add("No items").Enabled = false;
+
+            //main menu
             ContextMenuStrip trayMenu = new ContextMenuStrip();
-            trayMenu.Items.Add("KSLUploader v0.0.2 Beta", null, null);
-            trayMenu.Items.Add("Recent Items", null);
-
+            trayMenu.Items.Add("KSLUploader v0.0.2 Beta", null, null).Enabled = false;
             trayMenu.Items.Add("-");
+            trayMenu.Items.Add(recentItems);            
             trayMenu.Items.Add("-");
-
-            trayMenu.Items.Add("Capture Area", null);
-            trayMenu.Items.Add("Capture Desktop", null);
-            trayMenu.Items.Add("Upload File", null);
-            trayMenu.Items.Add("Upload Clipboard", null);
-
+            trayMenu.Items.Add("Capture Area", Properties.Resources.Area);
+            trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop);
+            trayMenu.Items.Add("Upload File", Properties.Resources.File);
+            trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Settings");
+            trayMenu.Items.Add("Settings", Properties.Resources.Settings);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Quit", KSLUploader.Properties.Resources.Quit, Quit) ;
+            trayMenu.Items.Add("Quit", Properties.Resources.Quit, Quit);
 
-            //disable first and second element in menu
-            trayMenu.Items[0].Enabled = false;
-            trayMenu.Items[1].Enabled = false;
-
+            //return menu
             return trayMenu;
         }
+
+        #region SYSTEMTRAY EVENTS
 
         private void Quit(object sender, EventArgs e)
         {
@@ -55,5 +64,7 @@ namespace KSLUploader
         {
             Console.Write("HELLO WORLD!");
         }
+
+        #endregion
     }
 }
