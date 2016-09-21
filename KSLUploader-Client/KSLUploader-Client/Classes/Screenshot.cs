@@ -12,7 +12,7 @@ namespace KSLUploader.Classes
 {
     public class Screenshot
     {
-        public static string CaptureDesktop()
+        public static FileInfo CaptureDesktop()
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
 

@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using KSLUploader.Windows;
+using System.IO;
+using KSLUploader.Classes.Uploaders;
 
 namespace KSLUploader.Classes
 {
@@ -41,7 +43,7 @@ namespace KSLUploader.Classes
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);            
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Capture Area", Properties.Resources.Area);
+            trayMenu.Items.Add("Capture Area", Properties.Resources.Area, delegate { CaptureArea(); });
             trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop, delegate { CaptureDesktop(); });
             trayMenu.Items.Add("Upload File", Properties.Resources.File);
             trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard);
@@ -84,8 +86,12 @@ namespace KSLUploader.Classes
 
         private void CaptureDesktop()
         {
-            string path = Screenshot.CaptureDesktop();
+            FileInfo screen = Screenshot.CaptureDesktop();
+        }
 
+        private void CaptureArea()
+        {
+            SocketUploader.Instance.SendNext();
         }
 
         #endregion

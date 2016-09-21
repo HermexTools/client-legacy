@@ -37,8 +37,23 @@ namespace KSLUploader.Classes.Uploaders
         public string SendNext()
         {
 
-        }
+            //FileInfo fileToSend = queue.First();
 
+            socket = new TcpClient("sergix44.ovh", 4030);
+
+            //FileStream reader = new FileStream(fileToSend.FullName, FileMode.Open);
+
+            StreamWriter output = new StreamWriter(socket.GetStream(), Encoding.UTF8);
+            StreamReader input = new StreamReader(socket.GetStream(), Encoding.UTF8);
+            output.NewLine = "\n";
+
+
+            output.WriteLine("ilmioksu&123&txt");
+            output.Flush();
+            Console.WriteLine(input.ReadLine());
+            return "";
+        }
+        
 
 
 

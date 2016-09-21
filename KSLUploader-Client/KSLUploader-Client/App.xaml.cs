@@ -27,8 +27,9 @@ namespace KSLUploader
                 ExitApplication();
                 return;
             }
-
+           
             base.OnStartup(e);
+            Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             st = new SystemTray();
         }
@@ -41,8 +42,8 @@ namespace KSLUploader
         public static bool IsWindowOpen<T>(string name = "") where T : Window
         {
             return string.IsNullOrEmpty(name)
-               ? Application.Current.Windows.OfType<T>().Any()
-               : Application.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
+               ? Current.Windows.OfType<T>().Any()
+               : Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
         }
     }
 }

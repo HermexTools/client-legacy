@@ -32,11 +32,5 @@ namespace KSLUploader.Windows
             //todo: save settings
             this.Hide();
         }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            this.Hide();
-        }
     }
 }
