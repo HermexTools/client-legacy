@@ -1,15 +1,6 @@
 ﻿using KSLUploader.Classes;
-using KSLUploader.Classes.Uploaders;
-using KSLUploader.Windows;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace KSLUploader
@@ -20,7 +11,6 @@ namespace KSLUploader
     public partial class App : Application
     {
         private SystemTray ksuTray;
-        private Settings ksuSettings;
 
         protected override void OnStartup(StartupEventArgs e)
         {
