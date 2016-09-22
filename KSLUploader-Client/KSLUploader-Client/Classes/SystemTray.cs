@@ -2,6 +2,8 @@
 using KSLUploader.Windows;
 using System.IO;
 using KSLUploader.Classes.Uploaders;
+using System.Diagnostics;
+using System;
 
 namespace KSLUploader.Classes
 {

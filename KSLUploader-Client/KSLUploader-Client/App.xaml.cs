@@ -2,6 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System;
+using System.IO;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace KSLUploader
 {
@@ -22,9 +26,41 @@ namespace KSLUploader
             base.OnStartup(e);
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
+            InizializeSettings();
+
             ksuTray = new SystemTray();
         }
-        
+
+        private void InizializeSettings()
+        {
+            //generals
+            SettingsManager.Inizialize("RunAtStartup", false);
+            SettingsManager.Inizialize("SaveLocal", false);
+            SettingsManager.Inizialize("SaveLocalPath", null);
+            SettingsManager.Inizialize("UploadMethod", "SOCKET");
+
+            //protocol
+            SettingsManager.Inizialize("SocketAddress","localhost");
+            SettingsManager.Inizialize("SocketPort", 4030);
+            SettingsManager.Inizialize("SocketPassword", "pass");
+
+            //ftp
+            SettingsManager.Inizialize("UseFTPS", false);
+            SettingsManager.Inizialize("AcceptCertificates", true);
+            SettingsManager.Inizialize("FTPAddress", null);
+            SettingsManager.Inizialize("FTPPort", 21);
+            SettingsManager.Inizialize("FTPDirectory", null);
+            SettingsManager.Inizialize("FTPWeburl", null);
+            SettingsManager.Inizialize("FTPUser", null);
+            SettingsManager.Inizialize("FTPPassword", null);
+
+            //shortcut
+            SettingsManager.Inizialize("ShortcutArea", "CTRL+SHIFTSX+1");
+            SettingsManager.Inizialize("ShortcutDesktop", "CTRL+SHIFTSX+2");
+            SettingsManager.Inizialize("ShortcutFile", "CTRL+SHIFTSX+3");
+            SettingsManager.Inizialize("ShortcutClipboard", "CTRL+SHIFTSX+4");
+        }
+
         public static bool IsWindowOpen<T>(string name = "") where T : Window
         {
             return string.IsNullOrEmpty(name)

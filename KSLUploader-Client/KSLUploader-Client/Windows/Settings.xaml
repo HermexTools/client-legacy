@@ -14,22 +14,22 @@
         <TabControl BorderThickness="0,1,0,0" Margin="0,5,0,0">
             <TabItem Header="Generals" FontSize="14" Width="70">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <CheckBox Content="Run at startup" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
-                    <CheckBox Content="Save local copy of images" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                    <CheckBox x:Name="generals_startup" Content="Run at startup" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                    <CheckBox x:Name="generals_save" Content="Save local copy of images" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button Content="Browse..." Margin="0,0,10,0"/>
-                        <TextBlock Grid.Column="1" Text="loaded dynamically" FontSize="16"/>
+                        <Button x:Name="generals_browsebutton" Content="Browse..." Margin="0,0,5,0" Padding="5,1"/>
+                        <TextBlock x:Name="generals_browselabel" Grid.Column="1" Text="cfsdfsdfsdfsd" FontSize="16" TextTrimming="CharacterEllipsis" Width="230"/>
                     </Grid>
                     <TextBlock Text="Upload method" Padding="0,10,0,5" FontWeight="Bold" FontSize="16"/>
-                    <RadioButton GroupName="1" Content="Use Socket" FontSize="16" VerticalContentAlignment="Center"/>
-                    <RadioButton GroupName="1" Content="Use FTP" FontSize="16" VerticalContentAlignment="Center"/>
+                    <RadioButton x:Name="generals_method_socket" GroupName="1" Content="Use Socket" FontSize="16" VerticalContentAlignment="Center"/>
+                    <RadioButton x:Name="generals_method_ftp" GroupName="1" Content="Use FTP" FontSize="16" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Protocol" FontSize="14" Width="70">
+            <TabItem x:Name="tab_protocol" Header="Protocol" FontSize="14" Width="70">
                 <Grid>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
@@ -41,16 +41,16 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Server Address" FontSize="16"/>
-                        <TextBox Width="150" Grid.Column="1" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Address" FontSize="16" Margin="0,0,0,10" VerticalAlignment="Center"/>
+                        <TextBox x:Name="protocol_address" Width="150" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,10"/>
                         <TextBlock Text="Server Password" Margin="0,0,20,0" Grid.Row="1" FontSize="16"/>
-                        <TextBox Width="150" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10"/>
+                        <TextBox x:Name="protocol_password" Width="150" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Center"/>
                         <TextBlock Text="Server Port" Margin="0,0,20,0" Grid.Row="2" FontSize="16"/>
-                        <TextBox Width="150" Grid.Row="2" Grid.Column="1"/>
+                        <TextBox x:Name="protocol_port" Width="150" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="FTP" FontSize="14" Width="70">
+            <TabItem x:Name="tab_ftp" Header="FTP" FontSize="14" Width="70">
                 <Grid>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
@@ -66,20 +66,20 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <CheckBox Content="Use FTPS" Margin="0,0,0,10" FontSize="16" VerticalContentAlignment="Center"/>
-                        <CheckBox Content="Accept Certificates" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                        <CheckBox x:Name="ftp_useftps" Content="Use FTPS" Margin="0,0,0,10" FontSize="16" VerticalContentAlignment="Center"/>
+                        <CheckBox x:Name="ftp_certificates" Content="Accept Certificates" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
                         <TextBlock Text="Server Address" Grid.Row="1" Padding="0,0,20,0" FontSize="16"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,10"/>
+                        <TextBox x:Name="ftp_address" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10"/>
                         <TextBlock Text="Server Port" Grid.Row="2" FontSize="16"/>
-                        <TextBox Grid.Row="2" Grid.Column="2" Margin="0,0,0,10"/>
+                        <TextBox x:Name="ftp_port" Grid.Row="2" Grid.Column="2" Margin="0,0,0,10"/>
                         <TextBlock Text="Server Directory" Grid.Row="3" FontSize="16"/>
-                        <TextBox Grid.Row="3" Grid.Column="3" Margin="0,0,0,10"/>
+                        <TextBox x:Name="ftp_directory" Grid.Row="3" Grid.Column="3" Margin="0,0,0,10"/>
                         <TextBlock Text="Server Weburl" Grid.Row="4" FontSize="16"/>
-                        <TextBox Grid.Row="4" Grid.Column="4" Margin="0,0,0,10"/>
+                        <TextBox x:Name="ftp_weburl" Grid.Row="4" Grid.Column="4" Margin="0,0,0,10"/>
                         <TextBlock Text="Server User" Grid.Row="5" FontSize="16"/>
-                        <TextBox Grid.Row="5" Grid.Column="5" Margin="0,0,0,10"/>
+                        <TextBox x:Name="ftp_user" Grid.Row="5" Grid.Column="5" Margin="0,0,0,10"/>
                         <TextBlock Text="Server Password" Grid.Row="6" FontSize="16"/>
-                        <TextBox Grid.Row="6" Grid.Column="6"/>
+                        <TextBox x:Name="ftp_password" Grid.Row="6" Grid.Column="6"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -97,16 +97,16 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Area shortcut" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button Content="Change" Grid.Column="1" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+                        <Button x:Name="shortcut_area" Content="Change" Grid.Column="1" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
 
                         <TextBlock Text="Desktop shortcut" Grid.Row="1" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button Content="Change" Grid.Row="1" Grid.Column="2" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+                        <Button x:Name="shortcut_desktop" Content="Change" Grid.Row="1" Grid.Column="2" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
 
                         <TextBlock Text="File shortcut" Grid.Row="2" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button Content="Change" Grid.Row="2" Grid.Column="3" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+                        <Button x:Name="shortcut_file" Content="Change" Grid.Row="2" Grid.Column="3" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
 
                         <TextBlock Text="Clipboard shortcut" Grid.Row="3" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button Content="Change" Grid.Row="3" Grid.Column="4" FontSize="16" Padding="0,5" Width="170"/>
+                        <Button x:Name="shortcut_clipboard" Content="Change" Grid.Row="3" Grid.Column="4" FontSize="16" Padding="0,5" Width="170"/>
                     </Grid>
                 </Grid>
             </TabItem>
