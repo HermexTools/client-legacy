@@ -87,11 +87,13 @@ namespace KSLUploader.Classes
         private void CaptureDesktop()
         {
             FileInfo screen = Screenshot.CaptureDesktop();
+            SocketUploader s = new SocketUploader(screen);
+            s.Send();
         }
 
         private void CaptureArea()
         {
-            SocketUploader.Instance.SendNext();
+            
         }
 
         #endregion

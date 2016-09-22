@@ -67,6 +67,8 @@
     <Compile Include="Classes\Screenshot.cs" />
     <Compile Include="Classes\Uploaders\SocketUploader.cs" />
     <Compile Include="Classes\SystemTray.cs" />
+    <Compile Include="Libs\DataInputStream.cs" />
+    <Compile Include="Libs\DataOutputStream.cs" />
     <Compile Include="Windows\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>

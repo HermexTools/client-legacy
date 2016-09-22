@@ -22,5 +22,41 @@ namespace KSLUploader.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string socket_address {
+            get {
+                return ((string)(this["socket_address"]));
+            }
+            set {
+                this["socket_address"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4030")]
+        public int socket_port {
+            get {
+                return ((int)(this["socket_port"]));
+            }
+            set {
+                this["socket_port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string socket_password {
+            get {
+                return ((string)(this["socket_password"]));
+            }
+            set {
+                this["socket_password"] = value;
+            }
+        }
     }
 }
