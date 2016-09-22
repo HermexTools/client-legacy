@@ -63,6 +63,7 @@ namespace KSLUploader.Classes
 
         #endregion
 
+        #region PROGRAM EVENTS
         private void CaptureDesktop()
         {
             FileInfo screen = Screenshot.CaptureDesktop();
@@ -99,6 +100,8 @@ namespace KSLUploader.Classes
                 settingsWindow.Show();
             }
         }
+
+        #endregion
 
     }
 }

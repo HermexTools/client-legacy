@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace KSLUploader
 {
-    /// <summary>
-    /// Logica di interazione per App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private SystemTray ksuTray;

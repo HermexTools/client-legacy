@@ -17,7 +17,7 @@ namespace KSLUploader.Windows
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             //todo: save settings
-            this.Hide();
+            this.Close();
         }
     }
 }

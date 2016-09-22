@@ -5,39 +5,120 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KSLUploader.Windows"
         mc:Ignorable="d"
-        Title="Settings" Height="350" Width="500" ResizeMode="NoResize">
+        Title="Settings" Height="350" Width="380" ResizeMode="NoResize" Icon="/KSLUploader-client;component/AppIcon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TabControl BorderThickness="0,1,0,0">
-            <TabItem Header="Generals">
-                <StackPanel>
-                    <CheckBox Content="Run at startup" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <CheckBox Content="Save local copy of images" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                </StackPanel>                
-            </TabItem>
-            <TabItem Header="Protocol">
-                <StackPanel>
-                    
+        <TabControl BorderThickness="0,1,0,0" Margin="0,5,0,0">
+            <TabItem Header="Generals" FontSize="14" Width="70">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <CheckBox Content="Run at startup" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                    <CheckBox Content="Save local copy of images" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Browse..." Margin="0,0,10,0"/>
+                        <TextBlock Grid.Column="1" Text="loaded dynamically" FontSize="16"/>
+                    </Grid>
+                    <TextBlock Text="Upload method" Padding="0,10,0,5" FontWeight="Bold" FontSize="16"/>
+                    <RadioButton GroupName="1" Content="Use Socket" FontSize="16" VerticalContentAlignment="Center"/>
+                    <RadioButton GroupName="1" Content="Use FTP" FontSize="16" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="FTP">
-                <Grid/>
+            <TabItem Header="Protocol" FontSize="14" Width="70">
+                <Grid>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Server Address" FontSize="16"/>
+                        <TextBox Width="150" Grid.Column="1" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Password" Margin="0,0,20,0" Grid.Row="1" FontSize="16"/>
+                        <TextBox Width="150" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Port" Margin="0,0,20,0" Grid.Row="2" FontSize="16"/>
+                        <TextBox Width="150" Grid.Row="2" Grid.Column="1"/>
+                    </Grid>
+                </Grid>
             </TabItem>
-            <TabItem Header="Shortcuts">
-                <Grid/>
+            <TabItem Header="FTP" FontSize="14" Width="70">
+                <Grid>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Content="Use FTPS" Margin="0,0,0,10" FontSize="16" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Accept Certificates" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Address" Grid.Row="1" Padding="0,0,20,0" FontSize="16"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Port" Grid.Row="2" FontSize="16"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Directory" Grid.Row="3" FontSize="16"/>
+                        <TextBox Grid.Row="3" Grid.Column="3" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Weburl" Grid.Row="4" FontSize="16"/>
+                        <TextBox Grid.Row="4" Grid.Column="4" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server User" Grid.Row="5" FontSize="16"/>
+                        <TextBox Grid.Row="5" Grid.Column="5" Margin="0,0,0,10"/>
+                        <TextBlock Text="Server Password" Grid.Row="6" FontSize="16"/>
+                        <TextBox Grid.Row="6" Grid.Column="6"/>
+                    </Grid>
+                </Grid>
             </TabItem>
-            <TabItem Header="Info">
-                <StackPanel>
-                    <TextBlock Text="KSLUploader"/>
-                    <TextBlock Text="Developed by SergiX44, Kaos1337, Lukasss93"/>
-                    <TextBlock Text="Version: 0.0.2-beta"/>
+            <TabItem Header="Shortcuts" FontSize="14" Width="70">
+                <Grid>
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Area shortcut" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
+                        <Button Content="Change" Grid.Column="1" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Desktop shortcut" Grid.Row="1" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
+                        <Button Content="Change" Grid.Row="1" Grid.Column="2" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="File shortcut" Grid.Row="2" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
+                        <Button Content="Change" Grid.Row="2" Grid.Column="3" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Clipboard shortcut" Grid.Row="3" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
+                        <Button Content="Change" Grid.Row="3" Grid.Column="4" FontSize="16" Padding="0,5" Width="170"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Info" FontSize="14" Width="70">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="KSLUploader" FontSize="20" TextAlignment="Center" FontWeight="Bold" Padding="0,0,0,10"/>
+                    <TextBlock Text="Developed by SergiX44, Kaos1337, Lukasss93" FontSize="16" TextAlignment="Center" Padding="0,0,0,10"/>
+                    <TextBlock Text="Version: 0.0.2-beta" FontSize="16" TextAlignment="Center"/>
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <Button x:Name="saveButton" Content="Save" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Width="55" Grid.Row="1" />
+        <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Right" Margin="10,5,5,5" Grid.Row="1" FontSize="16" VerticalAlignment="Bottom" Padding="15,1" />
 
     </Grid>
 </Window>
