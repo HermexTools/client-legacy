@@ -29,7 +29,7 @@ namespace KSLUploader.Classes.Uploaders
             file = f;
         }
 
-        public bool Send()
+        public bool Upload()
         {
 
             socket = new TcpClient(Properties.Settings.Default.socket_address, Properties.Settings.Default.socket_port);
@@ -95,6 +95,11 @@ namespace KSLUploader.Classes.Uploaders
                 //unknow error happened
             }
             return false;
+        }
+
+        public void Stop()
+        {
+
         }
 
         private string getType(FileInfo file)

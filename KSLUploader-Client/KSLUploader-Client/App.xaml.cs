@@ -1,10 +1,13 @@
 ﻿using KSLUploader.Classes;
+using KSLUploader.Classes.Uploaders;
+using KSLUploader.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,7 +19,8 @@ namespace KSLUploader
     /// </summary>
     public partial class App : Application
     {
-        private SystemTray st;
+        private SystemTray ksuTray;
+        private Settings ksuSettings;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -24,21 +28,16 @@ namespace KSLUploader
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
                 MessageBox.Show("KSLUploader is already running.", "Error");
-                ExitApplication();
+                Current.Shutdown();
                 return;
             }
            
             base.OnStartup(e);
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            st = new SystemTray();
+            ksuTray = new SystemTray();
         }
-
-        public static void ExitApplication()
-        {
-            Current.Shutdown();
-        }
-
+        
         public static bool IsWindowOpen<T>(string name = "") where T : Window
         {
             return string.IsNullOrEmpty(name)
