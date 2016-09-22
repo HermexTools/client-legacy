@@ -73,7 +73,7 @@ namespace KSLUploader.Classes
 
         private void CaptureArea()
         {
-
+            new UploadsPanel().Show();
         }
 
         private void UploadFile()
