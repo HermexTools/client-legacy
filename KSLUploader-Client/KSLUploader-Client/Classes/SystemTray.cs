@@ -4,6 +4,8 @@ using System.IO;
 using KSLUploader.Classes.Uploaders;
 using System.Diagnostics;
 using System;
+using System.Drawing;
+using System.ComponentModel;
 
 namespace KSLUploader.Classes
 {
@@ -63,14 +65,43 @@ namespace KSLUploader.Classes
             CaptureDesktop();
         }
 
+        private void ShowProgress(object sender, ProgressChangedEventArgs e)
+        {
+            Graphics canvas;
+            Bitmap iconBitmap = new Bitmap(16, 16);
+            canvas = Graphics.FromImage(iconBitmap);
+
+            canvas.DrawIcon(Properties.Resources.AppIcon, 0, 0);
+
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Center;
+
+            canvas.DrawString(
+                e.ProgressPercentage.ToString(),
+                new Font("Calibri", 8, FontStyle.Bold),
+                new SolidBrush(Color.FromArgb(40, 40, 40)),
+                new RectangleF(0, 3, 16, 13),
+                format
+            );
+
+            trayIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
+        }
+
         #endregion
 
         #region PROGRAM EVENTS
         private void CaptureDesktop()
         {
+            BackgroundWorker b = new BackgroundWorker();
+            b.WorkerReportsProgress = true;
+            b.ProgressChanged += ShowProgress;
             FileInfo screen = Screenshot.CaptureDesktop();
-            SocketUploader s = new SocketUploader(screen);
-            s.Upload();
+
+            SocketUploader s = new SocketUploader(screen, b);
+            if (s.Upload())
+            {
+                trayIcon.ShowBalloonTip(5000, "Upload Completed", s.Link, ToolTipIcon.Info);
+            }
         }
 
         private void CaptureArea()
@@ -98,8 +129,7 @@ namespace KSLUploader.Classes
         {
             if (!App.IsWindowOpen<Settings>())
             {
-                var settingsWindow = new Settings();
-                settingsWindow.Show();
+                new Settings().Show();
             }
         }
 

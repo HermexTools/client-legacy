@@ -5,6 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KSLUploader.Windows"
         mc:Ignorable="d"
-        Title="Uploads" Height="150" Width="250" WindowStyle="ToolWindow" ResizeMode="NoResize" SourceInitialized="UploadPanel_SourceInitialized">
+        Title="Uploads" Height="150" Width="250" ResizeMode="CanMinimize" SourceInitialized="UploadPanel_SourceInitialized">
     <Grid/>
 </Window>

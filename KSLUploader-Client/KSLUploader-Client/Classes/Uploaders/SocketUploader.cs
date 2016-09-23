@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Net.Sockets;
 
@@ -20,23 +21,25 @@ namespace KSLUploader.Classes.Uploaders
         private TcpClient socket;
         private FileInfo file;
         private string _link;
-        
 
-        public SocketUploader(FileInfo f)
+        private BackgroundWorker worker;
+
+        public SocketUploader(FileInfo f, BackgroundWorker bgworker)
         {
             file = f;
+            worker = bgworker;
         }
 
         public bool Upload()
         {
 
-            socket = new TcpClient(Properties.Settings.Default.SocketAddress, Properties.Settings.Default.SocketPort);
+            socket = new TcpClient((string)SettingsManager.Get("SocketAddress"), Convert.ToInt32(SettingsManager.Get("SocketPort")));
 
             DataOutputStream output = new DataOutputStream(new BinaryWriter(socket.GetStream()));
             DataInputStream input = new DataInputStream(new BinaryReader(socket.GetStream()));
 
             // password & file lenght & type
-            output.WriteUTF(Properties.Settings.Default.SocketPassword + "&" + file.Length + "&" + getType(file));
+            output.WriteUTF((string)SettingsManager.Get("SocketPassword") + "&" + file.Length + "&" + getType(file));
 
             if(input.ReadUTF().Equals(Messages.OK.ToString()))
             {
@@ -47,7 +50,7 @@ namespace KSLUploader.Classes.Uploaders
                     byte[] buffer = new byte[bufferSize];
                     int sentBytes = 0;
 
-                    long progress = 0;
+                    int progress = 0;
 
                     while(sentBytes < file.Length)
                     {
@@ -55,9 +58,9 @@ namespace KSLUploader.Classes.Uploaders
                         socket.GetStream().Write(buffer, 0, readed);
 
                         sentBytes += readed;
-                        progress = (100 * sentBytes / file.Length);
+                        progress = (int) (100 * sentBytes / file.Length);
 
-                        Console.WriteLine(progress);
+                        worker.ReportProgress(progress);
                     }
                 }
 
