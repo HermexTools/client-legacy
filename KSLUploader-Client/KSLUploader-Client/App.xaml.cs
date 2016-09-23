@@ -3,17 +3,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System;
-using System.IO;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using IWshRuntimeLibrary;
 using Microsoft.Win32;
 
 namespace KSLUploader
 {
     public partial class App : Application
     {
-        private SystemTray ksuTray;
+        private SystemTray ksluTray;
+        private KeyListener keyListener;        
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -25,13 +22,13 @@ namespace KSLUploader
                 return;
             }
            
-            base.OnStartup(e);
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             InizializeSettings();
             CheckRunAtStartup();
-
-            ksuTray = new SystemTray();
+            
+            keyListener = new KeyListener();
+            ksluTray = new SystemTray();
         }
 
         private void InizializeSettings()
@@ -58,10 +55,10 @@ namespace KSLUploader
             SettingsManager.Inizialize("FTPPassword", null);
 
             //shortcut
-            SettingsManager.Inizialize("ShortcutArea", "CTRL+SHIFTSX+1");
-            SettingsManager.Inizialize("ShortcutDesktop", "CTRL+SHIFTSX+2");
-            SettingsManager.Inizialize("ShortcutFile", "CTRL+SHIFTSX+3");
-            SettingsManager.Inizialize("ShortcutClipboard", "CTRL+SHIFTSX+4");
+            SettingsManager.Inizialize("ShortcutArea", new string[] { "LControlKey", "LMenu", "1" });
+            SettingsManager.Inizialize("ShortcutDesktop", new string[] { "LControlKey", "LMenu", "2" });
+            SettingsManager.Inizialize("ShortcutFile", new string[] { "LControlKey", "LMenu", "3" });
+            SettingsManager.Inizialize("ShortcutClipboard", new string[] { "LControlKey", "LMenu", "4" });
         }
 
         public static bool IsWindowOpen<T>(string name = "") where T : Window

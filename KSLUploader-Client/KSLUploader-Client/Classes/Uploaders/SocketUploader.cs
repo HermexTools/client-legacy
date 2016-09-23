@@ -32,7 +32,6 @@ namespace KSLUploader.Classes.Uploaders
 
         public bool Upload()
         {
-
             socket = new TcpClient((string)SettingsManager.Get("SocketAddress"), Convert.ToInt32(SettingsManager.Get("SocketPort")));
 
             DataOutputStream output = new DataOutputStream(new BinaryWriter(socket.GetStream()));

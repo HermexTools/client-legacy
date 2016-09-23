@@ -79,7 +79,7 @@ namespace KSLUploader.Classes
             canvas.DrawString(
                 e.ProgressPercentage.ToString(),
                 new Font("Calibri", 8, FontStyle.Bold),
-                new SolidBrush(Color.FromArgb(40, 40, 40)),
+                new SolidBrush(Color.White),
                 new RectangleF(0, 3, 16, 13),
                 format
             );

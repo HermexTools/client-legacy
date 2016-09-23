@@ -43,6 +43,12 @@ namespace KSLUploader.Classes
             return file[key];
         }
 
+        public static T Get<T>(string key)
+        {
+            var file = ReadSettingsFile();
+            return (T)file[key];
+        }
+
         public static void Remove(string key)
         {
             var file = ReadSettingsFile();
