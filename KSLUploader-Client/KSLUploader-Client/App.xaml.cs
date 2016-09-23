@@ -7,6 +7,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using IWshRuntimeLibrary;
+using Microsoft.Win32;
 
 namespace KSLUploader
 {
@@ -72,15 +73,21 @@ namespace KSLUploader
 
         public static void CheckRunAtStartup()
         {
-            var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            var registryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 
             if((bool)SettingsManager.Get("RunAtStartup"))
-            {
-                //TODO create shortcut to startup folder.
+            {               
+                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
+                {
+                    key.SetValue("KSLU", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+                }
             }
             else
             {
-                //TODO remove shortcut from startup folder.
+                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
+                {
+                    key.DeleteValue("KSLU", false);
+                }
             }
         }
     }
