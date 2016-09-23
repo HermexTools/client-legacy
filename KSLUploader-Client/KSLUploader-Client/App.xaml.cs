@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using IWshRuntimeLibrary;
 
 namespace KSLUploader
 {
@@ -27,6 +28,7 @@ namespace KSLUploader
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             InizializeSettings();
+            CheckRunAtStartup();
 
             ksuTray = new SystemTray();
         }
@@ -36,7 +38,7 @@ namespace KSLUploader
             //generals
             SettingsManager.Inizialize("RunAtStartup", false);
             SettingsManager.Inizialize("SaveLocal", false);
-            SettingsManager.Inizialize("SaveLocalPath", null);
+            SettingsManager.Inizialize("SaveLocalPath", Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
             SettingsManager.Inizialize("UploadMethod", "SOCKET");
 
             //protocol
@@ -66,6 +68,20 @@ namespace KSLUploader
             return string.IsNullOrEmpty(name)
                ? Current.Windows.OfType<T>().Any()
                : Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
+        }
+
+        public static void CheckRunAtStartup()
+        {
+            var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+            if((bool)SettingsManager.Get("RunAtStartup"))
+            {
+                //TODO create shortcut to startup folder.
+            }
+            else
+            {
+                //TODO remove shortcut from startup folder.
+            }
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Media;
 using KSLUploader.Classes;
 
@@ -20,7 +19,7 @@ namespace KSLUploader.Windows
             //generals
             generals_startup.IsChecked = (bool)SettingsManager.Get("RunAtStartup");
             generals_save.IsChecked = (bool)SettingsManager.Get("SaveLocal");
-            generals_browselabel.Text=SettingsManager.Get("SaveLocalPath")==null?"Not set.": (string)SettingsManager.Get("SaveLocalPath");
+            generals_browsepath.Text=SettingsManager.Get("SaveLocalPath")==null?"Not set.": (string)SettingsManager.Get("SaveLocalPath");
             generals_method_socket.IsChecked = (string)SettingsManager.Get("UploadMethod") == "SOCKET" ? true : false;
             generals_method_ftp.IsChecked = (string)SettingsManager.Get("UploadMethod") == "FTP" ? true : false;
 
@@ -75,57 +74,76 @@ namespace KSLUploader.Windows
             if(generals_save.IsChecked==true)
             {
                 generals_browsebutton.IsEnabled = true;
-                generals_browselabel.Foreground = new SolidColorBrush(Colors.Black);
+                generals_browsepath.IsEnabled = true;
             }
             else
             {
                 generals_browsebutton.IsEnabled = false;
-                generals_browselabel.Foreground = new SolidColorBrush(Colors.Gray);
+                generals_browsepath.IsEnabled = false;
             }
         }
 
         private void Generals_browsebutton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new FolderBrowserDialog();
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
             dialog.Description = "Please select the path of save folder.";
             var result = dialog.ShowDialog();
             if(result==System.Windows.Forms.DialogResult.OK)
             {
-                generals_browselabel.Text = dialog.SelectedPath;
+                generals_browsepath.Text = dialog.SelectedPath;
             }            
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            //generals
-            SettingsManager.Set("RunAtStartup", generals_startup.IsChecked);
-            SettingsManager.Set("SaveLocal", generals_save.IsChecked);
-            SettingsManager.Set("SaveLocalPath", generals_browselabel.Text);
-            SettingsManager.Set("UploadMethod", generals_method_socket.IsChecked==true?"SOCKET":"FTP");
+            try
+            {
+                //generals
+                SettingsManager.Set("RunAtStartup", generals_startup.IsChecked);
+                SettingsManager.Set("SaveLocal", generals_save.IsChecked);
+                SettingsManager.Set("SaveLocalPath", generals_browsepath.Text);
+                SettingsManager.Set("UploadMethod", generals_method_socket.IsChecked == true ? "SOCKET" : "FTP");
 
-            //protocol
-            SettingsManager.Set("SocketAddress", protocol_address.Text);
-            SettingsManager.Set("SocketPort", Convert.ToInt32(protocol_port.Text));
-            SettingsManager.Set("SocketPassword", protocol_password.Text);
+                //protocol
+                SettingsManager.Set("SocketAddress", protocol_address.Text);
+                SettingsManager.Set("SocketPort", Convert.ToInt32(protocol_port.Text));
+                SettingsManager.Set("SocketPassword", protocol_password.Text);
 
-            //ftp
-            SettingsManager.Set("UseFTPS", ftp_useftps.IsChecked);
-            SettingsManager.Set("AcceptCertificates", ftp_certificates.IsChecked);
-            SettingsManager.Set("FTPAddress", ftp_address.Text);
-            SettingsManager.Set("FTPPort", Convert.ToInt32(ftp_port.Text));
-            SettingsManager.Set("FTPDirectory", ftp_directory.Text);
-            SettingsManager.Set("FTPWeburl", ftp_weburl.Text);
-            SettingsManager.Set("FTPUser", ftp_user.Text);
-            SettingsManager.Set("FTPPassword", ftp_password.Text);
+                //ftp
+                SettingsManager.Set("UseFTPS", ftp_useftps.IsChecked);
+                SettingsManager.Set("AcceptCertificates", ftp_certificates.IsChecked);
+                SettingsManager.Set("FTPAddress", ftp_address.Text);
+                SettingsManager.Set("FTPPort", Convert.ToInt32(ftp_port.Text));
+                SettingsManager.Set("FTPDirectory", ftp_directory.Text);
+                SettingsManager.Set("FTPWeburl", ftp_weburl.Text);
+                SettingsManager.Set("FTPUser", ftp_user.Text);
+                SettingsManager.Set("FTPPassword", ftp_password.Text);
 
-            //shortcut
-            SettingsManager.Set("ShortcutArea", "CTRL+SHIFTSX+1");
-            SettingsManager.Set("ShortcutDesktop", "CTRL+SHIFTSX+2");
-            SettingsManager.Set("ShortcutFile", "CTRL+SHIFTSX+3");
-            SettingsManager.Set("ShortcutClipboard", "CTRL+SHIFTSX+4");
+                //shortcut
+                SettingsManager.Set("ShortcutArea", "CTRL+SHIFTSX+1");
+                SettingsManager.Set("ShortcutDesktop", "CTRL+SHIFTSX+2");
+                SettingsManager.Set("ShortcutFile", "CTRL+SHIFTSX+3");
+                SettingsManager.Set("ShortcutClipboard", "CTRL+SHIFTSX+4");
 
-            //close window
-            this.Close();
+                //check startup
+                App.CheckRunAtStartup();
+
+                //close window
+                this.Close();
+            }
+            catch(Exception ex)
+            {
+                switch(ex.HResult)
+                {
+                    case -2146233033:
+                        MessageBox.Show("Settings not saved.\nSocket Port and FTP Port must be integer!","Warning");
+                        break;
+
+                    default:
+                        Debug.WriteLine(ex.Message + "\n" + ex.StackTrace + "\n" + ex.HResult);
+                        break;
+                }
+            }
         }
     }
 }
