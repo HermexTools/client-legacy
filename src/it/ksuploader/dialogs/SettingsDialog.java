@@ -25,7 +25,7 @@ public class SettingsDialog extends JDialog implements NativeKeyListener {
 
 	public SettingsDialog() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setTitle("Settings - r14.1");
+		setTitle("Settings - r15");
 		setBounds(100, 100, 480, 330);
 		setResizable(false);
 		setModal(true);
