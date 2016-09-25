@@ -4,16 +4,19 @@ using System.Linq;
 using System.Windows;
 using System;
 using Microsoft.Win32;
+using System.Collections.Generic;
 
 namespace KSLUploader
 {
     public partial class App : Application
     {
         private SystemTray ksluTray;
-        private KeyListener keyListener;        
+        private KeyListener keyListener;
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            Logger.Info("App started");
+
             //no double instance!
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
@@ -55,10 +58,26 @@ namespace KSLUploader
             SettingsManager.Inizialize("FTPPassword", null);
 
             //shortcut
-            SettingsManager.Inizialize("ShortcutArea", new string[] { "LControlKey", "LMenu", "1" });
-            SettingsManager.Inizialize("ShortcutDesktop", new string[] { "LControlKey", "LMenu", "2" });
-            SettingsManager.Inizialize("ShortcutFile", new string[] { "LControlKey", "LMenu", "3" });
-            SettingsManager.Inizialize("ShortcutClipboard", new string[] { "LControlKey", "LMenu", "4" });
+            SettingsManager.Inizialize("ShortcutArea", new List<System.Windows.Forms.Keys> {
+                System.Windows.Forms.Keys.LControlKey,
+                System.Windows.Forms.Keys.LMenu,
+                System.Windows.Forms.Keys.D1
+            });
+            SettingsManager.Inizialize("ShortcutDesktop", new List<System.Windows.Forms.Keys> {
+                System.Windows.Forms.Keys.LControlKey,
+                System.Windows.Forms.Keys.LMenu,
+                System.Windows.Forms.Keys.D2
+            });
+            SettingsManager.Inizialize("ShortcutFile", new List<System.Windows.Forms.Keys> {
+                System.Windows.Forms.Keys.LControlKey,
+                System.Windows.Forms.Keys.LMenu,
+                System.Windows.Forms.Keys.D3
+            });
+            SettingsManager.Inizialize("ShortcutClipboard", new List<System.Windows.Forms.Keys> {
+                System.Windows.Forms.Keys.LControlKey,
+                System.Windows.Forms.Keys.LMenu,
+                System.Windows.Forms.Keys.D4
+            });
         }
 
         public static bool IsWindowOpen<T>(string name = "") where T : Window

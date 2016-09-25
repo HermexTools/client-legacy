@@ -39,10 +39,10 @@ namespace KSLUploader.Windows
             ftp_password.Text= (string)SettingsManager.Get("FTPPassword");
 
             //shortcut
-            shortcut_area.Content= (string)SettingsManager.Get("ShortcutArea");
-            shortcut_desktop.Content = (string)SettingsManager.Get("ShortcutDesktop");
-            shortcut_file.Content = (string)SettingsManager.Get("ShortcutFile");
-            shortcut_clipboard.Content = (string)SettingsManager.Get("ShortcutClipboard");
+            shortcut_area.Content = "todo";// (string)SettingsManager.Get("ShortcutArea");
+            shortcut_desktop.Content = "todo";//(string)SettingsManager.Get("ShortcutDesktop");
+            shortcut_file.Content = "todo";//(string)SettingsManager.Get("ShortcutFile");
+            shortcut_clipboard.Content = "todo";//(string)SettingsManager.Get("ShortcutClipboard");
 
             //events
             CheckSaveLocalImage();
@@ -120,10 +120,10 @@ namespace KSLUploader.Windows
                 SettingsManager.Set("FTPPassword", ftp_password.Text);
 
                 //shortcut
-                SettingsManager.Set("ShortcutArea", "CTRL+SHIFTSX+1");
-                SettingsManager.Set("ShortcutDesktop", "CTRL+SHIFTSX+2");
-                SettingsManager.Set("ShortcutFile", "CTRL+SHIFTSX+3");
-                SettingsManager.Set("ShortcutClipboard", "CTRL+SHIFTSX+4");
+                //SettingsManager.Set("ShortcutArea", "CTRL+SHIFTSX+1");
+                //SettingsManager.Set("ShortcutDesktop", "CTRL+SHIFTSX+2");
+                //SettingsManager.Set("ShortcutFile", "CTRL+SHIFTSX+3");
+                //SettingsManager.Set("ShortcutClipboard", "CTRL+SHIFTSX+4");
 
                 //check startup
                 App.CheckRunAtStartup();

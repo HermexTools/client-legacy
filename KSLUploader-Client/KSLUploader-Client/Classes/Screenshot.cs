@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,7 +22,11 @@ namespace KSLUploader.Classes
             Bitmap image = JoinBitmaps(bitmaps);
             return SaveBitmap(image);
         }
-        
+
+        public static FileInfo CaptureDesktop(Screen screen)
+        {
+            return SaveBitmap(GetBitmapFromScreen(screen));
+        }
 
         private static Bitmap GetBitmapFromScreen(Screen screen)
         {
@@ -70,8 +75,16 @@ namespace KSLUploader.Classes
 
         private static FileInfo SaveBitmap(Bitmap bitmap)
         {
+            //save local if enabled
+            if(SettingsManager.Get<bool>("SaveLocal"))
+            {
+                string filename = SettingsManager.Get<string>("SaveLocalPath")+"\\kslu_" + DateTime.Now.Ticks + ".png";
+                bitmap.Save(filename, ImageFormat.Png);
+            }
+
+            //save in temp to send
             FileInfo f = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".png"));
-            bitmap.Save(f.FullName);
+            bitmap.Save(f.FullName, ImageFormat.Png);
             return f;
         }
     }
