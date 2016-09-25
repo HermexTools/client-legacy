@@ -24,13 +24,12 @@ public class SocketUploader implements Observer {
 		OK,
 		BAD_SYN_STRING,
 		WRONG_PASSWORD,
-		FILE_NOT_RECOGNIZED,
 		FILE_TOO_LARGE,
 		SERVER_FULL,
 		UNKNOWN_ERROR
 	}
 
-	public boolean send(String type) {
+	public boolean send(String fileName) {
 		try {
 			this.socketChannel = createChannel(Main.config.getIp(), Main.config.getPort());
 			this.dos = new DataOutputStream(socketChannel != null ? socketChannel.socket().getOutputStream() : null);
@@ -41,7 +40,7 @@ public class SocketUploader implements Observer {
 			aFile = new RandomAccessFile(filePath, "r");
 			long fileLength = aFile.length();
 
-			dos.writeUTF(Main.config.getPass() + "&" + fileLength + "&" + type);
+			dos.writeUTF(Main.config.getPass() + "&" + fileLength + "&" + fileName);
 			this.link = dis.readUTF();
 			Main.myLog("[SocketUploader] SYN reply: " + link);
 
@@ -77,10 +76,6 @@ public class SocketUploader implements Observer {
 					break;
 				case SERVER_FULL:
 					Main.myLog("[SocketUploader] Server Full");
-					Main.dialog.serverFull();
-					break;
-				case FILE_NOT_RECOGNIZED:
-					Main.myLog("[SocketUploader] The server had a bad interpretation of the fileType");
 					Main.dialog.serverFull();
 					break;
 				case WRONG_PASSWORD:
