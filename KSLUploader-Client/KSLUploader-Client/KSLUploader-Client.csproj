@@ -90,6 +90,9 @@
     <Compile Include="Classes\SystemTray.cs" />
     <Compile Include="Libs\DataInputStream.cs" />
     <Compile Include="Libs\DataOutputStream.cs" />
+    <Compile Include="Windows\CaptureWindow.xaml.cs">
+      <DependentUpon>CaptureWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,10 @@
     <None Include="Resources\Settings.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Windows\CaptureWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -82,7 +82,7 @@ namespace KSLUploader.Classes
 
         private void onDoubleClick(object sender, MouseEventArgs e)
         {
-            CaptureDesktop();
+            new UploadsPanel().Show();
         }
 
         private void ShowProgress(object sender, ProgressChangedEventArgs e)
@@ -126,7 +126,7 @@ namespace KSLUploader.Classes
 
         private void CaptureArea()
         {
-            new UploadsPanel().Show();
+            new CaptureWindow().Show();
         }
 
         private void UploadFile()
