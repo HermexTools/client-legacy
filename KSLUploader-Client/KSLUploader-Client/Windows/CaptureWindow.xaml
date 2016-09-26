@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="CaptureWindow" Height="300" Width="300">
     <Grid>
-        
+        <Border x:Name="regionOLD" BorderBrush="Red" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="2" Visibility="Collapsed"/>
+
+        <Canvas Margin="-1">
+            <Path x:Name="regionPath" Stroke="LightBlue" Fill="#3F000000" StrokeThickness="2">
+                <Path.Data>
+                    <CombinedGeometry GeometryCombineMode="Exclude">
+                        <CombinedGeometry.Geometry1>
+                            <RectangleGeometry x:Name="regionBackground" Rect="0,0,300,300"/>
+                        </CombinedGeometry.Geometry1>
+                        <CombinedGeometry.Geometry2>
+                            <RectangleGeometry x:Name="regionSelection" Rect="0,0,0,0"/>
+                        </CombinedGeometry.Geometry2>
+                    </CombinedGeometry>
+                </Path.Data>
+            </Path>
+        </Canvas>
     </Grid>
 </Window>

@@ -23,6 +23,16 @@ namespace KSLUploader.Classes
             return bmp;
         }
 
+        public static Bitmap GetBitmapFromPoints(Point start, Point end)
+        {
+            Bitmap bmp = new Bitmap(end.X-start.X, end.Y-start.Y);
+            using(Graphics g = Graphics.FromImage(bmp))
+            {
+                g.CopyFromScreen(start.X, start.Y, 0, 0, new Size(end.X - start.X, end.Y - start.Y));
+            }
+            return bmp;
+        }
+
         public static Bitmap JoinBitmaps(List<Bitmap> bitmaps)
         {
             Bitmap output = null;
@@ -71,6 +81,11 @@ namespace KSLUploader.Classes
             FileInfo f = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".png"));
             bitmap.Save(f.FullName, ImageFormat.Png);
             return f;
-        }       
+        }  
+        
+        public static Point FromWindowsToDrawingPoint(System.Windows.Point start)
+        {
+            return new Point(Convert.ToInt32(start.X), Convert.ToInt32(start.Y));
+        }
     }
 }
