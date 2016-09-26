@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Dynamic;
@@ -30,6 +31,7 @@ namespace KSLUploader.Classes
             {
                 g.CopyFromScreen(start.X, start.Y, 0, 0, new Size(end.X - start.X, end.Y - start.Y));
             }
+
             return bmp;
         }
 

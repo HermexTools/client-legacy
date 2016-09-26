@@ -60,8 +60,9 @@ namespace KSLUploader.Windows
             this.Top = top;
             this.Width = width;
             this.Height = height;
-            
+                        
             regionBackground.Rect = new Rect(0, 0, width+2, height+2);
+            
 
             this.MouseRightButtonUp += CaptureWindow_MouseRightButtonUp;
             this.MouseDown += CaptureWindow_MouseDown;
@@ -74,10 +75,20 @@ namespace KSLUploader.Windows
         {
             if(e.ChangedButton==MouseButton.Left)
             {
-                endPoint.X -= 2;
-                endPoint.Y -= 2;
+                startPoint= this.PointToScreen(startPoint);
+                endPoint = this.PointToScreen(endPoint);
 
-                outputBitmap = Utils.GetBitmapFromPoints(Utils.FromWindowsToDrawingPoint(startPoint), Utils.FromWindowsToDrawingPoint(endPoint));
+                Point start = new Point(
+                    Math.Min(startPoint.X, endPoint.X), 
+                    Math.Min(startPoint.Y, endPoint.Y)
+                    );
+
+                Point end = new Point(
+                    Math.Max(startPoint.X, endPoint.X) - 2,
+                    Math.Max(startPoint.Y, endPoint.Y) - 2
+                    );
+
+                outputBitmap = Utils.GetBitmapFromPoints(Utils.FromWindowsToDrawingPoint(start), Utils.FromWindowsToDrawingPoint(end));
                 this.DialogResult = true;
                 this.Close();
             }
@@ -107,15 +118,12 @@ namespace KSLUploader.Windows
 
         private void DrawRegion()
         {
-            /*
-            var width = endPoint.X > startPoint.X ? endPoint.X - startPoint.X : (endPoint.X - startPoint.X) * -1;
-            var height = endPoint.Y > startPoint.Y ? endPoint.Y - startPoint.Y : (endPoint.Y - startPoint.Y) * -1;*/
-
-            var width = endPoint.X > startPoint.X ? endPoint.X - startPoint.X : startPoint.X - endPoint.X;
-            var height = endPoint.Y > startPoint.Y ? endPoint.Y - startPoint.Y : startPoint.Y - endPoint.Y;
-
-
-            regionSelection.Rect = new Rect(startPoint.X, startPoint.Y, width, height);
+            regionSelection.Rect = new Rect(
+                Math.Min(startPoint.X,endPoint.X), 
+                Math.Min(startPoint.Y,endPoint.Y),
+                Math.Max(startPoint.X-endPoint.X,endPoint.X-startPoint.X),
+                Math.Max(startPoint.Y-endPoint.Y,endPoint.Y-startPoint.Y)
+                );
         }
 
         private void CaptureWindow_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
