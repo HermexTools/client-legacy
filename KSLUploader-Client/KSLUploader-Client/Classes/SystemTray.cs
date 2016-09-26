@@ -117,7 +117,7 @@ namespace KSLUploader.Classes
             b.ProgressChanged += ShowProgress;
             FileInfo screen = Screenshot.CaptureDesktop();
 
-            SocketUploader s = new SocketUploader(screen, b);
+            SocketUploader s = new SocketUploader(screen, b, "{0}.png");
             if(s.Upload())
             {
                 trayIcon.ShowBalloonTip(5000, "Upload Completed", s.Link, ToolTipIcon.Info);

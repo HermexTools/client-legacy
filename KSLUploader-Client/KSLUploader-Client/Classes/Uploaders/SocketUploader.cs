@@ -21,24 +21,26 @@ namespace KSLUploader.Classes.Uploaders
         private TcpClient socket;
         private FileInfo file;
         private string _link;
+        private string _fileName;
 
         private BackgroundWorker worker;
 
-        public SocketUploader(FileInfo f, BackgroundWorker bgworker)
+        public SocketUploader(FileInfo f, BackgroundWorker bgworker, string sendname)
         {
             file = f;
             worker = bgworker;
+            FilenameToSend = sendname;
         }
 
         public bool Upload()
         {
-            socket = new TcpClient((string)SettingsManager.Get("SocketAddress"), Convert.ToInt32(SettingsManager.Get("SocketPort")));
+            socket = new TcpClient(SettingsManager.Get<string>("SocketAddress"), SettingsManager.Get<int>("SocketPort"));
 
             DataOutputStream output = new DataOutputStream(new BinaryWriter(socket.GetStream()));
             DataInputStream input = new DataInputStream(new BinaryReader(socket.GetStream()));
 
             // password & file lenght & type
-            output.WriteUTF((string)SettingsManager.Get("SocketPassword") + "&" + file.Length + "&" + getType(file));
+            output.WriteUTF(SettingsManager.Get<string>("SocketPassword") + "&" + file.Length + "&" + FilenameToSend);
 
             if(input.ReadUTF().Equals(Messages.OK.ToString()))
             {
@@ -99,7 +101,7 @@ namespace KSLUploader.Classes.Uploaders
 
         public void Stop()
         {
-
+            socket.Close();
         }
 
         public string Link
@@ -114,22 +116,17 @@ namespace KSLUploader.Classes.Uploaders
                 _link = value;
             }
         }
-
-        private string getType(FileInfo file)
+        public string FilenameToSend
         {
-            switch(file.Extension)
+            get
             {
-                case ".png":
-                    return "img";
-                case ".zip":
-                    return "file";
-                case ".txt":
-                    return "txt";
-                default:
-                    return "unk";
+                return _link;
+            }
+
+            private set
+            {
+                _link = value;
             }
         }
-
-
     }
 }
