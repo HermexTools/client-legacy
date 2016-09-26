@@ -15,7 +15,7 @@ namespace KSLUploader
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Logger.Info("App started");
+            Logger.Set("App started", LogType.INFO);
 
             //no double instance!
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)

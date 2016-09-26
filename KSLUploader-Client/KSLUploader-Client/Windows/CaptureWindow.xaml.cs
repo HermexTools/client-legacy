@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -19,6 +20,18 @@ namespace KSLUploader.Windows
 {
     public partial class CaptureWindow : Window
     {
+        public static Bitmap Capture()
+        {
+            var snap = new CaptureWindow();
+            if(snap.ShowDialog() == true)
+            {
+                return snap.outputBitmap;
+            }
+            return null;
+        }
+
+        public Bitmap outputBitmap = null;
+
         public CaptureWindow()
         {
             InitializeComponent();
@@ -28,7 +41,7 @@ namespace KSLUploader.Windows
             this.WindowStartupLocation = WindowStartupLocation.Manual;
             this.WindowState = WindowState.Normal;
             this.Topmost = true;
-            this.Background = new SolidColorBrush(Color.FromArgb(60, 0, 0, 0));
+            this.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(60, 0, 0, 0));
             this.AllowsTransparency = true;
 
             var left = Screen.AllScreens.Min(screen => screen.Bounds.X);

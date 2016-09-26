@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace KSLUploader.Classes
 {
+    public enum LogType { INFO, SEVERE }
+
     public class Logger
     {
         private static FileInfo logFile = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\.KSLU\\KSLULog.txt");
         
-        public static void Info(string s)
+        public static void Set(string message, LogType type)
         {
-            Write(s, "[INFO]");
-        }
-
-        public static void Severe(string s)
-        {
-            Write(s, "[SEVERE]");
+            Write(message, type.ToString(), new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name);
         }
 
         public static void Clear()
@@ -27,10 +27,10 @@ namespace KSLUploader.Classes
             File.WriteAllText(logFile.FullName, "");
         }
 
-        private static void Write(string content, string type)
+        private static void Write(string content, string type, string className)
         {
             InitializeFile();
-            File.AppendAllText(logFile.FullName,DateTime.Now.ToString("[dd/MM/yyyy H:mm:ss.FFF]")+" "+type+" "+content+"\n");            
+            File.AppendAllText(logFile.FullName, DateTime.Now.ToString("[dd-MM-yyyy H:mm:ss.FFF]") + " [" + type + "|" + className + "] " + content + "\n");     
         }
 
         private static void InitializeFile()

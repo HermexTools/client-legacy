@@ -88,6 +88,7 @@
     <Compile Include="Classes\Uploaders\FtpUploader.cs" />
     <Compile Include="Classes\Uploaders\SocketUploader.cs" />
     <Compile Include="Classes\SystemTray.cs" />
+    <Compile Include="Classes\Utils.cs" />
     <Compile Include="Libs\DataInputStream.cs" />
     <Compile Include="Libs\DataOutputStream.cs" />
     <Compile Include="Windows\CaptureWindow.xaml.cs">

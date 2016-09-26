@@ -126,7 +126,7 @@ namespace KSLUploader.Classes
 
         private void CaptureArea()
         {
-            new CaptureWindow().Show();
+            Screenshot.CaptureArea();
         }
 
         private void UploadFile()
