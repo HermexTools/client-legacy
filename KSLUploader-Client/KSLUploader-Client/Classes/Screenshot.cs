@@ -36,30 +36,6 @@ namespace KSLUploader.Classes
                 return Utils.SaveBitmap(bmp);
             }
             return null;
-        }
-        
-        public static FileInfo UploadClipboard()
-        {
-            if(Clipboard.ContainsText(TextDataFormat.Text))
-            {
-                string clipboard = Clipboard.GetText(TextDataFormat.Text);
-
-                //save in temp to send
-                FileInfo textFile = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".txt"));
-                
-                if(!File.Exists(textFile.FullName))
-                {
-                    using(var fs = File.Create(textFile.FullName))
-                    {
-                        fs.Close();
-                    }
-                }
-
-                File.WriteAllText(textFile.FullName, clipboard);
-
-                return textFile;
-            }
-            return null;
-        }  
+        } 
     }
 }
