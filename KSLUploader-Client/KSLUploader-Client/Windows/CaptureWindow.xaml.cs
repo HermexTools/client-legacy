@@ -24,7 +24,7 @@ namespace KSLUploader.Windows
         public static System.Drawing.Bitmap Capture()
         {
             var snap = new CaptureWindow();
-            if(snap.ShowDialog() == true)
+            if (snap.ShowDialog() == true)
             {
                 return snap.outputBitmap;
             }
@@ -60,9 +60,9 @@ namespace KSLUploader.Windows
             this.Top = top;
             this.Width = width;
             this.Height = height;
-                        
-            regionBackground.Rect = new Rect(0, 0, width+2, height+2);
-            
+
+            regionBackground.Rect = new Rect(0, 0, width + 2, height + 2);
+
 
             this.MouseRightButtonUp += CaptureWindow_MouseRightButtonUp;
             this.MouseDown += CaptureWindow_MouseDown;
@@ -73,13 +73,13 @@ namespace KSLUploader.Windows
 
         private void CaptureWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if(e.ChangedButton==MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                startPoint= this.PointToScreen(startPoint);
+                startPoint = this.PointToScreen(startPoint);
                 endPoint = this.PointToScreen(endPoint);
 
                 Point start = new Point(
-                    Math.Min(startPoint.X, endPoint.X), 
+                    Math.Min(startPoint.X, endPoint.X),
                     Math.Min(startPoint.Y, endPoint.Y)
                     );
 
@@ -96,7 +96,7 @@ namespace KSLUploader.Windows
 
         private void CaptureWindow_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 endPoint = e.GetPosition(this);
                 DrawRegion();
@@ -105,13 +105,10 @@ namespace KSLUploader.Windows
 
         private void CaptureWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                startPoint = new Point(0, 0);
-                endPoint = new Point(0, 0);
-                regionSelection.Rect = new Rect(0, 0, 0, 0);
-
                 startPoint = e.GetPosition(this);
+                endPoint = e.GetPosition(this);
                 DrawRegion();
             }
         }
@@ -119,10 +116,10 @@ namespace KSLUploader.Windows
         private void DrawRegion()
         {
             regionSelection.Rect = new Rect(
-                Math.Min(startPoint.X,endPoint.X), 
-                Math.Min(startPoint.Y,endPoint.Y),
-                Math.Max(startPoint.X-endPoint.X,endPoint.X-startPoint.X),
-                Math.Max(startPoint.Y-endPoint.Y,endPoint.Y-startPoint.Y)
+                Math.Min(startPoint.X, endPoint.X),
+                Math.Min(startPoint.Y, endPoint.Y),
+                Math.Max(startPoint.X - endPoint.X, endPoint.X - startPoint.X),
+                Math.Max(startPoint.Y - endPoint.Y, endPoint.Y - startPoint.Y)
                 );
         }
 
