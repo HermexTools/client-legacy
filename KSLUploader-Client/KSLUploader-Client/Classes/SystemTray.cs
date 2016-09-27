@@ -136,7 +136,7 @@ namespace KSLUploader.Classes
 
         private void UploadClipboard()
         {
-
+            Screenshot.UploadClipboard();
         }
 
         private void Exit()
