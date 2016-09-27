@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace KSLUploader.Classes
 {
@@ -88,6 +89,33 @@ namespace KSLUploader.Classes
         public static Point FromWindowsToDrawingPoint(System.Windows.Point start)
         {
             return new Point(Convert.ToInt32(start.X), Convert.ToInt32(start.Y));
+        }
+
+        public static bool IsWindowOpen<T>(string name = "") where T : System.Windows.Window
+        {
+            return string.IsNullOrEmpty(name)
+               ? App.Current.Windows.OfType<T>().Any()
+               : App.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
+        }
+
+        public static void CheckRunAtStartup()
+        {
+            var registryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+
+            if(SettingsManager.Get<bool>("RunAtStartup"))
+            {
+                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
+                {
+                    key.SetValue("KSLU", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+                }
+            }
+            else
+            {
+                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
+                {
+                    key.DeleteValue("KSLU", false);
+                }
+            }
         }
     }
 }

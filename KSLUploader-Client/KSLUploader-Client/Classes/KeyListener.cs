@@ -38,14 +38,17 @@ namespace KSLUploader.Classes
             }
         }
 
-        public static string GetStringCombination(string[] keys)
+        public static string GetStringCombination(List<int> keyValues)
         {
             StringBuilder output = new StringBuilder();
-            foreach(var item in keys)
+            foreach(var item in keyValues)
             {
-                output.Append(item);
+                output.Append(
+                    FromKeyToName((Keys)item)
+                    );
+                output.Append("+");
             }
-            output.Remove(-1, 1);
+            output.Remove(output.ToString().LastIndexOf("+"), 1);
             return output.ToString();
         }
     }

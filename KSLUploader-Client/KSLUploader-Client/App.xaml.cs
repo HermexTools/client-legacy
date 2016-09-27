@@ -5,6 +5,7 @@ using System.Windows;
 using System;
 using Microsoft.Win32;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace KSLUploader
 {
@@ -28,7 +29,7 @@ namespace KSLUploader
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             InizializeSettings();
-            CheckRunAtStartup();
+            Utils.CheckRunAtStartup();
             
             keyListener = new KeyListener();
             ksluTray = new SystemTray();
@@ -58,53 +59,14 @@ namespace KSLUploader
             SettingsManager.Inizialize("FTPPassword", null);
 
             //shortcut
-            SettingsManager.Inizialize("ShortcutArea", new List<System.Windows.Forms.Keys> {
-                System.Windows.Forms.Keys.LControlKey,
-                System.Windows.Forms.Keys.LMenu,
-                System.Windows.Forms.Keys.D1
-            });
-            SettingsManager.Inizialize("ShortcutDesktop", new List<System.Windows.Forms.Keys> {
-                System.Windows.Forms.Keys.LControlKey,
-                System.Windows.Forms.Keys.LMenu,
-                System.Windows.Forms.Keys.D2
-            });
-            SettingsManager.Inizialize("ShortcutFile", new List<System.Windows.Forms.Keys> {
-                System.Windows.Forms.Keys.LControlKey,
-                System.Windows.Forms.Keys.LMenu,
-                System.Windows.Forms.Keys.D3
-            });
-            SettingsManager.Inizialize("ShortcutClipboard", new List<System.Windows.Forms.Keys> {
-                System.Windows.Forms.Keys.LControlKey,
-                System.Windows.Forms.Keys.LMenu,
-                System.Windows.Forms.Keys.D4
-            });
+            SettingsManager.Inizialize("ShortcutArea", new List<int>() { 162, 160, 49 });
+            SettingsManager.Inizialize("ShortcutDesktop", new List<int>() { 162, 160, 50 });
+            SettingsManager.Inizialize("ShortcutFile", new List<int>() { 162, 160, 51 });
+            SettingsManager.Inizialize("ShortcutClipboard", new List<int>() { 162, 160, 52 });
         }
 
-        public static bool IsWindowOpen<T>(string name = "") where T : Window
-        {
-            return string.IsNullOrEmpty(name)
-               ? Current.Windows.OfType<T>().Any()
-               : Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
-        }
+        
 
-        public static void CheckRunAtStartup()
-        {
-            var registryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 
-            if((bool)SettingsManager.Get("RunAtStartup"))
-            {               
-                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
-                {
-                    key.SetValue("KSLU", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
-                }
-            }
-            else
-            {
-                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
-                {
-                    key.DeleteValue("KSLU", false);
-                }
-            }
-        }
     }
 }

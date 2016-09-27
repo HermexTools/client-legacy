@@ -24,7 +24,7 @@
                         <Button x:Name="generals_browsebutton" Content="Browse..." Margin="0,0,5,0" Padding="5,1"/>
                         <TextBox x:Name="generals_browsepath" Text="Not set." FontSize="16" Width="230" BorderBrush="Transparent" Grid.Column="1" IsReadOnly="true"/>
                     </Grid>
-                    <TextBlock Text="Upload method" Padding="0,10,0,5" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock x:Name="generals_method_label" Text="Upload method" Padding="0,10,0,5" FontWeight="Bold" FontSize="16"/>
                     <RadioButton x:Name="generals_method_socket" GroupName="1" Content="Use Socket" FontSize="16" VerticalContentAlignment="Center"/>
                     <RadioButton x:Name="generals_method_ftp" GroupName="1" Content="Use FTP" FontSize="16" VerticalContentAlignment="Center"/>
                 </StackPanel>
@@ -96,17 +96,17 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Area shortcut" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button x:Name="shortcut_area" Content="Change" Grid.Column="1" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+                        <TextBlock Text="Area shortcut" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>
+                        <Button x:Name="shortcut_area" Content="Change" Grid.Column="1" FontSize="12" Padding="0,5" Width="170" VerticalAlignment="Center"/>
 
-                        <TextBlock Text="Desktop shortcut" Grid.Row="1" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button x:Name="shortcut_desktop" Content="Change" Grid.Row="1" Grid.Column="2" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+                        <TextBlock Text="Desktop shortcut" Grid.Row="1" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>
+                        <Button x:Name="shortcut_desktop" Content="Change" Grid.Row="1" Grid.Column="2" FontSize="12" Padding="0,5" Width="170" VerticalAlignment="Center"/>
 
-                        <TextBlock Text="File shortcut" Grid.Row="2" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button x:Name="shortcut_file" Content="Change" Grid.Row="2" Grid.Column="3" FontSize="16" Padding="0,5" Width="170" Margin="0,0,0,10"/>
+                        <TextBlock Text="File shortcut" Grid.Row="2" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>
+                        <Button x:Name="shortcut_file" Content="Change" Grid.Row="2" Grid.Column="3" FontSize="12" Padding="0,5" Width="170" VerticalAlignment="Center"/>
 
-                        <TextBlock Text="Clipboard shortcut" Grid.Row="3" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center"/>
-                        <Button x:Name="shortcut_clipboard" Content="Change" Grid.Row="3" Grid.Column="4" FontSize="16" Padding="0,5" Width="170"/>
+                        <TextBlock Text="Clipboard shortcut" Grid.Row="3" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>
+                        <Button x:Name="shortcut_clipboard" Content="Change" Grid.Row="3" Grid.Column="4" FontSize="12" Padding="0,5" Width="170" VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>
             </TabItem>

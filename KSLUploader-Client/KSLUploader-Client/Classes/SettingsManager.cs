@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace KSLUploader.Classes
 {
@@ -36,17 +38,17 @@ namespace KSLUploader.Classes
             
             SaveSettingsFile(file);
         }
-
-        public static object Get(string key)
-        {
-            var file = ReadSettingsFile();
-            return file[key];
-        }
-
+        
         public static T Get<T>(string key)
         {
             var file = ReadSettingsFile();
-            return (T)file[key];
+            
+            if(file[key] is JArray)
+            {
+                return ((JArray)file[key]).ToObject<T>();
+            }
+
+            return (T)Convert.ChangeType(file[key], typeof(T));
         }
 
         public static void Remove(string key)
@@ -73,7 +75,7 @@ namespace KSLUploader.Classes
 
 
 
-        private static Dictionary<string, object> ReadSettingsFile()
+        public static Dictionary<string, object> ReadSettingsFile()
         {
             bool error = false;
             Dictionary<string, object> list = new Dictionary<string, object>();
@@ -125,6 +127,21 @@ namespace KSLUploader.Classes
         {
             var file = GetSettingFile();
             File.WriteAllText(file.FullName, JsonConvert.SerializeObject(settings, Formatting.Indented));
+        }
+
+        private static bool IsNumber(object value)
+        {
+            return value is sbyte
+                    || value is byte
+                    || value is short
+                    || value is ushort
+                    || value is int
+                    || value is uint
+                    || value is long
+                    || value is ulong
+                    || value is float
+                    || value is double
+                    || value is decimal;
         }
 
     }

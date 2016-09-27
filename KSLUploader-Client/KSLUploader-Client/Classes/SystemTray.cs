@@ -147,7 +147,7 @@ namespace KSLUploader.Classes
 
         private void ShowSettings()
         {
-            if(!App.IsWindowOpen<Settings>())
+            if(!Utils.IsWindowOpen<Settings>())
             {
                 new Settings().Show();
             }
