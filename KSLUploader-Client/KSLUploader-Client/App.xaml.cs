@@ -52,7 +52,7 @@ namespace KSLUploader
             SettingsManager.Inizialize("AcceptCertificates", true);
             SettingsManager.Inizialize("FTPAddress", null);
             SettingsManager.Inizialize("FTPPort", 21);
-            SettingsManager.Inizialize("FTPDirectory", null);
+            SettingsManager.Inizialize("FTPDirectory", "/");
             SettingsManager.Inizialize("FTPWeburl", null);
             SettingsManager.Inizialize("FTPUser", null);
             SettingsManager.Inizialize("FTPPassword", null);
