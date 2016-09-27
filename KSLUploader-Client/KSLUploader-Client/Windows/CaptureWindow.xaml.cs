@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using KSLUploader.Classes;
 
 namespace KSLUploader.Windows
@@ -32,9 +21,8 @@ namespace KSLUploader.Windows
         }
 
         public System.Drawing.Bitmap outputBitmap = null;
-
-        Point startPoint;
-        Point endPoint;
+        private Point startPoint;
+        private Point endPoint;
 
         public CaptureWindow()
         {
@@ -68,8 +56,34 @@ namespace KSLUploader.Windows
             this.MouseDown += CaptureWindow_MouseDown;
             this.MouseMove += CaptureWindow_MouseMove;
             this.MouseUp += CaptureWindow_MouseUp;
+            this.KeyUp += CaptureWindow_KeyUp;
 
         }
+
+        #region CANCEL ACTION EVENTS
+
+        private void CaptureWindow_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key==Key.Escape)
+            {
+                CancelAction();
+            }
+        }
+
+        private void CaptureWindow_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CancelAction();
+        }
+
+        private void CancelAction()
+        {
+            this.DialogResult = false;
+            this.Close();
+        }
+
+        #endregion
+
+        #region MOUSE DRAWING EVENTS
 
         private void CaptureWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -123,12 +137,6 @@ namespace KSLUploader.Windows
                 );
         }
 
-        private void CaptureWindow_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
-
-
+        #endregion
     }
 }
