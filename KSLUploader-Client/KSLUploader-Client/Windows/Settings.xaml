@@ -112,9 +112,9 @@
             </TabItem>
             <TabItem Header="Info" FontSize="14" Width="70">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="KSLUploader" FontSize="20" TextAlignment="Center" FontWeight="Bold" Padding="0,0,0,10"/>
-                    <TextBlock Text="Developed by SergiX44, Kaos1337, Lukasss93" FontSize="16" TextAlignment="Center" Padding="0,0,0,10"/>
-                    <TextBlock Text="Version: 0.0.2-beta" FontSize="16" TextAlignment="Center"/>
+                    <TextBlock x:Name="info_title" Text="KSLUploader" FontSize="20" TextAlignment="Center" FontWeight="Bold" Padding="0,0,0,10"/>
+                    <TextBlock x:Name="info_developers" Text="Developed by SergiX44, Kaos1337, Lukasss93" FontSize="16" TextAlignment="Center" Padding="0,0,0,10"/>
+                    <TextBlock x:Name="info_version" Text="Version: 0.0.2-beta" FontSize="16" TextAlignment="Center"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

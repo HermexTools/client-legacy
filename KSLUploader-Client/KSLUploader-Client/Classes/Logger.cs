@@ -8,9 +8,9 @@ namespace KSLUploader.Classes
 
     public class Logger
     {
-        private static FileInfo logFile = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".KSLU", "logs", "KSLU-" + DateTime.Now.ToString("dd-MM-yyyy") + ".log"));
+        private static FileInfo logFile = new FileInfo(AppConstants.LoggerFileName);
 
-        public static void Set(string message, LogType type)
+        public static void Set(string message, LogType type = LogType.INFO)
         {
             Write(message, type.ToString(), new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name);
         }

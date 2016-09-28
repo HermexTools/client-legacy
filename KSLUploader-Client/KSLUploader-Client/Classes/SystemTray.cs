@@ -17,7 +17,7 @@ namespace KSLUploader.Classes
             trayIcon = new NotifyIcon();
 
             //trayicon name
-            trayIcon.Text = "KSLUploader";
+            trayIcon.Text = AppConstants.Name;
 
             //trayicon icon
             trayIcon.Icon = Properties.Resources.AppIcon;
@@ -40,7 +40,7 @@ namespace KSLUploader.Classes
 
             //main menu
             ContextMenuStrip trayMenu = new ContextMenuStrip();
-            trayMenu.Items.Add("KSLUploader v0.0.2 Beta", null, null).Enabled = false;
+            trayMenu.Items.Add(AppConstants.Name+" v"+AppConstants.Version, null, null).Enabled = false;
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");

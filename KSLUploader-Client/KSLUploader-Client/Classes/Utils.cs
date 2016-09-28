@@ -15,20 +15,20 @@ namespace KSLUploader.Classes
 
         public static void CheckRunAtStartup()
         {
-            var registryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+            var registryKey = AppConstants.StartUpRegistryKey;
 
             if (SettingsManager.Get<bool>("RunAtStartup"))
             {
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
                 {
-                    key.SetValue("KSLU", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+                    key.SetValue(AppConstants.StartUpRegistryKeyName, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
                 }
             }
             else
             {
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
                 {
-                    key.DeleteValue("KSLU", false);
+                    key.DeleteValue(AppConstants.StartUpRegistryKeyName, false);
                 }
             }
         }
