@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -76,12 +76,11 @@ namespace KSLUploader.Classes
             //save local if enabled
             if(SettingsManager.Get<bool>("SaveLocal"))
             {
-                string filename = SettingsManager.Get<string>("SaveLocalPath") + "\\kslu_" + DateTime.Now.Ticks + ".png";
-                bitmap.Save(filename, ImageFormat.Png);
+                bitmap.Save(AppConstants.SaveLocalFileName, ImageFormat.Png);
             }
 
             //save in temp to send
-            FileInfo f = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".png"));
+            FileInfo f = new FileInfo(AppConstants.SaveTempFileName);
             bitmap.Save(f.FullName, ImageFormat.Png);
             return f;
         }  
@@ -100,20 +99,20 @@ namespace KSLUploader.Classes
 
         public static void CheckRunAtStartup()
         {
-            var registryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+            var registryKey = AppConstants.StartUpRegistryKey;
 
             if(SettingsManager.Get<bool>("RunAtStartup"))
             {
                 using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
                 {
-                    key.SetValue("KSLU", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
+                    key.SetValue(AppConstants.StartUpRegistryKeyName, "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\"");
                 }
             }
             else
             {
                 using(RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
                 {
-                    key.DeleteValue("KSLU", false);
+                    key.DeleteValue(AppConstants.StartUpRegistryKeyName, false);
                 }
             }
         }

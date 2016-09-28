@@ -14,7 +14,7 @@ namespace KSLUploader.Classes
 
     public class Logger
     {
-        private static FileInfo logFile = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\.KSLU\\KSLULog.txt");
+        private static FileInfo logFile = new FileInfo(AppConstants.LoggerFileName);
         
         public static void Set(string message, LogType type)
         {

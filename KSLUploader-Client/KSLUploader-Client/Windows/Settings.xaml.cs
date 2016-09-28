@@ -16,6 +16,7 @@ namespace KSLUploader.Windows
         public Settings()
         {
             InitializeComponent();
+
             //center window
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
@@ -54,8 +55,12 @@ namespace KSLUploader.Windows
             generals_browsebutton.Click += Generals_browsebutton_Click;
             generals_method_socket.Click += (s, e) => { CheckUploadMethod(); };
             generals_method_ftp.Click += (s, e) => { CheckUploadMethod(); };
-
             saveButton.Click += SaveButton_Click;
+
+            //info
+            info_title.Text = AppConstants.Name;
+            info_developers.Text = "Developed by " + String.Join(", ", AppConstants.Developers);
+            info_version.Text = "Version: " + AppConstants.Version;
         }
 
         private void CheckUploadMethod()

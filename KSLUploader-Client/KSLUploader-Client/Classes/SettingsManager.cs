@@ -12,8 +12,7 @@ namespace KSLUploader.Classes
 {
     public class SettingsManager
     {
-        private static string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".KSLU");
-        private static string file = "ksluconfig.json";
+        private static FileInfo SettingsFile = new FileInfo(AppConstants.SettingsFileName);
 
         public static void Inizialize(string key, object value)
         {
@@ -105,43 +104,28 @@ namespace KSLUploader.Classes
         private static FileInfo GetSettingFile()
         {
             //create folder
-            if(!Directory.Exists(folder))
+            if(!Directory.Exists(SettingsFile.DirectoryName))
             {
-                Directory.CreateDirectory(folder);
+                Directory.CreateDirectory(SettingsFile.DirectoryName);
             }
             
             //create file
-            if(!File.Exists(folder + "\\" + file))
+            if(!File.Exists(SettingsFile.FullName))
             {
-                using(var fs = File.Create(folder + "\\" + file))
+                using(var fs = File.Create(SettingsFile.FullName))
                 {
                     fs.Close();
                 }
-                File.WriteAllText(folder + "\\" + file, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));                
+                File.WriteAllText(SettingsFile.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));                
             }
 
-            return new FileInfo(folder + "\\" + file);
+            return SettingsFile;
         }
 
         private static void SaveSettingsFile(Dictionary<string,object> settings)
         {
             var file = GetSettingFile();
             File.WriteAllText(file.FullName, JsonConvert.SerializeObject(settings, Formatting.Indented));
-        }
-
-        private static bool IsNumber(object value)
-        {
-            return value is sbyte
-                    || value is byte
-                    || value is short
-                    || value is ushort
-                    || value is int
-                    || value is uint
-                    || value is long
-                    || value is ulong
-                    || value is float
-                    || value is double
-                    || value is decimal;
         }
 
     }
