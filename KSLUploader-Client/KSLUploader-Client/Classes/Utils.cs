@@ -76,7 +76,7 @@ namespace KSLUploader.Classes
             //save local if enabled
             if(SettingsManager.Get<bool>("SaveLocal"))
             {
-                bitmap.Save(AppConstants.SaveLocalFileName, ImageFormat.Png);
+                bitmap.Save(AppConstants.SaveLocalFileName(SettingsManager.Get<string>("SaveLocalPath")), ImageFormat.Png);
             }
 
             //save in temp to send

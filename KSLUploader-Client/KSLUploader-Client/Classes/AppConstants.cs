@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace KSLUploader.Classes
         private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + OwnAppDataFolderName + Path.DirectorySeparatorChar;
         private static readonly string TempFolder = Path.GetTempPath() + Path.DirectorySeparatorChar;
         private static readonly string SaveLocalFileNamePrefix = "kslu_";
-        private static readonly string SaveTempFileNamePrefix = "kslu_temp_";        
+        private static readonly string SaveTempFileNamePrefix = "kslu_temp_";
 
         //public fields
         public static readonly string Name = "KSLUploader";
@@ -22,11 +23,15 @@ namespace KSLUploader.Classes
         public static readonly string Version = "0.0.3-Beta";
         public static readonly string SaveLocalDefaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         public static readonly string LoggerFileName = AppDataFolder + "logs.txt";
-        public static readonly string SettingsFileName = AppDataFolder + "config.json";
-        public static readonly string SaveLocalFileName = SettingsManager.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + SaveLocalFileNamePrefix + DateTime.Now.Ticks + ".png";
+        public static readonly string SettingsFileName = AppDataFolder + "config.json";        
         public static readonly string SaveTempFileName = TempFolder + SaveTempFileNamePrefix + DateTime.Now.Ticks + ".png";
         public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
         public static readonly string StartUpRegistryKeyName = "KSLU";
+
+        public static string SaveLocalFileName(string directory)
+        {
+            return directory + Path.DirectorySeparatorChar + SaveLocalFileNamePrefix + DateTime.Now.Ticks + ".png";
+        }
 
         public static void InizializeSettings()
         {

@@ -16,6 +16,8 @@ namespace KSLUploader
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            Logger.Set("KSLU Started!");
+
             //no double instance!
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
