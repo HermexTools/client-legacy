@@ -96,12 +96,11 @@ namespace KSLUploader.Classes
             //save local if enabled
             if (SettingsManager.Get<bool>("SaveLocal"))
             {
-                string filename = Path.Combine(SettingsManager.Get<string>("SaveLocalPath"), "kslu_" + DateTime.Now.Ticks + ".png");
-                bitmap.Save(filename, ImageFormat.Png);
+                bitmap.Save(AppConstants.SaveLocalFileName(SettingsManager.Get<string>("SaveLocalPath")), ImageFormat.Png);
             }
 
             //save in temp to send
-            FileInfo f = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".png"));
+            FileInfo f = new FileInfo(AppConstants.SaveTempFileName);
             bitmap.Save(f.FullName, ImageFormat.Png);
             return f;
         }
