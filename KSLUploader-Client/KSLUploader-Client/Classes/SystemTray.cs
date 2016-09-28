@@ -1,11 +1,10 @@
-﻿using System.Windows.Forms;
+﻿using KSLUploader.Classes.Uploaders;
 using KSLUploader.Windows;
-using System.IO;
-using KSLUploader.Classes.Uploaders;
-using System.Diagnostics;
 using System;
-using System.Drawing;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace KSLUploader.Classes
 {
@@ -46,18 +45,18 @@ namespace KSLUploader.Classes
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Capture Area", Properties.Resources.Area, delegate { CaptureArea(); });
-            if(Screen.AllScreens.Length > 1)
+            if (Screen.AllScreens.Length > 1)
             {
                 //sub menu -> desktops
                 ToolStripMenuItem desktopItems = new ToolStripMenuItem("Capture Desktop", Properties.Resources.Desktop);
-                desktopItems.DropDownItems.Add("All Desktops",null,delegate { Screenshot.CaptureDesktop(); });
+                desktopItems.DropDownItems.Add("All Desktops", null, delegate { CaptureDesktop(null); });
                 desktopItems.DropDownItems.Add("-");
                 int i = 1;
-                foreach(var screen in Screen.AllScreens)
+                foreach (var screen in Screen.AllScreens)
                 {
                     string monitor = i + ". " + screen.Bounds.Width + "x" + screen.Bounds.Height;
 
-                    desktopItems.DropDownItems.Add(monitor, null, delegate { Screenshot.CaptureDesktop(screen); });
+                    desktopItems.DropDownItems.Add(monitor, null, delegate { CaptureDesktop(screen); });
                     i++;
                 }
 
@@ -65,7 +64,7 @@ namespace KSLUploader.Classes
             }
             else
             {
-                trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop, delegate { Screenshot.CaptureDesktop(); });
+                trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
             }
             trayMenu.Items.Add("Upload File", Properties.Resources.File, delegate { UploadFile(); });
             trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
@@ -110,23 +109,46 @@ namespace KSLUploader.Classes
         #endregion
 
         #region PROGRAM EVENTS
-        private void CaptureDesktop()
+        private void CaptureDesktop(Screen s)
         {
+            FileInfo screen;
+            if (s != null)
+            {
+                screen = Screenshot.CaptureDesktop(s);
+            }
+            else
+            {
+                screen = Screenshot.CaptureDesktop();
+            }
+
             BackgroundWorker b = new BackgroundWorker();
             b.WorkerReportsProgress = true;
             b.ProgressChanged += ShowProgress;
-            FileInfo screen = Screenshot.CaptureDesktop();
 
-            SocketUploader s = new SocketUploader(screen, b, "{0}.png");
-            if(s.Upload())
+            SocketUploader upload = new SocketUploader(screen, b, "{0}.png");
+            if (upload.Upload())
             {
-                trayIcon.ShowBalloonTip(5000, "Upload Completed", s.Link, ToolTipIcon.Info);
+                trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
             }
         }
 
         private void CaptureArea()
         {
-            Screenshot.CaptureArea();
+            var captureWin = new CaptureWindow();
+            if(captureWin.CompletedCapture())
+            {
+                FileInfo screen =  Screenshot.CaptureArea(Utils.ConvertPoint(captureWin.StartPoint), Utils.ConvertPoint(captureWin.EndPoint));
+
+                BackgroundWorker b = new BackgroundWorker();
+                b.WorkerReportsProgress = true;
+                b.ProgressChanged += ShowProgress;
+
+                SocketUploader upload = new SocketUploader(screen, b, "{0}.png");
+                if (upload.Upload())
+                {
+                    trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                }
+            }
         }
 
         private void UploadFile()
@@ -136,16 +158,16 @@ namespace KSLUploader.Classes
 
         private void UploadClipboard()
         {
-            if(Clipboard.ContainsText(TextDataFormat.Text))
+            if (Clipboard.ContainsText(TextDataFormat.Text))
             {
                 string clipboard = Clipboard.GetText(TextDataFormat.Text);
 
                 //save in temp to send
                 FileInfo textFile = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".txt"));
 
-                if(!File.Exists(textFile.FullName))
+                if (!File.Exists(textFile.FullName))
                 {
-                    using(var fs = File.Create(textFile.FullName))
+                    using (var fs = File.Create(textFile.FullName))
                     {
                         fs.Close();
                     }
@@ -163,7 +185,7 @@ namespace KSLUploader.Classes
 
         private void ShowSettings()
         {
-            if(!Utils.IsWindowOpen<Settings>())
+            if (!Utils.IsWindowOpen<Settings>())
             {
                 new Settings().Show();
             }

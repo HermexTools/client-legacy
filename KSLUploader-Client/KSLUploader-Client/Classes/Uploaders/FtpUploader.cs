@@ -81,12 +81,12 @@ namespace KSLUploader.Classes.Uploaders
         {
             get
             {
-                return _link;
+                return _fileName;
             }
 
             private set
             {
-                _link = value;
+                _fileName = value;
             }
         }
     }

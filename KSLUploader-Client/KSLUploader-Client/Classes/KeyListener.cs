@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Gma.System.MouseKeyHook;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Gma.System.MouseKeyHook;
 
 namespace KSLUploader.Classes
 {
@@ -21,12 +18,12 @@ namespace KSLUploader.Classes
 
         private void GlobalKeyApp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            Debug.WriteLine(e.KeyCode + " | " + e.KeyData + " | " + e.KeyValue+" | "+e.Modifiers);            
+            Debug.WriteLine(e.KeyCode + " | " + e.KeyData + " | " + e.KeyValue + " | " + e.Modifiers);
         }
 
         private static string FromKeyToName(Keys keys)
         {
-            switch(keys)
+            switch (keys)
             {
                 case Keys.LControlKey: return "CTRL-L";
                 case Keys.RControlKey: return "CTRL-R";
@@ -41,7 +38,7 @@ namespace KSLUploader.Classes
         public static string GetStringCombination(List<int> keyValues)
         {
             StringBuilder output = new StringBuilder();
-            foreach(var item in keyValues)
+            foreach (var item in keyValues)
             {
                 output.Append(
                     FromKeyToName((Keys)item)

@@ -1,11 +1,8 @@
 ﻿using KSLUploader.Classes;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
 using System;
-using Microsoft.Win32;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.Windows;
 
 namespace KSLUploader
 {

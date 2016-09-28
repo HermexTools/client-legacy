@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KSLUploader.Classes
 {
@@ -14,8 +8,8 @@ namespace KSLUploader.Classes
 
     public class Logger
     {
-        private static FileInfo logFile = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\.KSLU\\KSLULog.txt");
-        
+        private static FileInfo logFile = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".KSLU", "logs", "KSLU-" + DateTime.Now.ToString("dd-MM-yyyy") + ".log"));
+
         public static void Set(string message, LogType type)
         {
             Write(message, type.ToString(), new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name);
@@ -30,21 +24,21 @@ namespace KSLUploader.Classes
         private static void Write(string content, string type, string className)
         {
             InitializeFile();
-            File.AppendAllText(logFile.FullName, DateTime.Now.ToString("[dd-MM-yyyy H:mm:ss.FFF]") + " [" + type + "|" + className + "] " + content + "\n");     
+            File.AppendAllText(logFile.FullName, DateTime.Now.ToString("[dd-MM-yyyy H:mm:ss.FFF]") + " [" + type + "|" + className + "] " + content + "\r\n");
         }
 
         private static void InitializeFile()
         {
             //create folder
-            if(!Directory.Exists(logFile.DirectoryName))
+            if (!Directory.Exists(logFile.DirectoryName))
             {
                 Directory.CreateDirectory(logFile.DirectoryName);
             }
 
             //create file
-            if(!File.Exists(logFile.FullName))
+            if (!File.Exists(logFile.FullName))
             {
-                using(var fs = File.Create(logFile.FullName))
+                using (var fs = File.Create(logFile.FullName))
                 {
                     fs.Close();
                 }

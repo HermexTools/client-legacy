@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace KSLUploader.Classes
 {
@@ -17,7 +13,7 @@ namespace KSLUploader.Classes
 
         public static void Inizialize(string key, object value)
         {
-            if(!Contains(key))
+            if (!Contains(key))
             {
                 Set(key, value);
             }
@@ -27,7 +23,7 @@ namespace KSLUploader.Classes
         {
             var file = ReadSettingsFile();
 
-            if(Contains(key))
+            if (Contains(key))
             {
                 file[key] = value;
             }
@@ -35,15 +31,15 @@ namespace KSLUploader.Classes
             {
                 file.Add(key, value);
             }
-            
+
             SaveSettingsFile(file);
         }
-        
+
         public static T Get<T>(string key)
         {
             var file = ReadSettingsFile();
-            
-            if(file[key] is JArray)
+
+            if (file[key] is JArray)
             {
                 return ((JArray)file[key]).ToObject<T>();
             }
@@ -61,7 +57,7 @@ namespace KSLUploader.Classes
         public static void RemoveAll()
         {
             var file = ReadSettingsFile();
-            foreach(var item in file)
+            foreach (var item in file)
             {
                 Remove(item.Key);
             }
@@ -91,7 +87,7 @@ namespace KSLUploader.Classes
                 error = true;
             }
 
-            if(error)
+            if (error)
             {
                 var file = GetSettingFile();
                 File.WriteAllText(file.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>()));
@@ -105,25 +101,25 @@ namespace KSLUploader.Classes
         private static FileInfo GetSettingFile()
         {
             //create folder
-            if(!Directory.Exists(folder))
+            if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
-            
+
             //create file
-            if(!File.Exists(folder + "\\" + file))
+            if (!File.Exists(folder + "\\" + file))
             {
-                using(var fs = File.Create(folder + "\\" + file))
+                using (var fs = File.Create(folder + "\\" + file))
                 {
                     fs.Close();
                 }
-                File.WriteAllText(folder + "\\" + file, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));                
+                File.WriteAllText(folder + "\\" + file, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));
             }
 
             return new FileInfo(folder + "\\" + file);
         }
 
-        private static void SaveSettingsFile(Dictionary<string,object> settings)
+        private static void SaveSettingsFile(Dictionary<string, object> settings)
         {
             var file = GetSettingFile();
             File.WriteAllText(file.FullName, JsonConvert.SerializeObject(settings, Formatting.Indented));

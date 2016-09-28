@@ -1,28 +1,21 @@
-﻿using System;
+﻿using KSLUploader.Classes;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using KSLUploader.Classes;
 
 namespace KSLUploader.Windows
 {
     public partial class CaptureWindow : Window
     {
-        public static System.Drawing.Bitmap Capture()
+        public bool CompletedCapture()
         {
-            var snap = new CaptureWindow();
-            if (snap.ShowDialog() == true)
-            {
-                return snap.outputBitmap;
-            }
-            return null;
+            return (bool)ShowDialog();
         }
-
-        public System.Drawing.Bitmap outputBitmap = null;
-        private Point startPoint;
-        private Point endPoint;
+        
+        public Point StartPoint, EndPoint;
 
         public CaptureWindow()
         {
@@ -64,7 +57,7 @@ namespace KSLUploader.Windows
 
         private void CaptureWindow_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key==Key.Escape)
+            if (e.Key == Key.Escape)
             {
                 CancelAction();
             }
@@ -89,20 +82,18 @@ namespace KSLUploader.Windows
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                startPoint = this.PointToScreen(startPoint);
-                endPoint = this.PointToScreen(endPoint);
+                Point sp = this.PointToScreen(StartPoint);
+                Point ep = this.PointToScreen(EndPoint);
 
-                Point start = new Point(
-                    Math.Min(startPoint.X, endPoint.X),
-                    Math.Min(startPoint.Y, endPoint.Y)
+                StartPoint = new Point(
+                    Math.Min(sp.X, ep.X),
+                    Math.Min(sp.Y, EndPoint.Y)
                     );
 
-                Point end = new Point(
-                    Math.Max(startPoint.X, endPoint.X) - 2,
-                    Math.Max(startPoint.Y, endPoint.Y) - 2
+                StartPoint = new Point(
+                    Math.Max(sp.X, ep.X) - 2,
+                    Math.Max(sp.Y, ep.Y) - 2
                     );
-
-                outputBitmap = Utils.GetBitmapFromPoints(Utils.FromWindowsToDrawingPoint(start), Utils.FromWindowsToDrawingPoint(end));
                 this.DialogResult = true;
                 this.Close();
             }
@@ -112,7 +103,7 @@ namespace KSLUploader.Windows
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                endPoint = e.GetPosition(this);
+                EndPoint = e.GetPosition(this);
                 DrawRegion();
             }
         }
@@ -121,8 +112,8 @@ namespace KSLUploader.Windows
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                startPoint = e.GetPosition(this);
-                endPoint = e.GetPosition(this);
+                StartPoint = e.GetPosition(this);
+                EndPoint = e.GetPosition(this);
                 DrawRegion();
             }
         }
@@ -130,10 +121,10 @@ namespace KSLUploader.Windows
         private void DrawRegion()
         {
             regionSelection.Rect = new Rect(
-                Math.Min(startPoint.X, endPoint.X),
-                Math.Min(startPoint.Y, endPoint.Y),
-                Math.Max(startPoint.X - endPoint.X, endPoint.X - startPoint.X),
-                Math.Max(startPoint.Y - endPoint.Y, endPoint.Y - startPoint.Y)
+                Math.Min(StartPoint.X, EndPoint.X),
+                Math.Min(StartPoint.Y, EndPoint.Y),
+                Math.Max(StartPoint.X - EndPoint.X, EndPoint.X - StartPoint.X),
+                Math.Max(StartPoint.Y - EndPoint.Y, EndPoint.Y - StartPoint.Y)
                 );
         }
 
