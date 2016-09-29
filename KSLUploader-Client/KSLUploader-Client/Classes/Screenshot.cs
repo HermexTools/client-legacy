@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 
 namespace KSLUploader.Classes
 {
@@ -101,7 +102,7 @@ namespace KSLUploader.Classes
             }
 
             //save in temp to send
-            FileInfo f = new FileInfo(AppConstants.SaveTempFileName);
+            FileInfo f = new FileInfo(AppConstants.SaveImageToTempName);
             bitmap.Save(f.FullName, ImageFormat.Png);
             return f;
         }
@@ -109,6 +110,28 @@ namespace KSLUploader.Classes
         public static Point FromWindowsToDrawingPoint(System.Windows.Point start)
         {
             return new Point(Convert.ToInt32(start.X), Convert.ToInt32(start.Y));
+        }
+
+        public static BitmapSource ConvertBitmap(Bitmap source)
+        {
+            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                          source.GetHbitmap(),
+                          IntPtr.Zero,
+                          System.Windows.Int32Rect.Empty,
+                          BitmapSizeOptions.FromEmptyOptions());
+        }
+
+        public static Bitmap BitmapFromSource(BitmapSource bitmapsource)
+        {
+            Bitmap bitmap;
+            using(var outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
+                enc.Save(outStream);
+                bitmap = new Bitmap(outStream);
+            }
+            return bitmap;
         }
     }
 }

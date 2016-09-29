@@ -82,6 +82,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\AppConstants.cs" />
+    <Compile Include="Classes\ClipboardManager.cs" />
     <Compile Include="Classes\KeyListener.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\Screenshot.cs" />

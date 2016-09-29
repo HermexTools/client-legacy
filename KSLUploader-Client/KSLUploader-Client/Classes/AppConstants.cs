@@ -24,7 +24,8 @@ namespace KSLUploader.Classes
         public static readonly string SaveLocalDefaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         public static readonly string LoggerFileName = AppDataFolder + "logs.txt";
         public static readonly string SettingsFileName = AppDataFolder + "config.json";        
-        public static readonly string SaveTempFileName = TempFolder + SaveTempFileNamePrefix + DateTime.Now.Ticks + ".png";
+        public static readonly string SaveImageToTempName = TempFolder + SaveTempFileNamePrefix + DateTime.Now.Ticks + ".png";
+        public static readonly string SaveTextToTempName = TempFolder + SaveTempFileNamePrefix + DateTime.Now.Ticks + ".txt";
         public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
         public static readonly string StartUpRegistryKeyName = "KSLU";
 

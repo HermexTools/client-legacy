@@ -165,12 +165,11 @@ namespace KSLUploader.Classes
 
         private void UploadClipboard()
         {
-            if (Clipboard.ContainsText(TextDataFormat.Text))
+            string clipboard = ClipboardManager.GetText();
+            if(clipboard!=null)
             {
-                string clipboard = Clipboard.GetText(TextDataFormat.Text);
-
                 //save in temp to send
-                FileInfo textFile = new FileInfo(Path.Combine(Path.GetTempPath(), "kslu_temp_" + DateTime.Now.Ticks + ".txt"));
+                FileInfo textFile = new FileInfo(AppConstants.SaveTextToTempName);
 
                 if (!File.Exists(textFile.FullName))
                 {
