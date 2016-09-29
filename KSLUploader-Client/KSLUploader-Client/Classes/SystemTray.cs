@@ -134,10 +134,10 @@ namespace KSLUploader.Classes
 
         private void CaptureArea()
         {
-            var captureWin = new CaptureWindow();
-            if(captureWin.CompletedCapture())
+            var captureWin = Screenshot.CaptureArea();
+            if(captureWin.Result)
             {
-                FileInfo screen =  Screenshot.CaptureArea(Utils.ConvertPoint(captureWin.StartPoint), Utils.ConvertPoint(captureWin.EndPoint));
+                FileInfo screen = captureWin.File;
 
                 BackgroundWorker b = new BackgroundWorker();
                 b.WorkerReportsProgress = true;

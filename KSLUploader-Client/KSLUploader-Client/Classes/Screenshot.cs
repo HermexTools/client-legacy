@@ -29,9 +29,14 @@ namespace KSLUploader.Classes
             return SaveBitmap(GetBitmapFromScreen(screen));
         }
 
-        public static FileInfo CaptureArea(Point start, Point end)
+        public static ScreenshotResult CaptureArea()
         {
-            return SaveBitmap(getBitmapFromPoints(start, end));
+            var bmp = CaptureWindow.Capture();
+            if(bmp != null)
+            {
+                return new ScreenshotResult(true, SaveBitmap(bmp));
+            }
+            return new ScreenshotResult(false, null);
         }
 
         private static Bitmap GetBitmapFromScreen(Screen screen)
@@ -44,7 +49,7 @@ namespace KSLUploader.Classes
             return bmp;
         }
 
-        private static Bitmap getBitmapFromPoints(Point start, Point end)
+        public static Bitmap getBitmapFromPoints(Point start, Point end)
         {
             Bitmap bmp = new Bitmap(end.X - start.X, end.Y - start.Y);
             using (Graphics g = Graphics.FromImage(bmp))
@@ -108,6 +113,20 @@ namespace KSLUploader.Classes
         public static Point FromWindowsToDrawingPoint(System.Windows.Point start)
         {
             return new Point(Convert.ToInt32(start.X), Convert.ToInt32(start.Y));
+        }
+    }
+
+    public class ScreenshotResult
+    {
+        public bool Result { get; }
+        public FileInfo File { get; }
+
+        public ScreenshotResult() { }
+
+        public ScreenshotResult(bool r, FileInfo f)
+        {
+            Result = r;
+            File = f;
         }
     }
 }

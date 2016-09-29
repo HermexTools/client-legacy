@@ -10,14 +10,20 @@ namespace KSLUploader.Windows
 {
     public partial class CaptureWindow : Window
     {
-        public bool CompletedCapture()
+        public static System.Drawing.Bitmap Capture()
         {
-            return (bool)ShowDialog();
+            var snap = new CaptureWindow();
+            if(snap.ShowDialog() == true)
+            {
+                return snap.outputBitmap;
+            }
+            return null;
         }
-        
-        public Point StartPoint, EndPoint;
 
-        public CaptureWindow()
+        private Point StartPoint, EndPoint;
+        public System.Drawing.Bitmap outputBitmap;
+
+        private CaptureWindow()
         {
             InitializeComponent();
             this.ShowInTaskbar = false;
@@ -90,10 +96,13 @@ namespace KSLUploader.Windows
                     Math.Min(sp.Y, EndPoint.Y)
                     );
 
-                StartPoint = new Point(
+                EndPoint = new Point(
                     Math.Max(sp.X, ep.X) - 2,
                     Math.Max(sp.Y, ep.Y) - 2
                     );
+                
+                outputBitmap = Screenshot.getBitmapFromPoints(Screenshot.FromWindowsToDrawingPoint(StartPoint), Screenshot.FromWindowsToDrawingPoint(EndPoint));
+                
                 this.DialogResult = true;
                 this.Close();
             }
