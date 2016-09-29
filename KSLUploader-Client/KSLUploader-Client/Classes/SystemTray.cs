@@ -40,7 +40,7 @@ namespace KSLUploader.Classes
 
             //main menu
             ContextMenuStrip trayMenu = new ContextMenuStrip();
-            trayMenu.Items.Add(AppConstants.Name+" v"+AppConstants.Version, null, null).Enabled = false;
+            trayMenu.Items.Add(AppConstants.Name + " v" + AppConstants.Version, null, null).Enabled = false;
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");
@@ -134,10 +134,13 @@ namespace KSLUploader.Classes
 
         private void CaptureArea()
         {
-            var captureWin = Screenshot.CaptureArea();
-            if(captureWin.Result)
+            var captureWin = new CaptureWindow();
+            if (captureWin.hasCaught())
             {
-                FileInfo screen = captureWin.File;
+                FileInfo screen = Screenshot.CaptureArea(
+                    Screenshot.FromWindowsToDrawingPoint(captureWin.StartPoint),
+                    Screenshot.FromWindowsToDrawingPoint(captureWin.EndPoint)
+                );
 
                 BackgroundWorker b = new BackgroundWorker();
                 b.WorkerReportsProgress = true;
@@ -148,6 +151,10 @@ namespace KSLUploader.Classes
                 {
                     trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
                 }
+            }
+            else
+            {
+                trayIcon.ShowBalloonTip(2000, "Upload Cancelled", "", ToolTipIcon.Info);
             }
         }
 

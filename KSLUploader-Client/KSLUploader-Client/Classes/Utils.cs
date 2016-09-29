@@ -32,10 +32,5 @@ namespace KSLUploader.Classes
                 }
             }
         }
-
-        public static System.Drawing.Point ConvertPoint(Point p)
-        {
-            return new System.Drawing.Point((int)p.X, (int)p.Y);
-        }
     }
 }

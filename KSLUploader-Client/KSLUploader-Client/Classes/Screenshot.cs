@@ -29,14 +29,10 @@ namespace KSLUploader.Classes
             return SaveBitmap(GetBitmapFromScreen(screen));
         }
 
-        public static ScreenshotResult CaptureArea()
+        public static FileInfo CaptureArea(Point start, Point end)
         {
-            var bmp = CaptureWindow.Capture();
-            if(bmp != null)
-            {
-                return new ScreenshotResult(true, SaveBitmap(bmp));
-            }
-            return new ScreenshotResult(false, null);
+            var bmp = getBitmapFromPoints(start, end);
+            return SaveBitmap(bmp);
         }
 
         private static Bitmap GetBitmapFromScreen(Screen screen)
@@ -113,20 +109,6 @@ namespace KSLUploader.Classes
         public static Point FromWindowsToDrawingPoint(System.Windows.Point start)
         {
             return new Point(Convert.ToInt32(start.X), Convert.ToInt32(start.Y));
-        }
-    }
-
-    public class ScreenshotResult
-    {
-        public bool Result { get; }
-        public FileInfo File { get; }
-
-        public ScreenshotResult() { }
-
-        public ScreenshotResult(bool r, FileInfo f)
-        {
-            Result = r;
-            File = f;
         }
     }
 }
