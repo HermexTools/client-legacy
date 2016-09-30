@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
+using KSLUploader.Windows;
 
 namespace KSLUploader
 {
     public partial class App : Application
     {
         private SystemTray ksluTray;
-        private KeyListener keyListener;
+        public KeyListener keyListener;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -27,7 +28,7 @@ namespace KSLUploader
 
             AppConstants.InizializeSettings();
             Utils.CheckRunAtStartup();
-            
+
             keyListener = new KeyListener();
             ksluTray = new SystemTray();
         }

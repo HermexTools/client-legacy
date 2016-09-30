@@ -23,15 +23,18 @@ namespace KSLUploader.Classes
         public static readonly string Version = "0.0.3-Beta";
         public static readonly string SaveLocalDefaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         public static readonly string LoggerFileName = AppDataFolder + "logs.txt";
-        public static readonly string SettingsFileName = AppDataFolder + "config.json";        
-        public static readonly string SaveImageToTempName = TempFolder + SaveTempFileNamePrefix + DateTime.Now.Ticks + ".png";
-        public static readonly string SaveTextToTempName = TempFolder + SaveTempFileNamePrefix + DateTime.Now.Ticks + ".txt";
+        public static readonly string SettingsFileName = AppDataFolder + "config.json";
         public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
         public static readonly string StartUpRegistryKeyName = "KSLU";
 
-        public static string SaveLocalFileName(string directory)
+        public static string SaveImageToLocalPath(string filename)
         {
-            return directory + Path.DirectorySeparatorChar + SaveLocalFileNamePrefix + DateTime.Now.Ticks + ".png";
+            return SettingsManager.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + SaveLocalFileNamePrefix + filename;
+        }
+
+        public static string SaveFileToTempPath(string filename)
+        {
+            return TempFolder + SaveTempFileNamePrefix + filename;
         }
 
         public static void InizializeSettings()
@@ -58,10 +61,10 @@ namespace KSLUploader.Classes
             SettingsManager.Inizialize("FTPPassword", null);
 
             //shortcut
-            SettingsManager.Inizialize("ShortcutArea", new List<int>() { 162, 160, 49 });
-            SettingsManager.Inizialize("ShortcutDesktop", new List<int>() { 162, 160, 50 });
-            SettingsManager.Inizialize("ShortcutFile", new List<int>() { 162, 160, 51 });
-            SettingsManager.Inizialize("ShortcutClipboard", new List<int>() { 162, 160, 52 });
+            SettingsManager.Inizialize("ShortcutArea", new HashSet<int>() { 162, 160, 49 });
+            SettingsManager.Inizialize("ShortcutDesktop", new HashSet<int>() { 162, 160, 50 });
+            SettingsManager.Inizialize("ShortcutFile", new HashSet<int>() { 162, 160, 51 });
+            SettingsManager.Inizialize("ShortcutClipboard", new HashSet<int>() { 162, 160, 52 });
         }
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace KSLUploader.Classes
 {
@@ -30,6 +31,27 @@ namespace KSLUploader.Classes
 
             //show trayicon
             trayIcon.Visible = true;
+
+            (App.Current as App).keyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
+        }
+
+        private void KeyListener_OnShortcutEvent(object sender, ShortcutEventArgs e)
+        {            
+            switch(e.shortcutEvent)
+            {
+                case ShortcutEvent.ShortcutArea:
+                    CaptureArea();
+                    break;
+                case ShortcutEvent.ShortcutDesktop:
+                    CaptureDesktop(null);                    
+                    break;
+                case ShortcutEvent.ShortcutFile:
+                    UploadFile();
+                    break;
+                case ShortcutEvent.ShortcutClipboard:
+                    UploadClipboard();
+                    break;
+            }
         }
 
         private ContextMenuStrip buildMenu()
@@ -44,12 +66,12 @@ namespace KSLUploader.Classes
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Capture Area", Properties.Resources.Area, delegate { CaptureArea(); });
+            trayMenu.Items.Add("Capture Area ("+ KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea"))+")", Properties.Resources.Area, delegate { CaptureArea(); });
             if (Screen.AllScreens.Length > 1)
             {
                 //sub menu -> desktops
                 ToolStripMenuItem desktopItems = new ToolStripMenuItem("Capture Desktop", Properties.Resources.Desktop);
-                desktopItems.DropDownItems.Add("All Desktops", null, delegate { CaptureDesktop(null); });
+                desktopItems.DropDownItems.Add("All Desktops (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", null, delegate { CaptureDesktop(null); });
                 desktopItems.DropDownItems.Add("-");
                 int i = 1;
                 foreach (var screen in Screen.AllScreens)
@@ -64,10 +86,10 @@ namespace KSLUploader.Classes
             }
             else
             {
-                trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
+                trayMenu.Items.Add("Capture Desktop (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
             }
-            trayMenu.Items.Add("Upload File", Properties.Resources.File, delegate { UploadFile(); });
-            trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
+            trayMenu.Items.Add("Upload File (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutFile")) + ")", Properties.Resources.File, delegate { UploadFile(); });
+            trayMenu.Items.Add("Upload Clipboard (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")) + ")", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Settings", Properties.Resources.Settings, delegate { ShowSettings(); });
             trayMenu.Items.Add("-");
@@ -121,6 +143,7 @@ namespace KSLUploader.Classes
                 screen = Screenshot.CaptureDesktop();
             }
 
+            /*
             BackgroundWorker b = new BackgroundWorker();
             b.WorkerReportsProgress = true;
             b.ProgressChanged += ShowProgress;
@@ -129,7 +152,7 @@ namespace KSLUploader.Classes
             if (upload.Upload())
             {
                 trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
-            }
+            }*/
         }
 
         private void CaptureArea()
@@ -141,7 +164,7 @@ namespace KSLUploader.Classes
                     Screenshot.FromWindowsToDrawingPoint(captureWin.StartPoint),
                     Screenshot.FromWindowsToDrawingPoint(captureWin.EndPoint)
                 );
-
+                /*
                 BackgroundWorker b = new BackgroundWorker();
                 b.WorkerReportsProgress = true;
                 b.ProgressChanged += ShowProgress;
@@ -150,11 +173,11 @@ namespace KSLUploader.Classes
                 if (upload.Upload())
                 {
                     trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
-                }
+                }*/
             }
             else
             {
-                trayIcon.ShowBalloonTip(2000, "Upload Cancelled", "", ToolTipIcon.Info);
+                //trayIcon.ShowBalloonTip(2000, "Upload Cancelled", "", ToolTipIcon.Info);
             }
         }
 
@@ -169,8 +192,7 @@ namespace KSLUploader.Classes
             if(clipboard!=null)
             {
                 //save in temp to send
-                FileInfo textFile = new FileInfo(AppConstants.SaveTextToTempName);
-
+                FileInfo textFile = new FileInfo(AppConstants.SaveFileToTempPath(DateTime.Now.Ticks.ToString() + ".txt"));
                 if (!File.Exists(textFile.FullName))
                 {
                     using (var fs = File.Create(textFile.FullName))

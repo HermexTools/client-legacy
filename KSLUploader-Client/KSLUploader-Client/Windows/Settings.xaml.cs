@@ -23,30 +23,30 @@ namespace KSLUploader.Windows
             //generals
             generals_startup.IsChecked = SettingsManager.Get<bool>("RunAtStartup");
             generals_save.IsChecked = SettingsManager.Get<bool>("SaveLocal");
-            generals_browsepath.Text=SettingsManager.Get<string>("SaveLocalPath")==null?"Not set.": SettingsManager.Get<string>("SaveLocalPath");
+            generals_browsepath.Text = SettingsManager.Get<string>("SaveLocalPath") == null ? "Not set." : SettingsManager.Get<string>("SaveLocalPath");
             generals_method_socket.IsChecked = SettingsManager.Get<string>("UploadMethod") == "SOCKET" ? true : false;
             generals_method_ftp.IsChecked = SettingsManager.Get<string>("UploadMethod") == "FTP" ? true : false;
 
             //protocol
-            protocol_address.Text= SettingsManager.Get<string>("SocketAddress");
+            protocol_address.Text = SettingsManager.Get<string>("SocketAddress");
             protocol_port.Text = SettingsManager.Get<int>("SocketPort").ToString();
             protocol_password.Text = SettingsManager.Get<string>("SocketPassword");
 
             //ftp
-            ftp_useftps.IsChecked= SettingsManager.Get<bool>("UseFTPS");
-            ftp_certificates.IsChecked= SettingsManager.Get<bool>("AcceptCertificates");
-            ftp_address.Text= SettingsManager.Get<string>("FTPAddress");
-            ftp_port.Text= SettingsManager.Get<int>("FTPPort").ToString();
-            ftp_directory.Text= SettingsManager.Get<string>("FTPDirectory");
-            ftp_weburl.Text= SettingsManager.Get<string>("FTPWeburl");
-            ftp_user.Text= SettingsManager.Get<string>("FTPUser");
-            ftp_password.Text= SettingsManager.Get<string>("FTPPassword");
+            ftp_useftps.IsChecked = SettingsManager.Get<bool>("UseFTPS");
+            ftp_certificates.IsChecked = SettingsManager.Get<bool>("AcceptCertificates");
+            ftp_address.Text = SettingsManager.Get<string>("FTPAddress");
+            ftp_port.Text = SettingsManager.Get<int>("FTPPort").ToString();
+            ftp_directory.Text = SettingsManager.Get<string>("FTPDirectory");
+            ftp_weburl.Text = SettingsManager.Get<string>("FTPWeburl");
+            ftp_user.Text = SettingsManager.Get<string>("FTPUser");
+            ftp_password.Text = SettingsManager.Get<string>("FTPPassword");
 
             //shortcut
-            shortcut_area.Content = KeyListener.GetStringCombination(SettingsManager.Get<List<int>>("ShortcutArea"));
-            shortcut_desktop.Content = KeyListener.GetStringCombination(SettingsManager.Get<List<int>>("ShortcutDesktop"));
-            shortcut_file.Content = KeyListener.GetStringCombination(SettingsManager.Get<List<int>>("ShortcutFile"));
-            shortcut_clipboard.Content = KeyListener.GetStringCombination(SettingsManager.Get<List<int>>("ShortcutClipboard"));
+            shortcut_area.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea"));
+            shortcut_desktop.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop"));
+            shortcut_file.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutFile"));
+            shortcut_clipboard.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutClipboard"));
 
             //events
             CheckSaveLocalImage();

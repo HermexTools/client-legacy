@@ -24,7 +24,9 @@ namespace KSLUploader.Classes
         private static void Write(string content, string type, string className)
         {
             InitializeFile();
-            File.AppendAllText(logFile.FullName, DateTime.Now.ToString("[dd-MM-yyyy H:mm:ss.FFF]") + " [" + type + "|" + className + "] " + content + "\r\n");
+
+            var ms = Utils.CoolMs(DateTime.Now.Millisecond.ToString());
+            File.AppendAllText(logFile.FullName, DateTime.Now.ToString("[dd-MM-yyyy H:mm:ss.") + ms+"] [" + type + "|" + className + "] " + content + "\r\n");
         }
 
         private static void InitializeFile()

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 using System.Linq;
+using System;
 
 namespace KSLUploader.Classes
 {
@@ -13,6 +14,10 @@ namespace KSLUploader.Classes
         private static Dictionary<Keys, string> supportedKeys = new Dictionary<Keys, string>();
         private int combinationMinLimit = 2;
         private int combinationMaxLimit = 3;
+
+        private HashSet<int> combination = new HashSet<int>();
+        private int keydowncount = 0;
+        private int keyupcount = 0;
 
         public KeyListener()
         {
@@ -69,47 +74,91 @@ namespace KSLUploader.Classes
             supportedKeys.Add(Keys.Y, "Y");
             supportedKeys.Add(Keys.Z, "Z");
             supportedKeys.Add(Keys.Space, "SPACE");
-            supportedKeys.Add(Keys.OemBackslash,"<");
+            supportedKeys.Add(Keys.OemBackslash, "<");
 
 
 
             keyHook = Hook.GlobalEvents();
-            keyHook.KeyUp += GlobalKeyApp;
+            keyHook.KeyDown += HookKeyDown;
+            keyHook.KeyUp += HookKeyUp;
+
         }
 
-        private void GlobalKeyApp(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            Debug.WriteLine(e.KeyCode + " | " + e.KeyData + " | " + e.KeyValue + " | " + e.Modifiers);
-        }
+        public delegate void ShortcutEventHandler(object sender, ShortcutEventArgs e);
+        public event ShortcutEventHandler OnShortcutEvent;
 
-        private static string FromKeyToName(Keys keys)
+        private void HookKeyDown(object sender, KeyEventArgs e)
         {
-            switch (keys)
+            if(!combination.Contains(e.KeyValue))
             {
-                case Keys.LControlKey: return "CTRL-L";
-                case Keys.RControlKey: return "CTRL-R";
-                case Keys.LShiftKey: return "SHIFT-L";
-                case Keys.RShiftKey: return "SHIFT-R";
-                case Keys.LMenu: return "ALT-L";
-                case Keys.RMenu: return "ALT-R";
-                default: return keys.ToString();
+                keydowncount++;
+                combination.Add(e.KeyValue);
             }
         }
 
-        public static string GetStringCombination(List<int> keyValues)
+        private void HookKeyUp(object sender, KeyEventArgs e)
+        {
+            if(combination.Contains(e.KeyValue))
+            {
+                keyupcount++;
+
+                if(keydowncount == keyupcount)
+                {
+                    keydowncount = 0;
+                    keyupcount = 0;
+                    RunCombination();
+                    combination.Clear();
+                }
+            }
+        }
+
+        private void RunCombination()
+        {
+            if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutArea")))
+            {
+                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutArea));
+            }
+            else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")))
+            {
+                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutDesktop));
+            }
+            else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutFile")))
+            {
+                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutFile));
+            }
+            else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")))
+            {
+                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutClipboard));
+            }
+        }
+        
+        public static string GetStringCombination(HashSet<int> keyValues)
         {
             StringBuilder output = new StringBuilder();
-            foreach (var item in keyValues)
+            foreach(var item in keyValues)
             {
-                output.Append(
-                    supportedKeys.First(x=>x.Key==(Keys)item).Value
-
-                    //FromKeyToName((Keys)item)
-                    );
-                output.Append(" + ");
+                output.Append(supportedKeys.First(x => x.Key == (Keys)item).Value);
+                output.Append("+");
             }
-            output.Remove(output.ToString().LastIndexOf(" + "),3);
+            output.Remove(output.ToString().LastIndexOf("+"), 1);
             return output.ToString();
+        }
+    }
+
+    public enum ShortcutEvent
+    {
+        ShortcutArea,
+        ShortcutDesktop,
+        ShortcutFile,
+        ShortcutClipboard
+    }
+
+    public class ShortcutEventArgs : EventArgs
+    {
+        public ShortcutEvent shortcutEvent { get; private set; }
+        public ShortcutEventArgs(ShortcutEvent e)
+        {
+            shortcutEvent = e;
         }
     }
 }

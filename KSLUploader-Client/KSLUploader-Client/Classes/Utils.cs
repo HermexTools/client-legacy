@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Linq;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace KSLUploader.Classes
 {
@@ -30,6 +31,22 @@ namespace KSLUploader.Classes
                 {
                     key.DeleteValue(AppConstants.StartUpRegistryKeyName, false);
                 }
+            }
+        }
+        
+        public static string CoolMs(string ms)
+        {
+            if(ms.Length==1)
+            {
+                return "00" + ms;
+            }
+            else if(ms.Length == 2)
+            {
+                return "0" + ms;
+            }
+            else
+            {
+                return ms;
             }
         }
     }
