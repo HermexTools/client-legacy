@@ -14,15 +14,12 @@ namespace KSLUploader.Classes
     {
         public static FileInfo CaptureDesktop()
         {
-            List<Bitmap> bitmaps = new List<Bitmap>();
+            var left = Screen.AllScreens.Min(screen => screen.Bounds.X);
+            var top = Screen.AllScreens.Min(screen => screen.Bounds.Y);
+            var right = Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
+            var bottom = Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
 
-            foreach (var screen in Screen.AllScreens.OrderBy(x => x.Bounds.X).ToList())
-            {
-                bitmaps.Add(GetBitmapFromScreen(screen));
-            }
-
-            Bitmap image = JoinBitmaps(bitmaps);
-            return SaveBitmap(image);
+            return SaveBitmap(GetBitmapFromPoints(new Point(left,top),new Point(right,bottom)));
         }
 
         public static FileInfo CaptureDesktop(Screen screen)
@@ -32,7 +29,7 @@ namespace KSLUploader.Classes
 
         public static FileInfo CaptureArea(Point start, Point end)
         {
-            var bmp = getBitmapFromPoints(start, end);
+            var bmp = GetBitmapFromPoints(start, end);
             return SaveBitmap(bmp);
         }
 
@@ -46,7 +43,7 @@ namespace KSLUploader.Classes
             return bmp;
         }
 
-        public static Bitmap getBitmapFromPoints(Point start, Point end)
+        public static Bitmap GetBitmapFromPoints(Point start, Point end)
         {
             Bitmap bmp = new Bitmap(end.X - start.X, end.Y - start.Y);
             using (Graphics g = Graphics.FromImage(bmp))
