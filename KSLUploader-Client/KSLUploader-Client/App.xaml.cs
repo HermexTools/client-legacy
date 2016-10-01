@@ -26,7 +26,7 @@ namespace KSLUploader
            
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            AppConstants.InizializeSettings();
+            AppConstants.InitializeSettings();
             Utils.CheckRunAtStartup();
 
             keyListener = new KeyListener();

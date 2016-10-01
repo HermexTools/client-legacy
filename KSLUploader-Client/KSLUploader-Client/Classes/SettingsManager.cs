@@ -10,7 +10,7 @@ namespace KSLUploader.Classes
     {
         private static FileInfo SettingsFile = new FileInfo(AppConstants.SettingsFileName);
 
-        public static void Inizialize(string key, object value)
+        public static void Initialize(string key, object value)
         {
             if (!Contains(key))
             {
@@ -36,14 +36,28 @@ namespace KSLUploader.Classes
 
         public static T Get<T>(string key)
         {
-            var file = ReadSettingsFile();
-
-            if (file[key] is JArray)
+            Dictionary<string, object> dictionary = null;
+            
+            if(!Contains(key))
             {
-                return ((JArray)file[key]).ToObject<T>();
+                AppConstants.InitializeSettings();
             }
 
-            return (T)Convert.ChangeType(file[key], typeof(T));
+            dictionary = ReadSettingsFile();
+
+            if(dictionary[key].GetType()!=typeof(T))
+            {
+                Remove(key);
+                AppConstants.InitializeSettings();
+                dictionary = ReadSettingsFile();
+            }
+
+            if (dictionary[key] is JArray)
+            {
+                return ((JArray)dictionary[key]).ToObject<T>();
+            }
+
+            return (T)Convert.ChangeType(dictionary[key], typeof(T));
         }
 
         public static void Remove(string key)
@@ -90,8 +104,11 @@ namespace KSLUploader.Classes
             {
                 var file = GetSettingFile();
                 File.WriteAllText(file.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>()));
+
+
+                AppConstants.InitializeSettings();
                 string content = File.ReadAllText(file.FullName);
-                list = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
+                list = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);                
             }
 
             return list;

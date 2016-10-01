@@ -37,34 +37,34 @@ namespace KSLUploader.Classes
             return TempFolder + SaveTempFileNamePrefix + filename;
         }
 
-        public static void InizializeSettings()
+        public static void InitializeSettings()
         {
             //generals
-            SettingsManager.Inizialize("RunAtStartup", false);
-            SettingsManager.Inizialize("SaveLocal", false);
-            SettingsManager.Inizialize("SaveLocalPath", SaveLocalDefaultPath);
-            SettingsManager.Inizialize("UploadMethod", "SOCKET");
+            SettingsManager.Initialize("RunAtStartup", false);
+            SettingsManager.Initialize("SaveLocal", false);
+            SettingsManager.Initialize("SaveLocalPath", SaveLocalDefaultPath);
+            SettingsManager.Initialize("UploadMethod", "SOCKET");
 
             //protocol
-            SettingsManager.Inizialize("SocketAddress", "localhost");
-            SettingsManager.Inizialize("SocketPort", 4030);
-            SettingsManager.Inizialize("SocketPassword", "pass");
+            SettingsManager.Initialize("SocketAddress", "localhost");
+            SettingsManager.Initialize("SocketPort", 4030);
+            SettingsManager.Initialize("SocketPassword", "pass");
 
             //ftp
-            SettingsManager.Inizialize("UseFTPS", false);
-            SettingsManager.Inizialize("AcceptCertificates", true);
-            SettingsManager.Inizialize("FTPAddress", null);
-            SettingsManager.Inizialize("FTPPort", 21);
-            SettingsManager.Inizialize("FTPDirectory", "/");
-            SettingsManager.Inizialize("FTPWeburl", null);
-            SettingsManager.Inizialize("FTPUser", null);
-            SettingsManager.Inizialize("FTPPassword", null);
+            SettingsManager.Initialize("UseFTPS", false);
+            SettingsManager.Initialize("AcceptCertificates", true);
+            SettingsManager.Initialize("FTPAddress", null);
+            SettingsManager.Initialize("FTPPort", 21);
+            SettingsManager.Initialize("FTPDirectory", "/");
+            SettingsManager.Initialize("FTPWeburl", null);
+            SettingsManager.Initialize("FTPUser", null);
+            SettingsManager.Initialize("FTPPassword", null);
 
             //shortcut
-            SettingsManager.Inizialize("ShortcutArea", new HashSet<int>() { 162, 160, 49 });
-            SettingsManager.Inizialize("ShortcutDesktop", new HashSet<int>() { 162, 160, 50 });
-            SettingsManager.Inizialize("ShortcutFile", new HashSet<int>() { 162, 160, 51 });
-            SettingsManager.Inizialize("ShortcutClipboard", new HashSet<int>() { 162, 160, 52 });
+            SettingsManager.Initialize("ShortcutArea", new HashSet<int>() { 162, 160, 49 });
+            SettingsManager.Initialize("ShortcutDesktop", new HashSet<int>() { 162, 160, 50 });
+            SettingsManager.Initialize("ShortcutFile", new HashSet<int>() { 162, 160, 51 });
+            SettingsManager.Initialize("ShortcutClipboard", new HashSet<int>() { 162, 160, 52 });
         }
     }
 }
