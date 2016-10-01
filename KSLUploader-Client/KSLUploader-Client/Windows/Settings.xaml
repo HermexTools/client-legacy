@@ -29,7 +29,7 @@
                     <RadioButton x:Name="generals_method_ftp" GroupName="1" Content="Use FTP" FontSize="16" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="tab_protocol" Header="Protocol" FontSize="14" Width="70">
+            <TabItem x:Name="tab_protocol" Header="Socket" FontSize="14" Width="70">
                 <Grid>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>

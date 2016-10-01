@@ -30,7 +30,7 @@ namespace KSLUploader.Windows
             this.WindowStartupLocation = WindowStartupLocation.Manual;
             this.WindowState = WindowState.Normal;
             this.Topmost = true;
-            this.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
+            this.Background = new SolidColorBrush(Color.FromArgb(5, 0, 0, 0));
             this.AllowsTransparency = true;
             this.Cursor = System.Windows.Input.Cursors.Cross;
 

@@ -51,16 +51,29 @@ namespace KSLUploader.Windows
             //events
             CheckSaveLocalImage();
             CheckUploadMethod();
+
             generals_save.Click += (s, e) => { CheckSaveLocalImage(); };
             generals_browsebutton.Click += Generals_browsebutton_Click;
             generals_method_socket.Click += (s, e) => { CheckUploadMethod(); };
             generals_method_ftp.Click += (s, e) => { CheckUploadMethod(); };
+
+            shortcut_area.Click += ShortcutClick;
+            shortcut_desktop.Click += ShortcutClick;
+            shortcut_file.Click += ShortcutClick;
+            shortcut_clipboard.Click += ShortcutClick;
+
             saveButton.Click += SaveButton_Click;
 
             //info
             info_title.Text = AppConstants.Name;
             info_developers.Text = "Developed by " + String.Join(", ", AppConstants.Developers);
             info_version.Text = "Version: " + AppConstants.Version;
+        }
+
+        private void ShortcutClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            MessageBox.Show(button.Name + " clicked!", "testing");
         }
 
         private void CheckUploadMethod()

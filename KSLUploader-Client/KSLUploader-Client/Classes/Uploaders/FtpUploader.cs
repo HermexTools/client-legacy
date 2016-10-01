@@ -23,12 +23,17 @@ namespace KSLUploader.Classes.Uploaders
 
         public bool Upload()
         {
-            string ftpurl = "ftp://" + SettingsManager.Get<string>("FTPAddress") + ":" + SettingsManager.Get<string>("FTPPort") + SettingsManager.Get<string>("FTPDirectory");
+            string ftpurl = String.Format("ftp://{0}:{1}{2}", 
+                SettingsManager.Get<string>("FTPAddress"),
+                SettingsManager.Get<string>("FTPPort"),
+                SettingsManager.Get<string>("FTPDirectory")
+                );
             ftp = (FtpWebRequest) FtpWebRequest.Create(ftpurl + FilenameToSend);
             ftp.Credentials = new System.Net.NetworkCredential(SettingsManager.Get<string>("FTPUser"), SettingsManager.Get<string>("FTPPassword"));
             ftp.Method = WebRequestMethods.Ftp.UploadFile;
             ftp.UseBinary = true;
             ftp.KeepAlive = true;
+            ftp.UsePassive = true;
             
             ftp.ContentLength = file.Length;
 

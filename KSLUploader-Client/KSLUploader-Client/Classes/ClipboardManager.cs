@@ -32,5 +32,38 @@ namespace KSLUploader.Classes
         {
             Clipboard.SetText(text);
         }
+
+        public static ClipboardDataType Contain()
+        {
+            if(Clipboard.ContainsAudio())
+            {
+                return ClipboardDataType.Audio;
+            }
+            else if(Clipboard.ContainsFileDropList())
+            {
+                return ClipboardDataType.FileDropList;
+            }
+            else if(Clipboard.ContainsImage())
+            {
+                return ClipboardDataType.Image;
+            }
+            else if(Clipboard.ContainsText())
+            {
+                return ClipboardDataType.Text;
+            }
+            else
+            {
+                return ClipboardDataType.Void;
+            }
+        }
+    }
+
+    public enum ClipboardDataType
+    {
+        Text,
+        Image,
+        Audio,
+        FileDropList,
+        Void
     }
 }
