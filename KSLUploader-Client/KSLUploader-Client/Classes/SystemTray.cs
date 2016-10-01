@@ -143,7 +143,7 @@ namespace KSLUploader.Classes
                 screen = Screenshot.CaptureDesktop();
             }
 
-            /*
+            
             BackgroundWorker b = new BackgroundWorker();
             b.WorkerReportsProgress = true;
             b.ProgressChanged += ShowProgress;
@@ -152,7 +152,7 @@ namespace KSLUploader.Classes
             if (upload.Upload())
             {
                 trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
-            }*/
+            }
         }
 
         private void CaptureArea()
@@ -164,7 +164,8 @@ namespace KSLUploader.Classes
                     Screenshot.FromWindowsToDrawingPoint(captureWin.StartPoint),
                     Screenshot.FromWindowsToDrawingPoint(captureWin.EndPoint)
                 );
-                /*
+                
+
                 BackgroundWorker b = new BackgroundWorker();
                 b.WorkerReportsProgress = true;
                 b.ProgressChanged += ShowProgress;
@@ -173,11 +174,11 @@ namespace KSLUploader.Classes
                 if (upload.Upload())
                 {
                     trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
-                }*/
+                }
             }
             else
             {
-                //trayIcon.ShowBalloonTip(2000, "Upload Cancelled", "", ToolTipIcon.Info);
+                trayIcon.ShowBalloonTip(2000, "Upload Cancelled", "", ToolTipIcon.Info);
             }
         }
 
@@ -203,10 +204,15 @@ namespace KSLUploader.Classes
                 }
 
                 File.WriteAllText(textFile.FullName, clipboard);
+
+                //todo: send file
             }
             else if(ClipboardManager.Contain() == ClipboardDataType.Image)
             {
-                //todo
+                var clipboard = ClipboardManager.GetImage();
+                var file = Screenshot.SaveBitmap(clipboard);
+
+                //todo: send file
             }
         }
 

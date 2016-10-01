@@ -54,43 +54,7 @@ namespace KSLUploader.Classes
             return bmp;
         }
 
-
-        private static Bitmap JoinBitmaps(List<Bitmap> bitmaps)
-        {
-            Bitmap output = null;
-
-            for (int i = 0; i < bitmaps.Count; i++)
-            {
-                if (i == 0)
-                {
-                    output = bitmaps[i];
-                }
-                else
-                {
-                    output = Join2Bitmap(output, bitmaps[i]);
-                }
-            }
-
-            return output;
-        }
-
-        private static Bitmap Join2Bitmap(Bitmap first, Bitmap second)
-        {
-            int outputImageWidth = first.Width + second.Width;
-            int outputImageHeight = first.Height > second.Height ? first.Height : second.Height;
-
-            Bitmap outputImage = new Bitmap(outputImageWidth, outputImageHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            using (Graphics graphics = Graphics.FromImage(outputImage))
-            {
-                graphics.DrawImage(first, new Rectangle(new Point(), first.Size), new Rectangle(new Point(), first.Size), GraphicsUnit.Pixel);
-                graphics.DrawImage(second, new Rectangle(new Point(first.Width, 0), second.Size), new Rectangle(new Point(), second.Size), GraphicsUnit.Pixel);
-            }
-
-            return outputImage;
-        }
-
-        private static FileInfo SaveBitmap(Bitmap bitmap)
+        public static FileInfo SaveBitmap(Bitmap bitmap)
         {
             //save local if enabled
             if (SettingsManager.Get<bool>("SaveLocal"))
