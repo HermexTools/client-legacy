@@ -18,23 +18,31 @@ namespace KSLUploader.Classes.Uploaders
         {
             file = f;
             worker = bgworker;
-            FilenameToSend = sendname;
+
+            if(sendname.Contains("{0}"))
+            {
+                FilenameToSend = String.Format(sendname, Utils.GenerateName());
+            }
+            else
+            {
+                FilenameToSend = Utils.GenerateName(sendname);
+            }
         }
 
         public bool Upload()
         {
-            string ftpurl = String.Format("ftp://{0}:{1}{2}", 
+            string ftpurl = String.Format("ftp://{0}:{1}{2}",
                 SettingsManager.Get<string>("FTPAddress"),
                 SettingsManager.Get<string>("FTPPort"),
                 SettingsManager.Get<string>("FTPDirectory")
                 );
-            ftp = (FtpWebRequest) FtpWebRequest.Create(ftpurl + FilenameToSend);
+            ftp = (FtpWebRequest)FtpWebRequest.Create(ftpurl + FilenameToSend);
             ftp.Credentials = new System.Net.NetworkCredential(SettingsManager.Get<string>("FTPUser"), SettingsManager.Get<string>("FTPPassword"));
             ftp.Method = WebRequestMethods.Ftp.UploadFile;
             ftp.UseBinary = true;
             ftp.KeepAlive = true;
             ftp.UsePassive = true;
-            
+
             ftp.ContentLength = file.Length;
 
             int bufferSize = (int)Math.Min(4096, file.Length);
@@ -62,6 +70,9 @@ namespace KSLUploader.Classes.Uploaders
             FtpWebResponse uploadResponse = (FtpWebResponse)ftp.GetResponse();
             var value = uploadResponse.StatusDescription;
             uploadResponse.Close();
+
+            Link = SettingsManager.Get<string>("FTPWeburl") + FilenameToSend;
+
             return true;
         }
 

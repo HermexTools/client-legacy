@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
+using System;
+using System.Text.RegularExpressions;
 
 namespace KSLUploader.Classes
 {
@@ -33,14 +35,14 @@ namespace KSLUploader.Classes
                 }
             }
         }
-        
+
         public static string CoolMs(string ms)
         {
-            if(ms.Length==1)
+            if (ms.Length == 1)
             {
                 return "00" + ms;
             }
-            else if(ms.Length == 2)
+            else if (ms.Length == 2)
             {
                 return "0" + ms;
             }
@@ -48,6 +50,20 @@ namespace KSLUploader.Classes
             {
                 return ms;
             }
+        }
+
+        public static string GenerateName()
+        {
+            string filename = DateTime.Now.ToString("ddMMyy-HHmmss");
+            return new Random().Next(999) + "-" + filename;
+        }
+
+        public static string GenerateName(string name)
+        {
+            string st = name;
+            st = Regex.Replace(st, "[-+^,èòàù()%&:\\[\\]{\\}]", "");
+            st = st.Replace(" ", "_");
+            return new Random().Next(99999) + "-" + st;
         }
     }
 }
