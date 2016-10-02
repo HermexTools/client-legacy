@@ -37,7 +37,7 @@ namespace KSLUploader.Classes
 
         private void KeyListener_OnShortcutEvent(object sender, ShortcutEventArgs e)
         {
-            switch(e.shortcutEvent)
+            switch (e.shortcutEvent)
             {
                 case ShortcutEvent.ShortcutArea:
                     CaptureArea();
@@ -67,14 +67,14 @@ namespace KSLUploader.Classes
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Capture Area (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea")) + ")", Properties.Resources.Area, delegate { CaptureArea(); });
-            if(Screen.AllScreens.Length > 1)
+            if (Screen.AllScreens.Length > 1)
             {
                 //sub menu -> desktops
                 ToolStripMenuItem desktopItems = new ToolStripMenuItem("Capture Desktop", Properties.Resources.Desktop);
                 desktopItems.DropDownItems.Add("All Desktops (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", null, delegate { CaptureDesktop(null); });
                 desktopItems.DropDownItems.Add("-");
                 int i = 1;
-                foreach(var screen in Screen.AllScreens)
+                foreach (var screen in Screen.AllScreens)
                 {
                     string monitor = i + ". " + screen.Bounds.Width + "x" + screen.Bounds.Height;
 
@@ -134,7 +134,7 @@ namespace KSLUploader.Classes
         private void CaptureDesktop(Screen s)
         {
             FileInfo screen;
-            if(s != null)
+            if (s != null)
             {
                 screen = Screenshot.CaptureDesktop(s);
             }
@@ -143,7 +143,7 @@ namespace KSLUploader.Classes
                 screen = Screenshot.CaptureDesktop();
             }
 
-            
+
             BackgroundWorker b = new BackgroundWorker();
             b.WorkerReportsProgress = true;
             b.ProgressChanged += ShowProgress;
@@ -158,13 +158,13 @@ namespace KSLUploader.Classes
         private void CaptureArea()
         {
             var captureWin = new CaptureWindow();
-            if(captureWin.hasCaught())
+            if (captureWin.hasCaught())
             {
                 FileInfo screen = Screenshot.CaptureArea(
                     Screenshot.FromWindowsToDrawingPoint(captureWin.StartPoint),
                     Screenshot.FromWindowsToDrawingPoint(captureWin.EndPoint)
                 );
-                
+
 
                 BackgroundWorker b = new BackgroundWorker();
                 b.WorkerReportsProgress = true;
@@ -184,20 +184,25 @@ namespace KSLUploader.Classes
 
         private void UploadFile()
         {
-
+            var dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                
+            }
         }
 
         private void UploadClipboard()
         {
-            if(ClipboardManager.Contain() == ClipboardDataType.Text)
+            if (ClipboardManager.Contain() == ClipboardDataType.Text)
             {
                 string clipboard = ClipboardManager.GetText();
 
                 //save in temp to send
                 FileInfo textFile = new FileInfo(AppConstants.SaveFileToTempPath(DateTime.Now.Ticks.ToString() + ".txt"));
-                if(!File.Exists(textFile.FullName))
+                if (!File.Exists(textFile.FullName))
                 {
-                    using(var fs = File.Create(textFile.FullName))
+                    using (var fs = File.Create(textFile.FullName))
                     {
                         fs.Close();
                     }
@@ -207,7 +212,7 @@ namespace KSLUploader.Classes
 
                 //todo: send file
             }
-            else if(ClipboardManager.Contain() == ClipboardDataType.Image)
+            else if (ClipboardManager.Contain() == ClipboardDataType.Image)
             {
                 var clipboard = ClipboardManager.GetImage();
                 var file = Screenshot.SaveBitmap(clipboard);
@@ -224,7 +229,7 @@ namespace KSLUploader.Classes
 
         private void ShowSettings()
         {
-            if(!Utils.IsWindowOpen<Settings>())
+            if (!Utils.IsWindowOpen<Settings>())
             {
                 new Settings().Show();
             }
