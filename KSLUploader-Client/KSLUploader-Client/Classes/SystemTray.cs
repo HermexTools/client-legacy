@@ -185,10 +185,12 @@ namespace KSLUploader.Classes
 
         private void UploadFile()
         {
-            var dialog = new OpenDialogView();
-            var view = (OpenDialogViewModel)dialog.DataContext;
-            view.IsDirectoryChooser = true;
-            view.Show();
+            var dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                
+            }
         }
 
         private void UploadClipboard()
