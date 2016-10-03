@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public enum LogType { INFO, SEVERE }
 

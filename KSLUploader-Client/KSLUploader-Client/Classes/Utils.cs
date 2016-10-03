@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Text.RegularExpressions;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public class Utils
     {

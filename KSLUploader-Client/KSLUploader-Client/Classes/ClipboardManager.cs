@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public class ClipboardManager
     {

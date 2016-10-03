@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net.Sockets;
 
-namespace KSLUploader.Classes.Uploaders
+namespace Hermex.Classes.Uploaders
 {
     public class SocketUploader
     {

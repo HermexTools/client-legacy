@@ -1,4 +1,4 @@
-﻿using KSLUploader.Classes;
+﻿using Hermex.Classes;
 using System;
 using System.Linq;
 using System.Windows;
@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace KSLUploader.Windows
+namespace Hermex.Windows
 {
     public partial class CaptureWindow : Window
     {

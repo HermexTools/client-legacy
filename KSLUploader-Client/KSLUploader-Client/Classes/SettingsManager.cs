@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public class SettingsManager
     {

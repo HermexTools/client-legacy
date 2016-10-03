@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace KSLUploader.Windows
+namespace Hermex.Windows
 {
     /// <summary>
     /// Logica di interazione per UploadsPanel.xaml

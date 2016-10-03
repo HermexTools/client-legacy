@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 
-namespace KSLUploader.Classes.Uploaders
+namespace Hermex.Classes.Uploaders
 {
     class FtpUploader
     {

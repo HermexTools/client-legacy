@@ -6,26 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public class AppConstants
     {
         //private fields
-        private static readonly string OwnAppDataFolderName = ".KSLU";
+        private static readonly string OwnAppDataFolderName = ".hermex";
         private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + OwnAppDataFolderName + Path.DirectorySeparatorChar;
         private static readonly string TempFolder = Path.GetTempPath() + Path.DirectorySeparatorChar;
-        private static readonly string SaveLocalFileNamePrefix = "kslu_";
-        private static readonly string SaveTempFileNamePrefix = "kslu_temp_";
+        private static readonly string SaveLocalFileNamePrefix = "hermex_";
+        private static readonly string SaveTempFileNamePrefix = "hermex_temp_";
 
         //public fields
-        public static readonly string Name = "KSLUploader";
+        public static readonly string Name = "Hermex";
         public static readonly string[] Developers = new string[] { "Kaos1337", "SergiX44", "Lukasss93" };
         public static readonly string Version = "0.0.3-Beta";
         public static readonly string SaveLocalDefaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         public static readonly string LoggerFileName = AppDataFolder + "logs.txt";
         public static readonly string SettingsFileName = AppDataFolder + "config.json";
         public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-        public static readonly string StartUpRegistryKeyName = "KSLU";
+        public static readonly string StartUpRegistryKeyName = "Hermex";
 
         public static string SaveImageToLocalPath(string filename)
         {

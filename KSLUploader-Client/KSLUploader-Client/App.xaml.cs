@@ -1,25 +1,25 @@
-﻿using KSLUploader.Classes;
+﻿using Hermex.Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
-using KSLUploader.Windows;
+using Hermex.Windows;
 
-namespace KSLUploader
+namespace Hermex
 {
     public partial class App : Application
     {
-        private SystemTray ksluTray;
-        public KeyListener keyListener;
+        private SystemTray Tray;
+        public KeyListener KeyListener;
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Logger.Set("KSLU Started!");
+            Logger.Set(AppConstants.Name + " started!");
 
             //no double instance!
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
-                MessageBox.Show("KSLUploader is already running.", "Error");
+                MessageBox.Show(AppConstants.Name + " is already running.", "Error");
                 Current.Shutdown();
                 return;
             }
@@ -29,8 +29,8 @@ namespace KSLUploader
             AppConstants.InitializeSettings();
             Utils.CheckRunAtStartup();
 
-            keyListener = new KeyListener();
-            ksluTray = new SystemTray();
+            KeyListener = new KeyListener();
+            Tray = new SystemTray();
         }
         
     }

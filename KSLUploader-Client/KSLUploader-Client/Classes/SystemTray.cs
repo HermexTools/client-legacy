@@ -1,14 +1,13 @@
-﻿using KSLUploader.Classes.Uploaders;
-using KSLUploader.Windows;
+﻿using Hermex.Classes.Uploaders;
+using Hermex.Windows;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using Gat.Controls;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public class SystemTray
     {
@@ -22,7 +21,7 @@ namespace KSLUploader.Classes
             trayIcon.Text = AppConstants.Name;
 
             //trayicon icon
-            trayIcon.Icon = Properties.Resources.AppIcon;
+            trayIcon.Icon = Properties.Resources.hermex;
 
             //trayicon doubleclick event
             trayIcon.MouseDoubleClick += onDoubleClick;
@@ -33,7 +32,7 @@ namespace KSLUploader.Classes
             //show trayicon
             trayIcon.Visible = true;
 
-            (App.Current as App).keyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
+            (App.Current as App).KeyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
         }
 
         private void KeyListener_OnShortcutEvent(object sender, ShortcutEventArgs e)

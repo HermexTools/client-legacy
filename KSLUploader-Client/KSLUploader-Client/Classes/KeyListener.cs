@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System;
 
-namespace KSLUploader.Classes
+namespace Hermex.Classes
 {
     public class KeyListener
     {

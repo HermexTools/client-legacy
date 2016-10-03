@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using KSLUploader.Classes;
+using Hermex.Classes;
 
-namespace KSLUploader.Windows
+namespace Hermex.Windows
 {
     /// <summary>
     /// Logica di interazione per Settings.xaml
