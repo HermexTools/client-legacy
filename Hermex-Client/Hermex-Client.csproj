@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>hermex.ico</ApplicationIcon>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>Internet</TargetZone>
@@ -133,12 +133,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AppIcon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="AppIcon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Area.png" />
   </ItemGroup>
   <ItemGroup>
@@ -182,10 +176,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="hermex.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\hermex.ico" />
+    <Resource Include="AppIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

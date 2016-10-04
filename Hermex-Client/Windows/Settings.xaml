@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hermex.Windows"
         mc:Ignorable="d"
-        Title="Settings" Height="350" Width="380" ResizeMode="NoResize" Icon="/KSLUploader-client;component/AppIcon.ico">
+        Title="Settings" Height="350" Width="380" ResizeMode="NoResize" Icon="/Hermex;component/AppIcon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

@@ -21,7 +21,7 @@ namespace Hermex.Classes
             trayIcon.Text = AppConstants.Name;
 
             //trayicon icon
-            trayIcon.Icon = Properties.Resources.hermex;
+            trayIcon.Icon = Properties.Resources.AppIcon;
 
             //trayicon doubleclick event
             trayIcon.MouseDoubleClick += onDoubleClick;

@@ -45,7 +45,7 @@ namespace Hermex.Classes
 
             dictionary = ReadSettingsFile();
 
-            if(dictionary[key].GetType()!=typeof(T))
+            if(!(dictionary[key] is T))
             {
                 Remove(key);
                 AppConstants.InitializeSettings();
