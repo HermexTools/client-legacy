@@ -10,14 +10,21 @@ namespace Hermex.Classes
 {
     public class KeyListener
     {
+        //library interface
         private IKeyboardMouseEvents keyHook;
-        private static Dictionary<Keys, string> supportedKeys = new Dictionary<Keys, string>();
-        private int combinationMinLimit = 2;
-        private int combinationMaxLimit = 3;
 
+        //supported keys with their name
+        private static Dictionary<Keys, string> supportedKeys = new Dictionary<Keys, string>();
+
+        //current combination when any key is pressed
         private HashSet<int> combination = new HashSet<int>();
+
+        //integer values with the purpose of generating a correct combination 
         private int keydowncount = 0;
         private int keyupcount = 0;
+
+        //mode: true=read; false=set;
+        private bool IsReadMode = true;
 
         public KeyListener()
         {
@@ -79,8 +86,7 @@ namespace Hermex.Classes
 
 
             keyHook = Hook.GlobalEvents();
-            keyHook.KeyDown += HookKeyDown;
-            keyHook.KeyUp += HookKeyUp;
+            
 
         }
 
@@ -114,24 +120,49 @@ namespace Hermex.Classes
 
         private void RunCombination()
         {
-            if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutArea")))
+            if(IsReadMode)
             {
-                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutArea));
+                if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutArea")))
+                {
+                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutArea));
+                }
+                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")))
+                {
+                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutDesktop));
+                }
+                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutFile")))
+                {
+                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutFile));
+                }
+                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")))
+                {
+                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutClipboard));
+                }
             }
-            else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")))
+            else
             {
-                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutDesktop));
-            }
-            else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutFile")))
-            {
-                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutFile));
-            }
-            else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")))
-            {
-                OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutClipboard));
+                //todo
             }
         }
         
+        public void EnableListener()
+        {
+            keyHook.KeyDown += HookKeyDown;
+            keyHook.KeyUp += HookKeyUp;
+        }
+
+        public void DisableListener()
+        {
+            keyHook.KeyDown -= HookKeyDown;
+            keyHook.KeyUp -= HookKeyUp;
+        }
+
+        private void SetCombination(Button button, ShortcutEvent shortcut)
+        {
+            //todo
+        }
+
+
         public static string GetStringCombination(HashSet<int> keyValues)
         {
             StringBuilder output = new StringBuilder();

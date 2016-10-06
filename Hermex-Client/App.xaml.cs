@@ -10,7 +10,7 @@ namespace Hermex
     public partial class App : Application
     {
         private SystemTray Tray;
-        public KeyListener KeyListener;
+        public KeyListener GlobalKeyListener;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -29,7 +29,8 @@ namespace Hermex
             AppConstants.InitializeSettings();
             Utils.CheckRunAtStartup();
 
-            KeyListener = new KeyListener();
+            GlobalKeyListener = new KeyListener();
+            GlobalKeyListener.EnableListener();
             Tray = new SystemTray();
         }
         

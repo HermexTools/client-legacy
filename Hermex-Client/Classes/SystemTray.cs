@@ -32,7 +32,7 @@ namespace Hermex.Classes
             //show trayicon
             trayIcon.Visible = true;
 
-            (App.Current as App).KeyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
+            (App.Current as App).GlobalKeyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
         }
 
         private void KeyListener_OnShortcutEvent(object sender, ShortcutEventArgs e)
