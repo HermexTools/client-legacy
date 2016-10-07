@@ -8,11 +8,11 @@ using Hermex.Classes;
 
 namespace Hermex.Windows
 {
-    /// <summary>
-    /// Logica di interazione per Settings.xaml
-    /// </summary>
     public partial class Settings : Window
     {
+        private KeyListener SettingsKeyListener = new KeyListener();
+        private bool IsSettingShortcut = false;
+
         public Settings()
         {
             InitializeComponent();
@@ -73,7 +73,20 @@ namespace Hermex.Windows
         private void ShortcutClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            MessageBox.Show(button.Name + " clicked!", "testing");
+            var shortcut = ShortcutEvent.ShortcutArea;
+            switch(button.Name.Split('_')[1])
+            {
+                case "area": shortcut = ShortcutEvent.ShortcutArea; break;
+                case "desktop": shortcut = ShortcutEvent.ShortcutDesktop; break;
+                case "file": shortcut = ShortcutEvent.ShortcutFile; break;
+                case "clipboard": shortcut = ShortcutEvent.ShortcutClipboard; break;
+            }
+            
+
+            (App.Current as App).GlobalKeyListener.DisableListener();
+            
+
+            (App.Current as App).GlobalKeyListener.EnableListener();
         }
 
         private void CheckUploadMethod()

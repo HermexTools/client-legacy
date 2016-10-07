@@ -5,10 +5,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Linq;
 using System;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Hermex.Classes
 {
-    public class KeyListener
+    public class NewKeyListener
     {
         //library interface
         private IKeyboardMouseEvents keyHook;
@@ -23,10 +25,10 @@ namespace Hermex.Classes
         private int keydowncount = 0;
         private int keyupcount = 0;
 
-        //mode: true=read; false=set;
-        private bool IsReadMode = true;
+        //item to check (if null use global)
+        public UIElement element = null;
 
-        public KeyListener()
+        public NewKeyListener()
         {
             supportedKeys.Add(Keys.LControlKey, "CTRL-L");
             supportedKeys.Add(Keys.RControlKey, "CTRL-R");
@@ -86,20 +88,54 @@ namespace Hermex.Classes
             keyHook = Hook.GlobalEvents();
         }
 
-        public delegate void ShortcutEventHandler(object sender, ShortcutEventArgs e);
-        public event ShortcutEventHandler OnShortcutEvent;
+        public delegate void KeyListenerEventHandler(object sender, KeyListenerEventArgs e);
+        public event KeyListenerEventHandler OnKeyDown;
+        public event KeyListenerEventHandler OnKeyUp;
+        public event KeyListenerEventHandler OnCombinationCompleted;        
 
-        private void HookKeyDown(object sender, KeyEventArgs e)
+        public void EnableListener()
         {
-            if(!combination.Contains(e.KeyValue))
+            if(element == null)
+            {
+                keyHook.KeyDown += GlobalKeyDown;
+                keyHook.KeyUp += GlobalKeyUp;
+            }
+            else
+            {
+                element.KeyDown += ElementKeyDown;
+                element.KeyUp += ElementKeyUp;
+            }
+        }
+
+        public void DisableListener()
+        {
+            if(element == null)
+            {
+                keyHook.KeyDown -= GlobalKeyDown;
+                keyHook.KeyUp -= GlobalKeyUp;
+            }
+            else
+            {
+                element.KeyDown -= ElementKeyDown;
+                element.KeyUp -= ElementKeyUp;
+            }
+        }
+
+        private void GlobalKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            OnKeyDown?.Invoke(this, new KeyListenerEventArgs(combination, e.KeyValue));
+
+            if(!combination.Contains(e.KeyValue) && combination.Count<=3)
             {
                 keydowncount++;
                 combination.Add(e.KeyValue);
             }
         }
 
-        private void HookKeyUp(object sender, KeyEventArgs e)
+        private void GlobalKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
+            OnKeyUp?.Invoke(this, new KeyListenerEventArgs(combination, e.KeyValue));
+
             if(combination.Contains(e.KeyValue))
             {
                 keyupcount++;
@@ -108,50 +144,52 @@ namespace Hermex.Classes
                 {
                     keydowncount = 0;
                     keyupcount = 0;
-                    RunCombination();
+                    OnCombinationCompleted?.Invoke(this, new KeyListenerEventArgs(combination));
                     combination.Clear();
                 }
             }
         }
 
-        private void RunCombination()
+        private void ElementKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(IsReadMode)
+            OnKeyDown?.Invoke(this, new KeyListenerEventArgs(combination, (int)e.Key));
+
+            if(!combination.Contains((int)e.Key) && combination.Count <= 3)
             {
-                if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutArea")))
-                {
-                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutArea));
-                }
-                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")))
-                {
-                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutDesktop));
-                }
-                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutFile")))
-                {
-                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutFile));
-                }
-                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")))
-                {
-                    OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutClipboard));
-                }
+                keydowncount++;
+                combination.Add((int)e.Key);
             }
-            else
-            {
-                //todo: SetCombination
-            }
-        }
-        
-        public void EnableListener()
-        {
-            keyHook.KeyDown += HookKeyDown;
-            keyHook.KeyUp += HookKeyUp;
         }
 
-        public void DisableListener()
+        private void ElementKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            keyHook.KeyDown -= HookKeyDown;
-            keyHook.KeyUp -= HookKeyUp;
+            OnKeyUp?.Invoke(this, new KeyListenerEventArgs(combination, (int)e.Key));
+
+            if(combination.Contains((int)e.Key))
+            {
+                keyupcount++;
+
+                if(keydowncount == keyupcount)
+                {
+                    keydowncount = 0;
+                    keyupcount = 0;
+                    OnCombinationCompleted?.Invoke(this, new KeyListenerEventArgs(combination));
+                    combination.Clear();
+                }
+            }
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public static string GetStringCombination(HashSet<int> keyValues)
@@ -166,21 +204,24 @@ namespace Hermex.Classes
             return output.ToString();
         }
     }
+    
 
-    public enum ShortcutEvent
+    public class KeyListenerEventArgs : EventArgs
     {
-        ShortcutArea,
-        ShortcutDesktop,
-        ShortcutFile,
-        ShortcutClipboard
-    }
+        public HashSet<int> Combination { get; set; }
+        public int EventKey { get; set; }
 
-    public class ShortcutEventArgs : EventArgs
-    {
-        public ShortcutEvent shortcutEvent { get; private set; }
-        public ShortcutEventArgs(ShortcutEvent e)
+        public KeyListenerEventArgs() { }
+
+        public KeyListenerEventArgs(HashSet<int> combination)
         {
-            shortcutEvent = e;
+            Combination = combination;
+        }
+
+        public KeyListenerEventArgs(HashSet<int> combination, int eventkey)
+        {
+            Combination = combination;
+            EventKey = eventkey;
         }
     }
 }
