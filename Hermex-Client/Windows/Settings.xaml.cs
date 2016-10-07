@@ -10,8 +10,14 @@ namespace Hermex.Windows
 {
     public partial class Settings : Window
     {
-        private KeyListener SettingsKeyListener = new KeyListener();
-        private bool IsSettingShortcut = false;
+        private NewKeyListener SettingsKeyListener = new NewKeyListener();
+
+        private HashSet<int> ShortcutAreaSetting = new HashSet<int>();
+        private HashSet<int> ShortcutDesktopSetting = new HashSet<int>();
+        private HashSet<int> ShortcutFileSetting = new HashSet<int>();
+        private HashSet<int> ShortcutClipboardSetting = new HashSet<int>();
+
+        private Button CurrentShortcutButton = null;
 
         public Settings()
         {
@@ -43,10 +49,15 @@ namespace Hermex.Windows
             ftp_password.Text = SettingsManager.Get<string>("FTPPassword");
 
             //shortcut
-            shortcut_area.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea"));
-            shortcut_desktop.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop"));
-            shortcut_file.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutFile"));
-            shortcut_clipboard.Content = KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutClipboard"));
+            ShortcutAreaSetting = SettingsManager.Get<HashSet<int>>("ShortcutArea");
+            ShortcutDesktopSetting = SettingsManager.Get<HashSet<int>>("ShortcutDesktop");
+            ShortcutFileSetting = SettingsManager.Get<HashSet<int>>("ShortcutFile");
+            ShortcutClipboardSetting = SettingsManager.Get<HashSet<int>>("ShortcutClipboard");
+            
+            shortcut_area.Content = AppConstants.GetStringCombination(ShortcutAreaSetting);
+            shortcut_desktop.Content = AppConstants.GetStringCombination(ShortcutDesktopSetting);
+            shortcut_file.Content = AppConstants.GetStringCombination(ShortcutFileSetting);
+            shortcut_clipboard.Content = AppConstants.GetStringCombination(ShortcutClipboardSetting);
 
             //events
             CheckSaveLocalImage();
@@ -68,25 +79,54 @@ namespace Hermex.Windows
             info_title.Text = AppConstants.Name;
             info_developers.Text = "Developed by " + String.Join(", ", AppConstants.Developers);
             info_version.Text = "Version: " + AppConstants.Version;
+
+            SettingsKeyListener.OnKeyPressed += SettingsKeyListener_OnKeyPressed;
+            SettingsKeyListener.OnCombinationCompleted += SettingsKeyListener_OnCombinationCompleted;
+        }
+
+        private void SettingsKeyListener_OnCombinationCompleted(object sender, KeyListenerEventArgs e)
+        {
+            CurrentShortcutButton.Content = AppConstants.GetStringCombination(e.Combination);
+            switch(CurrentShortcutButton.Name.Split('_')[1])
+            {
+                case "area":
+                    ShortcutAreaSetting.Clear();
+                    ShortcutAreaSetting.UnionWith(e.Combination);
+                    break;
+                case "desktop":
+                    ShortcutDesktopSetting.Clear();
+                    ShortcutDesktopSetting.UnionWith(e.Combination);
+                    break;
+                case "file":
+                    ShortcutFileSetting.Clear();
+                    ShortcutFileSetting.UnionWith(e.Combination);
+                    break;
+                case "clipboard":
+                    ShortcutClipboardSetting.Clear();
+                    ShortcutClipboardSetting.UnionWith(e.Combination);
+                    break;
+            }
+
+            CurrentShortcutButton.IsEnabled = true;
+            CurrentShortcutButton = null;
+            SettingsKeyListener.DisableListener();
+            (App.Current as App).GlobalKeyListener.EnableListener();
+        }
+
+        private void SettingsKeyListener_OnKeyPressed(object sender, KeyListenerEventArgs e)
+        {
+            CurrentShortcutButton.Content = AppConstants.GetStringCombination(e.Combination);
         }
 
         private void ShortcutClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var shortcut = ShortcutEvent.ShortcutArea;
-            switch(button.Name.Split('_')[1])
-            {
-                case "area": shortcut = ShortcutEvent.ShortcutArea; break;
-                case "desktop": shortcut = ShortcutEvent.ShortcutDesktop; break;
-                case "file": shortcut = ShortcutEvent.ShortcutFile; break;
-                case "clipboard": shortcut = ShortcutEvent.ShortcutClipboard; break;
-            }
-            
+            CurrentShortcutButton = sender as Button;
 
             (App.Current as App).GlobalKeyListener.DisableListener();
-            
 
-            (App.Current as App).GlobalKeyListener.EnableListener();
+            CurrentShortcutButton.Content = "Select a hotkey...";
+            CurrentShortcutButton.IsEnabled = false;
+            SettingsKeyListener.EnableListener();
         }
 
         private void CheckUploadMethod()
@@ -152,12 +192,12 @@ namespace Hermex.Windows
                 SettingsManager.Set("FTPWeburl", ftp_weburl.Text);
                 SettingsManager.Set("FTPUser", ftp_user.Text);
                 SettingsManager.Set("FTPPassword", ftp_password.Text);
-
+                                
                 //shortcut
-                //SettingsManager.Set("ShortcutArea", "CTRL+SHIFTSX+1");
-                //SettingsManager.Set("ShortcutDesktop", "CTRL+SHIFTSX+2");
-                //SettingsManager.Set("ShortcutFile", "CTRL+SHIFTSX+3");
-                //SettingsManager.Set("ShortcutClipboard", "CTRL+SHIFTSX+4");
+                SettingsManager.Set("ShortcutArea", ShortcutAreaSetting);
+                SettingsManager.Set("ShortcutDesktop", ShortcutDesktopSetting);
+                SettingsManager.Set("ShortcutFile", ShortcutFileSetting);
+                SettingsManager.Set("ShortcutClipboard", ShortcutClipboardSetting);
 
                 //check startup
                 Utils.CheckRunAtStartup();
@@ -170,7 +210,7 @@ namespace Hermex.Windows
                 switch(ex.HResult)
                 {
                     case -2146233033:
-                        MessageBox.Show("Settings not saved.\nSocket Port and FTP Port must be integer!","Warning");
+                        MessageBox.Show("Socket Port and FTP Port must be integer!","Warning");
                         break;
 
                     default:

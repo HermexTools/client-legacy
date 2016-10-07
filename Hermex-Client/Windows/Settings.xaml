@@ -96,7 +96,7 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Area shortcut" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>
+                        <TextBlock x:Name="ddd" Text="Area shortcut" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>
                         <Button x:Name="shortcut_area" Content="Change" Grid.Column="1" FontSize="12" Padding="0,5" Width="170" VerticalAlignment="Center"/>
 
                         <TextBlock Text="Desktop shortcut" Grid.Row="1" FontSize="16" Padding="0,0,10,0" VerticalAlignment="Center" Margin="0,10"/>

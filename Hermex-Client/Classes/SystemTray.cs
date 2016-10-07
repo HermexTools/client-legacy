@@ -66,12 +66,12 @@ namespace Hermex.Classes
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Capture Area (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea")) + ")", Properties.Resources.Area, delegate { CaptureArea(); });
+            trayMenu.Items.Add("Capture Area (" + AppConstants.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea")) + ")", Properties.Resources.Area, delegate { CaptureArea(); });
             if (Screen.AllScreens.Length > 1)
             {
                 //sub menu -> desktops
                 ToolStripMenuItem desktopItems = new ToolStripMenuItem("Capture Desktop", Properties.Resources.Desktop);
-                desktopItems.DropDownItems.Add("All Desktops (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", null, delegate { CaptureDesktop(null); });
+                desktopItems.DropDownItems.Add("All Desktops (" + AppConstants.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", null, delegate { CaptureDesktop(null); });
                 desktopItems.DropDownItems.Add("-");
                 int i = 1;
                 foreach (var screen in Screen.AllScreens)
@@ -86,10 +86,10 @@ namespace Hermex.Classes
             }
             else
             {
-                trayMenu.Items.Add("Capture Desktop (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
+                trayMenu.Items.Add("Capture Desktop (" + AppConstants.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
             }
-            trayMenu.Items.Add("Upload File (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutFile")) + ")", Properties.Resources.File, delegate { UploadFile(); });
-            trayMenu.Items.Add("Upload Clipboard (" + KeyListener.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")) + ")", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
+            trayMenu.Items.Add("Upload File (" + AppConstants.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutFile")) + ")", Properties.Resources.File, delegate { UploadFile(); });
+            trayMenu.Items.Add("Upload Clipboard (" + AppConstants.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")) + ")", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Settings", Properties.Resources.Settings, delegate { ShowSettings(); });
             trayMenu.Items.Add("-");
