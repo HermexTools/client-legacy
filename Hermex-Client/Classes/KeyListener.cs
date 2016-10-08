@@ -60,19 +60,19 @@ namespace Hermex.Classes
         {
             if(IsReadMode)
             {
-                if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutArea")))
+                if(combination.SetEquals(AppSettings.Get<HashSet<int>>("ShortcutArea")))
                 {
                     OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutArea));
                 }
-                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")))
+                else if(combination.SetEquals(AppSettings.Get<HashSet<int>>("ShortcutDesktop")))
                 {
                     OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutDesktop));
                 }
-                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutFile")))
+                else if(combination.SetEquals(AppSettings.Get<HashSet<int>>("ShortcutFile")))
                 {
                     OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutFile));
                 }
-                else if(combination.SetEquals(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")))
+                else if(combination.SetEquals(AppSettings.Get<HashSet<int>>("ShortcutClipboard")))
                 {
                     OnShortcutEvent?.Invoke(this, new ShortcutEventArgs(ShortcutEvent.ShortcutClipboard));
                 }

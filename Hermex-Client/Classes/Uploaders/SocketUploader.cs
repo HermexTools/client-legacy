@@ -34,13 +34,13 @@ namespace Hermex.Classes.Uploaders
 
         public bool Upload()
         {
-            socket = new TcpClient(SettingsManager.Get<string>("SocketAddress"), SettingsManager.Get<int>("SocketPort"));
+            socket = new TcpClient(AppSettings.Get<string>("SocketAddress"), AppSettings.Get<int>("SocketPort"));
 
             DataOutputStream output = new DataOutputStream(new BinaryWriter(socket.GetStream()));
             DataInputStream input = new DataInputStream(new BinaryReader(socket.GetStream()));
 
             // password & file lenght & type
-            output.WriteUTF(SettingsManager.Get<string>("SocketPassword") + "&" + file.Length + "&" + FilenameToSend);
+            output.WriteUTF(AppSettings.Get<string>("SocketPassword") + "&" + file.Length + "&" + FilenameToSend);
 
             if(input.ReadUTF().Equals(Messages.OK.ToString()))
             {

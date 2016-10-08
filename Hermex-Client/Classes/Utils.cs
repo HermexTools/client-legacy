@@ -23,7 +23,7 @@ namespace Hermex.Classes
         {
             var registryKey = AppConstants.StartUpRegistryKey;
 
-            if (SettingsManager.Get<bool>("RunAtStartup"))
+            if (AppSettings.Get<bool>("RunAtStartup"))
             {
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryKey, true))
                 {
@@ -71,7 +71,7 @@ namespace Hermex.Classes
 
         public static string SaveImageToLocalPath(string filename)
         {
-            return SettingsManager.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + AppConstants.SaveLocalFileNamePrefix + filename;
+            return AppSettings.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + AppConstants.SaveLocalFileNamePrefix + filename;
         }
 
         public static string SaveFileToTempPath(string filename)

@@ -57,7 +57,7 @@ namespace Hermex.Classes
         public static FileInfo SaveBitmap(Bitmap bitmap)
         {
             //save local if enabled
-            if (SettingsManager.Get<bool>("SaveLocal"))
+            if (AppSettings.Get<bool>("SaveLocal"))
             {
                 bitmap.Save(Utils.SaveImageToLocalPath(DateTime.Now.Ticks.ToString() + ".png"), ImageFormat.Png);
             }

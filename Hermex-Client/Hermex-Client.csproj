@@ -87,7 +87,7 @@
     <Compile Include="Classes\KeyListener.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\Screenshot.cs" />
-    <Compile Include="Classes\SettingsManager.cs" />
+    <Compile Include="Classes\AppSettings.cs" />
     <Compile Include="Classes\Uploaders\FtpUploader.cs" />
     <Compile Include="Classes\Uploaders\SocketUploader.cs" />
     <Compile Include="Classes\SystemTray.cs" />

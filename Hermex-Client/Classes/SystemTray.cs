@@ -66,12 +66,12 @@ namespace Hermex.Classes
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Capture Area (" + Utils.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutArea")) + ")", Properties.Resources.Area, delegate { CaptureArea(); });
+            trayMenu.Items.Add("Capture Area", Properties.Resources.Area, delegate { CaptureArea(); });
             if (Screen.AllScreens.Length > 1)
             {
                 //sub menu -> desktops
                 ToolStripMenuItem desktopItems = new ToolStripMenuItem("Capture Desktop", Properties.Resources.Desktop);
-                desktopItems.DropDownItems.Add("All Desktops (" + Utils.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", null, delegate { CaptureDesktop(null); });
+                desktopItems.DropDownItems.Add("All Desktops", null, delegate { CaptureDesktop(null); });
                 desktopItems.DropDownItems.Add("-");
                 int i = 1;
                 foreach (var screen in Screen.AllScreens)
@@ -86,10 +86,10 @@ namespace Hermex.Classes
             }
             else
             {
-                trayMenu.Items.Add("Capture Desktop (" + Utils.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutDesktop")) + ")", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
+                trayMenu.Items.Add("Capture Desktop", Properties.Resources.Desktop, delegate { CaptureDesktop(null); });
             }
-            trayMenu.Items.Add("Upload File (" + Utils.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutFile")) + ")", Properties.Resources.File, delegate { UploadFile(); });
-            trayMenu.Items.Add("Upload Clipboard (" + Utils.GetStringCombination(SettingsManager.Get<HashSet<int>>("ShortcutClipboard")) + ")", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
+            trayMenu.Items.Add("Upload File", Properties.Resources.File, delegate { UploadFile(); });
+            trayMenu.Items.Add("Upload Clipboard", Properties.Resources.Clipboard, delegate { UploadClipboard(); });
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Settings", Properties.Resources.Settings, delegate { ShowSettings(); });
             trayMenu.Items.Add("-");
@@ -227,7 +227,7 @@ namespace Hermex.Classes
         private void Exit()
         {
             trayIcon.Dispose();
-            SettingsManager.SaveSettingsFile();
+            AppSettings.SaveSettingsFile();
             Utils.CheckRunAtStartup();
             App.Current.Shutdown();
         }

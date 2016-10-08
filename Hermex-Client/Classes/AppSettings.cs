@@ -6,14 +6,14 @@ using System.IO;
 
 namespace Hermex.Classes
 {
-    public class SettingsManager
+    public class AppSettings
     {
         private static FileInfo SettingsFile = new FileInfo(AppConstants.SettingsFileName);
         private static Dictionary<string, object> CurrentSettings;
 
         public static void Initialize(string key, object value)
         {
-            if (!Contains(key))
+            if(!Contains(key))
             {
                 Set(key, value);
             }
@@ -21,7 +21,7 @@ namespace Hermex.Classes
 
         public static void Set(string key, object value)
         {
-            if (Contains(key))
+            if(Contains(key))
             {
                 CurrentSettings[key] = value;
             }
@@ -33,7 +33,7 @@ namespace Hermex.Classes
 
         public static T Get<T>(string key)
         {
-            if (CurrentSettings[key] is JArray)
+            if(CurrentSettings[key] is JArray)
             {
                 return ((JArray)CurrentSettings[key]).ToObject<T>();
             }
@@ -48,7 +48,7 @@ namespace Hermex.Classes
 
         public static void RemoveAll()
         {
-            foreach (var item in CurrentSettings)
+            foreach(var item in CurrentSettings)
             {
                 Remove(item.Key);
             }
@@ -76,7 +76,7 @@ namespace Hermex.Classes
                 error = true;
             }
 
-            if (error)
+            if(error)
             {
                 var file = GetSettingFile();
                 File.WriteAllText(file.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>()));
@@ -90,15 +90,15 @@ namespace Hermex.Classes
         private static FileInfo GetSettingFile()
         {
             //create folder
-            if (!Directory.Exists(SettingsFile.DirectoryName))
+            if(!Directory.Exists(SettingsFile.DirectoryName))
             {
                 Directory.CreateDirectory(SettingsFile.DirectoryName);
             }
 
             //create file
-            if (!File.Exists(SettingsFile.FullName))
+            if(!File.Exists(SettingsFile.FullName))
             {
-                using (var fs = File.Create(SettingsFile.FullName))
+                using(var fs = File.Create(SettingsFile.FullName))
                 {
                     fs.Close();
                 }

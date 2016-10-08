@@ -27,32 +27,32 @@ namespace Hermex.Windows
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             //generals
-            generals_startup.IsChecked = SettingsManager.Get<bool>("RunAtStartup");
-            generals_save.IsChecked = SettingsManager.Get<bool>("SaveLocal");
-            generals_browsepath.Text = SettingsManager.Get<string>("SaveLocalPath") == null ? "Not set." : SettingsManager.Get<string>("SaveLocalPath");
-            generals_method_socket.IsChecked = SettingsManager.Get<string>("UploadMethod") == "SOCKET" ? true : false;
-            generals_method_ftp.IsChecked = SettingsManager.Get<string>("UploadMethod") == "FTP" ? true : false;
+            generals_startup.IsChecked = AppSettings.Get<bool>("RunAtStartup");
+            generals_save.IsChecked = AppSettings.Get<bool>("SaveLocal");
+            generals_browsepath.Text = AppSettings.Get<string>("SaveLocalPath") == null ? "Not set." : AppSettings.Get<string>("SaveLocalPath");
+            generals_method_socket.IsChecked = AppSettings.Get<string>("UploadMethod") == "SOCKET" ? true : false;
+            generals_method_ftp.IsChecked = AppSettings.Get<string>("UploadMethod") == "FTP" ? true : false;
 
             //protocol
-            protocol_address.Text = SettingsManager.Get<string>("SocketAddress");
-            protocol_port.Text = SettingsManager.Get<int>("SocketPort").ToString();
-            protocol_password.Text = SettingsManager.Get<string>("SocketPassword");
+            protocol_address.Text = AppSettings.Get<string>("SocketAddress");
+            protocol_port.Text = AppSettings.Get<int>("SocketPort").ToString();
+            protocol_password.Text = AppSettings.Get<string>("SocketPassword");
 
             //ftp
-            ftp_useftps.IsChecked = SettingsManager.Get<bool>("UseFTPS");
-            ftp_certificates.IsChecked = SettingsManager.Get<bool>("AcceptCertificates");
-            ftp_address.Text = SettingsManager.Get<string>("FTPAddress");
-            ftp_port.Text = SettingsManager.Get<int>("FTPPort").ToString();
-            ftp_directory.Text = SettingsManager.Get<string>("FTPDirectory");
-            ftp_weburl.Text = SettingsManager.Get<string>("FTPWeburl");
-            ftp_user.Text = SettingsManager.Get<string>("FTPUser");
-            ftp_password.Text = SettingsManager.Get<string>("FTPPassword");
+            ftp_useftps.IsChecked = AppSettings.Get<bool>("UseFTPS");
+            ftp_certificates.IsChecked = AppSettings.Get<bool>("AcceptCertificates");
+            ftp_address.Text = AppSettings.Get<string>("FTPAddress");
+            ftp_port.Text = AppSettings.Get<int>("FTPPort").ToString();
+            ftp_directory.Text = AppSettings.Get<string>("FTPDirectory");
+            ftp_weburl.Text = AppSettings.Get<string>("FTPWeburl");
+            ftp_user.Text = AppSettings.Get<string>("FTPUser");
+            ftp_password.Text = AppSettings.Get<string>("FTPPassword");
 
             //shortcut
-            ShortcutAreaSetting = SettingsManager.Get<HashSet<int>>("ShortcutArea");
-            ShortcutDesktopSetting = SettingsManager.Get<HashSet<int>>("ShortcutDesktop");
-            ShortcutFileSetting = SettingsManager.Get<HashSet<int>>("ShortcutFile");
-            ShortcutClipboardSetting = SettingsManager.Get<HashSet<int>>("ShortcutClipboard");
+            ShortcutAreaSetting = AppSettings.Get<HashSet<int>>("ShortcutArea");
+            ShortcutDesktopSetting = AppSettings.Get<HashSet<int>>("ShortcutDesktop");
+            ShortcutFileSetting = AppSettings.Get<HashSet<int>>("ShortcutFile");
+            ShortcutClipboardSetting = AppSettings.Get<HashSet<int>>("ShortcutClipboard");
             
             shortcut_area.Content = Utils.GetStringCombination(ShortcutAreaSetting);
             shortcut_desktop.Content = Utils.GetStringCombination(ShortcutDesktopSetting);
@@ -173,37 +173,37 @@ namespace Hermex.Windows
             try
             {
                 //generals
-                SettingsManager.Set("RunAtStartup", generals_startup.IsChecked);
-                SettingsManager.Set("SaveLocal", generals_save.IsChecked);
-                SettingsManager.Set("SaveLocalPath", generals_browsepath.Text);
-                SettingsManager.Set("UploadMethod", generals_method_socket.IsChecked == true ? "SOCKET" : "FTP");
+                AppSettings.Set("RunAtStartup", generals_startup.IsChecked);
+                AppSettings.Set("SaveLocal", generals_save.IsChecked);
+                AppSettings.Set("SaveLocalPath", generals_browsepath.Text);
+                AppSettings.Set("UploadMethod", generals_method_socket.IsChecked == true ? "SOCKET" : "FTP");
 
                 //protocol
-                SettingsManager.Set("SocketAddress", protocol_address.Text);
-                SettingsManager.Set("SocketPort", Convert.ToInt32(protocol_port.Text));
-                SettingsManager.Set("SocketPassword", protocol_password.Text);
+                AppSettings.Set("SocketAddress", protocol_address.Text);
+                AppSettings.Set("SocketPort", Convert.ToInt32(protocol_port.Text));
+                AppSettings.Set("SocketPassword", protocol_password.Text);
 
                 //ftp
-                SettingsManager.Set("UseFTPS", ftp_useftps.IsChecked);
-                SettingsManager.Set("AcceptCertificates", ftp_certificates.IsChecked);
-                SettingsManager.Set("FTPAddress", ftp_address.Text);
-                SettingsManager.Set("FTPPort", Convert.ToInt32(ftp_port.Text));
-                SettingsManager.Set("FTPDirectory", ftp_directory.Text);
-                SettingsManager.Set("FTPWeburl", ftp_weburl.Text);
-                SettingsManager.Set("FTPUser", ftp_user.Text);
-                SettingsManager.Set("FTPPassword", ftp_password.Text);
+                AppSettings.Set("UseFTPS", ftp_useftps.IsChecked);
+                AppSettings.Set("AcceptCertificates", ftp_certificates.IsChecked);
+                AppSettings.Set("FTPAddress", ftp_address.Text);
+                AppSettings.Set("FTPPort", Convert.ToInt32(ftp_port.Text));
+                AppSettings.Set("FTPDirectory", ftp_directory.Text);
+                AppSettings.Set("FTPWeburl", ftp_weburl.Text);
+                AppSettings.Set("FTPUser", ftp_user.Text);
+                AppSettings.Set("FTPPassword", ftp_password.Text);
                                 
                 //shortcut
-                SettingsManager.Set("ShortcutArea", ShortcutAreaSetting);
-                SettingsManager.Set("ShortcutDesktop", ShortcutDesktopSetting);
-                SettingsManager.Set("ShortcutFile", ShortcutFileSetting);
-                SettingsManager.Set("ShortcutClipboard", ShortcutClipboardSetting);
+                AppSettings.Set("ShortcutArea", ShortcutAreaSetting);
+                AppSettings.Set("ShortcutDesktop", ShortcutDesktopSetting);
+                AppSettings.Set("ShortcutFile", ShortcutFileSetting);
+                AppSettings.Set("ShortcutClipboard", ShortcutClipboardSetting);
 
                 //check startup
                 Utils.CheckRunAtStartup();
 
                 //save config
-                SettingsManager.SaveSettingsFile();
+                AppSettings.SaveSettingsFile();
 
                 //close window
                 Close();
