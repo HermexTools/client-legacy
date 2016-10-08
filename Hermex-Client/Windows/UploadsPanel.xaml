@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hermex.Windows"
         mc:Ignorable="d"
-        Title="Uploads" Height="150" Width="250" ResizeMode="CanMinimize" SourceInitialized="UploadPanel_SourceInitialized">
-    <Grid x:Name="uploadPanel"/>
+        Title="Uploads" Height="112.169" Width="250" ResizeMode="CanMinimize" SourceInitialized="UploadPanel_SourceInitialized">
+    <Grid x:Name="uploadPanel">
+        <ProgressBar Height="28" Margin="10,45,10,10" VerticalAlignment="Center" Width="224" RenderTransformOrigin="0.511,-0.751" HorizontalAlignment="Center"/>
+        <Label x:Name="label" Content="Label" HorizontalAlignment="Center" Margin="10,10,10,43" VerticalAlignment="Center" Width="224" Height="30"/>
+    </Grid>
 </Window>

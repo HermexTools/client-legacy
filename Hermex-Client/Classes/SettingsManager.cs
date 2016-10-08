@@ -23,15 +23,7 @@ namespace Hermex.Classes
         {
             if (Contains(key))
             {
-                if (CurrentSettings[key] is HashSet<int> && value is HashSet<int>)
-                {
-                    ((HashSet<int>)CurrentSettings[key]).Clear();
-                    ((HashSet<int>)CurrentSettings[key]).UnionWith((HashSet<int>)value);
-                }
-                else
-                {
-                    CurrentSettings[key] = value;
-                }
+                CurrentSettings[key] = value;
             }
             else
             {
@@ -88,7 +80,6 @@ namespace Hermex.Classes
             {
                 var file = GetSettingFile();
                 File.WriteAllText(file.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>()));
-
 
                 InitializeSettings();
                 string content = File.ReadAllText(file.FullName);
@@ -153,6 +144,8 @@ namespace Hermex.Classes
             Initialize("ShortcutDesktop", new HashSet<int>() { 162, 160, 50 });
             Initialize("ShortcutFile", new HashSet<int>() { 162, 160, 51 });
             Initialize("ShortcutClipboard", new HashSet<int>() { 162, 160, 52 });
+
+            SaveSettingsFile();
         }
 
     }

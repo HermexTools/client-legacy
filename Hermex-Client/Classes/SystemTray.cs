@@ -93,7 +93,7 @@ namespace Hermex.Classes
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Settings", Properties.Resources.Settings, delegate { ShowSettings(); });
             trayMenu.Items.Add("-");
-            trayMenu.Items.Add("Quit", Properties.Resources.Quit, delegate { Exit(); });
+            trayMenu.Items.Add("Exit", Properties.Resources.Quit, delegate { Exit(); });
 
             //return menu
             return trayMenu;
@@ -103,7 +103,10 @@ namespace Hermex.Classes
 
         private void onDoubleClick(object sender, MouseEventArgs e)
         {
-            new UploadsPanel().Show();
+            if (!Utils.IsWindowOpen<UploadsPanel>())
+            {
+                new UploadsPanel().Show();
+            }
         }
 
         private void ShowProgress(object sender, ProgressChangedEventArgs e)
@@ -188,7 +191,7 @@ namespace Hermex.Classes
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                
+
             }
         }
 
@@ -224,6 +227,8 @@ namespace Hermex.Classes
         private void Exit()
         {
             trayIcon.Dispose();
+            SettingsManager.SaveSettingsFile();
+            Utils.CheckRunAtStartup();
             App.Current.Shutdown();
         }
 

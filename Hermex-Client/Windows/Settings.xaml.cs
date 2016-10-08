@@ -206,7 +206,7 @@ namespace Hermex.Windows
                 SettingsManager.SaveSettingsFile();
 
                 //close window
-                this.Close();
+                Close();
             }
             catch(Exception ex)
             {
