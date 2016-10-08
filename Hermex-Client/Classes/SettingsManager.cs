@@ -24,7 +24,16 @@ namespace Hermex.Classes
 
             if (Contains(key))
             {
-                file[key] = value;
+
+                if(file[key] is HashSet<int> && value is HashSet<int>)
+                {
+                    ((HashSet<int>)file[key]).Clear();
+                    ((HashSet<int>)file[key]).UnionWith((HashSet<int>)value);
+                }
+                else
+                {
+                    file[key] = value;
+                }
             }
             else
             {
