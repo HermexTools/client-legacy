@@ -26,7 +26,7 @@ namespace Hermex
            
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            AppConstants.InitializeSettings();
+            SettingsManager.InitializeSettings();
             Utils.CheckRunAtStartup();
 
             GlobalKeyListener = new KeyListener();

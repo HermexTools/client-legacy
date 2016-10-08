@@ -11,14 +11,11 @@ namespace Hermex.Classes
 {
     public class AppConstants
     {
-        //private fields
-        private static readonly string OwnAppDataFolderName = ".hermex";
-        private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + OwnAppDataFolderName + Path.DirectorySeparatorChar;
-        private static readonly string TempFolder = Path.GetTempPath() + Path.DirectorySeparatorChar;
-        private static readonly string SaveLocalFileNamePrefix = "hermex_";
-        private static readonly string SaveTempFileNamePrefix = "hermex_temp_";
-
-        //public fields
+        public static readonly string OwnAppDataFolderName = ".hermex";
+        public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + OwnAppDataFolderName + Path.DirectorySeparatorChar;
+        public static readonly string TempFolder = Path.GetTempPath() + Path.DirectorySeparatorChar;
+        public static readonly string SaveLocalFileNamePrefix = "hermex_";
+        public static readonly string SaveTempFileNamePrefix = "hermex_temp_";
         public static readonly string Name = "Hermex";
         public static readonly string[] Developers = new string[] { "Kaos1337", "SergiX44", "Lukasss93" };
         public static readonly string Version = "0.0.3-Beta";
@@ -27,18 +24,6 @@ namespace Hermex.Classes
         public static readonly string SettingsFileName = AppDataFolder + "config.json";
         public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
         public static readonly string StartUpRegistryKeyName = "Hermex";
-
-        public static string SaveImageToLocalPath(string filename)
-        {
-            return SettingsManager.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + SaveLocalFileNamePrefix + filename;
-        }
-
-        public static string SaveFileToTempPath(string filename)
-        {
-            return TempFolder + SaveTempFileNamePrefix + filename;
-        }
-
-
         public static readonly Dictionary<Keys, string> SupportedKeys = new Dictionary<Keys, string>()
         {
             { Keys.LControlKey, "CTRL-L"},
@@ -96,48 +81,5 @@ namespace Hermex.Classes
             { Keys.Space, "SPACE"},
             { Keys.OemBackslash, "<"}
         };
-
-        public static string GetStringCombination(HashSet<int> keyValues)
-        {
-            StringBuilder output = new StringBuilder();
-            foreach(var item in keyValues)
-            {
-                output.Append(SupportedKeys[(Keys)item]);
-                output.Append("+");
-            }
-            output.Remove(output.ToString().LastIndexOf("+"), 1);
-            return output.ToString();
-        }
-
-        public static void InitializeSettings()
-        {
-            //generals
-            SettingsManager.Initialize("RunAtStartup", false);
-            SettingsManager.Initialize("SaveLocal", false);
-            SettingsManager.Initialize("SaveLocalPath", SaveLocalDefaultPath);
-            SettingsManager.Initialize("UploadMethod", "SOCKET");
-
-            //protocol
-            SettingsManager.Initialize("SocketAddress", "localhost");
-            SettingsManager.Initialize("SocketPort", 4030);
-            SettingsManager.Initialize("SocketPassword", "pass");
-
-            //ftp
-            SettingsManager.Initialize("UseFTPS", false);
-            SettingsManager.Initialize("AcceptCertificates", true);
-            SettingsManager.Initialize("FTPAddress", null);
-            SettingsManager.Initialize("FTPPort", 21);
-            SettingsManager.Initialize("FTPDirectory", "/");
-            SettingsManager.Initialize("FTPWeburl", null);
-            SettingsManager.Initialize("FTPUser", null);
-            SettingsManager.Initialize("FTPPassword", null);
-
-            //shortcut
-            SettingsManager.Initialize("ShortcutArea", new HashSet<int>() { 162, 160, 49 });
-            SettingsManager.Initialize("ShortcutDesktop", new HashSet<int>() { 162, 160, 50 });
-            SettingsManager.Initialize("ShortcutFile", new HashSet<int>() { 162, 160, 51 });
-            SettingsManager.Initialize("ShortcutClipboard", new HashSet<int>() { 162, 160, 52 });
-            //todo: setting will be initialized every time... why? boh...
-        }
     }
 }

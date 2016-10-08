@@ -59,11 +59,11 @@ namespace Hermex.Classes
             //save local if enabled
             if (SettingsManager.Get<bool>("SaveLocal"))
             {
-                bitmap.Save(AppConstants.SaveImageToLocalPath(DateTime.Now.Ticks.ToString() + ".png"), ImageFormat.Png);
+                bitmap.Save(Utils.SaveImageToLocalPath(DateTime.Now.Ticks.ToString() + ".png"), ImageFormat.Png);
             }
 
             //save in temp to send
-            FileInfo f = new FileInfo(AppConstants.SaveFileToTempPath(DateTime.Now.Ticks.ToString() + ".png"));
+            FileInfo f = new FileInfo(Utils.SaveFileToTempPath(DateTime.Now.Ticks.ToString() + ".png"));
             bitmap.Save(f.FullName, ImageFormat.Png);
             return f;
         }

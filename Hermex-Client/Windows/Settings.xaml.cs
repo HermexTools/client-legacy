@@ -54,10 +54,10 @@ namespace Hermex.Windows
             ShortcutFileSetting = SettingsManager.Get<HashSet<int>>("ShortcutFile");
             ShortcutClipboardSetting = SettingsManager.Get<HashSet<int>>("ShortcutClipboard");
             
-            shortcut_area.Content = AppConstants.GetStringCombination(ShortcutAreaSetting);
-            shortcut_desktop.Content = AppConstants.GetStringCombination(ShortcutDesktopSetting);
-            shortcut_file.Content = AppConstants.GetStringCombination(ShortcutFileSetting);
-            shortcut_clipboard.Content = AppConstants.GetStringCombination(ShortcutClipboardSetting);
+            shortcut_area.Content = Utils.GetStringCombination(ShortcutAreaSetting);
+            shortcut_desktop.Content = Utils.GetStringCombination(ShortcutDesktopSetting);
+            shortcut_file.Content = Utils.GetStringCombination(ShortcutFileSetting);
+            shortcut_clipboard.Content = Utils.GetStringCombination(ShortcutClipboardSetting);
 
             //events
             CheckSaveLocalImage();
@@ -86,7 +86,7 @@ namespace Hermex.Windows
 
         private void SettingsKeyListener_OnCombinationCompleted(object sender, KeyListenerEventArgs e)
         {
-            CurrentShortcutButton.Content = AppConstants.GetStringCombination(e.Combination);
+            CurrentShortcutButton.Content = Utils.GetStringCombination(e.Combination);
             switch(CurrentShortcutButton.Name.Split('_')[1])
             {
                 case "area":
@@ -115,7 +115,7 @@ namespace Hermex.Windows
 
         private void SettingsKeyListener_OnKeyPressed(object sender, KeyListenerEventArgs e)
         {
-            CurrentShortcutButton.Content = AppConstants.GetStringCombination(e.Combination);
+            CurrentShortcutButton.Content = Utils.GetStringCombination(e.Combination);
         }
 
         private void ShortcutClick(object sender, RoutedEventArgs e)

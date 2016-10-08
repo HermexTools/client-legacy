@@ -4,6 +4,9 @@ using System.Windows;
 using System.Collections.Generic;
 using System;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Hermex.Classes
 {
@@ -64,6 +67,28 @@ namespace Hermex.Classes
             st = Regex.Replace(st, "[-+^,èòàù()%&:\\[\\]{\\}]", "");
             st = st.Replace(" ", "_");
             return new Random().Next(99999) + "-" + st;
+        }
+
+        public static string SaveImageToLocalPath(string filename)
+        {
+            return SettingsManager.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + AppConstants.SaveLocalFileNamePrefix + filename;
+        }
+
+        public static string SaveFileToTempPath(string filename)
+        {
+            return AppConstants.TempFolder + AppConstants.SaveTempFileNamePrefix + filename;
+        }
+
+        public static string GetStringCombination(HashSet<int> keyValues)
+        {
+            StringBuilder output = new StringBuilder();
+            foreach(var item in keyValues)
+            {
+                output.Append(AppConstants.SupportedKeys[(Keys)item]);
+                output.Append("+");
+            }
+            output.Remove(output.ToString().LastIndexOf("+"), 1);
+            return output.ToString();
         }
     }
 }

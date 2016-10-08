@@ -24,7 +24,6 @@ namespace Hermex.Classes
 
             if (Contains(key))
             {
-
                 if(file[key] is HashSet<int> && value is HashSet<int>)
                 {
                     ((HashSet<int>)file[key]).Clear();
@@ -47,19 +46,7 @@ namespace Hermex.Classes
         {
             Dictionary<string, object> dictionary = null;
             
-            if(!Contains(key))
-            {
-                AppConstants.InitializeSettings();
-            }
-
             dictionary = ReadSettingsFile();
-
-            if(!(dictionary[key] is T))
-            {
-                Remove(key);
-                AppConstants.InitializeSettings();
-                dictionary = ReadSettingsFile();
-            }
 
             if (dictionary[key] is JArray)
             {
@@ -115,7 +102,7 @@ namespace Hermex.Classes
                 File.WriteAllText(file.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>()));
 
 
-                AppConstants.InitializeSettings();
+                InitializeSettings();
                 string content = File.ReadAllText(file.FullName);
                 list = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);                
             }
@@ -148,6 +135,36 @@ namespace Hermex.Classes
         {
             var file = GetSettingFile();
             File.WriteAllText(file.FullName, JsonConvert.SerializeObject(settings, Formatting.Indented));
+        }
+
+        public static void InitializeSettings()
+        {
+            //generals
+            Initialize("RunAtStartup", false);
+            Initialize("SaveLocal", false);
+            Initialize("SaveLocalPath", AppConstants.SaveLocalDefaultPath);
+            Initialize("UploadMethod", "SOCKET");
+
+            //protocol
+            Initialize("SocketAddress", "localhost");
+            Initialize("SocketPort", 4030);
+            Initialize("SocketPassword", "pass");
+
+            //ftp
+            Initialize("UseFTPS", false);
+            Initialize("AcceptCertificates", true);
+            Initialize("FTPAddress", null);
+            Initialize("FTPPort", 21);
+            Initialize("FTPDirectory", "/");
+            Initialize("FTPWeburl", null);
+            Initialize("FTPUser", null);
+            Initialize("FTPPassword", null);
+
+            //shortcut
+            Initialize("ShortcutArea", new HashSet<int>() { 162, 160, 49 });
+            Initialize("ShortcutDesktop", new HashSet<int>() { 162, 160, 50 });
+            Initialize("ShortcutFile", new HashSet<int>() { 162, 160, 51 });
+            Initialize("ShortcutClipboard", new HashSet<int>() { 162, 160, 52 });
         }
 
     }
