@@ -9,6 +9,7 @@ namespace Hermex.Classes
     public class SettingsManager
     {
         private static FileInfo SettingsFile = new FileInfo(AppConstants.SettingsFileName);
+        private static Dictionary<string, object> CurrentSettings;
 
         public static void Initialize(string key, object value)
         {
@@ -20,53 +21,42 @@ namespace Hermex.Classes
 
         public static void Set(string key, object value)
         {
-            var file = ReadSettingsFile();
-
             if (Contains(key))
             {
-                if(file[key] is HashSet<int> && value is HashSet<int>)
+                if (CurrentSettings[key] is HashSet<int> && value is HashSet<int>)
                 {
-                    ((HashSet<int>)file[key]).Clear();
-                    ((HashSet<int>)file[key]).UnionWith((HashSet<int>)value);
+                    ((HashSet<int>)CurrentSettings[key]).Clear();
+                    ((HashSet<int>)CurrentSettings[key]).UnionWith((HashSet<int>)value);
                 }
                 else
                 {
-                    file[key] = value;
+                    CurrentSettings[key] = value;
                 }
             }
             else
             {
-                file.Add(key, value);
+                CurrentSettings.Add(key, value);
             }
-
-            SaveSettingsFile(file);
         }
 
         public static T Get<T>(string key)
         {
-            Dictionary<string, object> dictionary = null;
-            
-            dictionary = ReadSettingsFile();
-
-            if (dictionary[key] is JArray)
+            if (CurrentSettings[key] is JArray)
             {
-                return ((JArray)dictionary[key]).ToObject<T>();
+                return ((JArray)CurrentSettings[key]).ToObject<T>();
             }
 
-            return (T)Convert.ChangeType(dictionary[key], typeof(T));
+            return (T)Convert.ChangeType(CurrentSettings[key], typeof(T));
         }
 
         public static void Remove(string key)
         {
-            var file = ReadSettingsFile();
-            file.Remove(key);
-            SaveSettingsFile(file);
+            CurrentSettings.Remove(key);
         }
 
         public static void RemoveAll()
         {
-            var file = ReadSettingsFile();
-            foreach (var item in file)
+            foreach (var item in CurrentSettings)
             {
                 Remove(item.Key);
             }
@@ -74,22 +64,20 @@ namespace Hermex.Classes
 
         public static bool Contains(string key)
         {
-            var file = ReadSettingsFile();
-            return file.ContainsKey(key);
+            return CurrentSettings.ContainsKey(key);
         }
 
 
 
-        public static Dictionary<string, object> ReadSettingsFile()
+        public static void ReadSettingsFile()
         {
             bool error = false;
-            Dictionary<string, object> list = new Dictionary<string, object>();
 
             try
             {
                 var file = GetSettingFile();
                 string content = File.ReadAllText(file.FullName);
-                list = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
+                CurrentSettings = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
             }
             catch
             {
@@ -104,41 +92,41 @@ namespace Hermex.Classes
 
                 InitializeSettings();
                 string content = File.ReadAllText(file.FullName);
-                list = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);                
+                CurrentSettings = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
             }
-
-            return list;
         }
 
         private static FileInfo GetSettingFile()
         {
             //create folder
-            if(!Directory.Exists(SettingsFile.DirectoryName))
+            if (!Directory.Exists(SettingsFile.DirectoryName))
             {
                 Directory.CreateDirectory(SettingsFile.DirectoryName);
             }
 
             //create file
-            if(!File.Exists(SettingsFile.FullName))
+            if (!File.Exists(SettingsFile.FullName))
             {
-                using(var fs = File.Create(SettingsFile.FullName))
+                using (var fs = File.Create(SettingsFile.FullName))
                 {
                     fs.Close();
                 }
-                File.WriteAllText(SettingsFile.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));                
+                File.WriteAllText(SettingsFile.FullName, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));
             }
 
             return SettingsFile;
         }
 
-        private static void SaveSettingsFile(Dictionary<string, object> settings)
+        public static void SaveSettingsFile()
         {
             var file = GetSettingFile();
-            File.WriteAllText(file.FullName, JsonConvert.SerializeObject(settings, Formatting.Indented));
+            File.WriteAllText(file.FullName, JsonConvert.SerializeObject(CurrentSettings, Formatting.Indented));
         }
 
         public static void InitializeSettings()
         {
+            ReadSettingsFile();
+
             //generals
             Initialize("RunAtStartup", false);
             Initialize("SaveLocal", false);

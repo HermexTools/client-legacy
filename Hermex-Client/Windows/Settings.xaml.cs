@@ -202,6 +202,9 @@ namespace Hermex.Windows
                 //check startup
                 Utils.CheckRunAtStartup();
 
+                //save config
+                SettingsManager.SaveSettingsFile();
+
                 //close window
                 this.Close();
             }
