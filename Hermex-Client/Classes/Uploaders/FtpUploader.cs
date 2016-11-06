@@ -12,12 +12,12 @@ namespace Hermex.Classes.Uploaders
         private string _link;
         private string _fileName;
 
-        private BackgroundWorker worker;
+        private IProgress<int> progressReporter;
 
-        public FtpUploader(FileInfo f, BackgroundWorker bgworker, string sendname)
+        public FtpUploader(FileInfo f, Progress<int> pReporter, string sendname)
         {
             file = f;
-            worker = bgworker;
+            progressReporter = pReporter;
 
             if(sendname.Contains("{0}"))
             {
@@ -62,7 +62,7 @@ namespace Hermex.Classes.Uploaders
                 sentBytes += readed;
                 progress = (int)(100 * sentBytes / file.Length);
 
-                worker.ReportProgress(progress);
+                progressReporter.Report(progress);
             }
 
             fs.Close();

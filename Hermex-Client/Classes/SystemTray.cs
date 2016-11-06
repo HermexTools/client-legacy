@@ -123,7 +123,7 @@ namespace Hermex.Classes
             }
         }
 
-        private void ShowProgress(object sender, ProgressChangedEventArgs e)
+        private void ShowProgress(object sender, int progress)
         {
             Graphics canvas;
             Bitmap iconBitmap = new Bitmap(32, 32);
@@ -132,7 +132,7 @@ namespace Hermex.Classes
             canvas.DrawIcon(Properties.Resources.LoadingIcon, 0, 0);
             
             canvas.DrawString(
-                e.ProgressPercentage<100? e.ProgressPercentage.ToString():"99",
+                progress < 100 ? progress.ToString() : "99",
                 new Font("Segoe UI", 13, FontStyle.Bold),
                 new SolidBrush(Color.White),
                 new RectangleF(0, 3, 32, 29),
@@ -158,19 +158,17 @@ namespace Hermex.Classes
             }
 
 
-            BackgroundWorker b = new BackgroundWorker();
-            b.WorkerReportsProgress = true;
-            b.ProgressChanged += ShowProgress;
-            b.RunWorkerCompleted += (sen, e) =>
-            {
-                trayIcon.Icon = Properties.Resources.AppIcon;
-            };
+            Progress<int> progressReporter = new Progress<int>();
+            progressReporter.ProgressChanged += ShowProgress;
 
-            SocketUploader upload = new SocketUploader(screen, b, "{0}.png");
+            SocketUploader upload = new SocketUploader(screen, progressReporter, "{0}.png");
             if (upload.Upload())
             {
                 trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
             }
+
+            trayIcon.Icon = Properties.Resources.AppIcon;
+
         }
 
         private void CaptureArea()
@@ -184,26 +182,22 @@ namespace Hermex.Classes
                 );
 
 
-                BackgroundWorker b = new BackgroundWorker();
-                b.WorkerReportsProgress = true;
-                b.ProgressChanged += ShowProgress;
-                b.RunWorkerCompleted += (sen, e) =>
-                {
-                    trayIcon.Icon = Properties.Resources.AppIcon;
-                };
+                Progress<int> progressReporter = new Progress<int>();
+                progressReporter.ProgressChanged += ShowProgress;
 
-                SocketUploader upload = new SocketUploader(screen, b, "{0}.png");
+                SocketUploader upload = new SocketUploader(screen, progressReporter, "{0}.png");
                 if (upload.Upload())
                 {
                     Utils.SetTooltip(trayIcon, 5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
                     ClipboardManager.SetText(upload.Link);
                 }
+
+                trayIcon.Icon = Properties.Resources.AppIcon;
             }
             else
             {
                 Utils.SetTooltip(trayIcon, 2000, "Upload Cancelled", "", ToolTipIcon.Info);
             }
-
         }
 
         private void UploadFile()

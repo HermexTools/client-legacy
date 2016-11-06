@@ -23,12 +23,12 @@ namespace Hermex.Classes.Uploaders
         private string _link;
         private string _fileName;
 
-        private BackgroundWorker worker;
+        private IProgress<int> progressReporter;
 
-        public SocketUploader(FileInfo f, BackgroundWorker bgworker, string sendname)
+        public SocketUploader(FileInfo f, Progress<int> pReporter, string sendname)
         {
             file = f;
-            worker = bgworker;
+            progressReporter = pReporter;
             FilenameToSend = sendname;
         }
 
@@ -61,7 +61,7 @@ namespace Hermex.Classes.Uploaders
                         sentBytes += readed;
                         progress = (int) (100 * sentBytes / file.Length);
 
-                        worker.ReportProgress(progress);
+                        progressReporter.Report(progress);
                     }
                 }
                 
