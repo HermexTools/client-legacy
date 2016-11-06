@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Hermex.Classes
 {
@@ -32,7 +33,20 @@ namespace Hermex.Classes
             //show trayicon
             trayIcon.Visible = true;
 
+            trayIcon.BalloonTipClicked += TrayIcon_BalloonTipClicked;
+
             (App.Current as App).GlobalKeyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
+        }
+
+        private void TrayIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            string text = trayIcon.BalloonTipText;
+            
+            if(!string.IsNullOrEmpty(text) && Utils.CheckURL(text))
+            {
+                Process.Start(text);
+            }
+                        
         }
 
         private void KeyListener_OnShortcutEvent(object sender, ShortcutEventArgs e)
@@ -112,20 +126,17 @@ namespace Hermex.Classes
         private void ShowProgress(object sender, ProgressChangedEventArgs e)
         {
             Graphics canvas;
-            Bitmap iconBitmap = new Bitmap(16, 16);
+            Bitmap iconBitmap = new Bitmap(32, 32);
             canvas = Graphics.FromImage(iconBitmap);
 
-            canvas.DrawIcon(Properties.Resources.AppIcon, 0, 0);
-
-            StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Center;
-
+            canvas.DrawIcon(Properties.Resources.LoadingIcon, 0, 0);
+            
             canvas.DrawString(
-                e.ProgressPercentage.ToString(),
-                new Font("Calibri", 8, FontStyle.Bold),
+                e.ProgressPercentage<100? e.ProgressPercentage.ToString():"99",
+                new Font("Segoe UI", 13, FontStyle.Bold),
                 new SolidBrush(Color.White),
-                new RectangleF(0, 3, 16, 13),
-                format
+                new RectangleF(0, 3, 32, 29),
+                new StringFormat() { Alignment=StringAlignment.Center }
             );
 
             trayIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
@@ -150,6 +161,10 @@ namespace Hermex.Classes
             BackgroundWorker b = new BackgroundWorker();
             b.WorkerReportsProgress = true;
             b.ProgressChanged += ShowProgress;
+            b.RunWorkerCompleted += (sen, e) =>
+            {
+                trayIcon.Icon = Properties.Resources.AppIcon;
+            };
 
             SocketUploader upload = new SocketUploader(screen, b, "{0}.png");
             if (upload.Upload())
@@ -172,17 +187,23 @@ namespace Hermex.Classes
                 BackgroundWorker b = new BackgroundWorker();
                 b.WorkerReportsProgress = true;
                 b.ProgressChanged += ShowProgress;
+                b.RunWorkerCompleted += (sen, e) =>
+                {
+                    trayIcon.Icon = Properties.Resources.AppIcon;
+                };
 
                 SocketUploader upload = new SocketUploader(screen, b, "{0}.png");
                 if (upload.Upload())
                 {
-                    trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                    Utils.SetTooltip(trayIcon, 5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                    ClipboardManager.SetText(upload.Link);
                 }
             }
             else
             {
-                trayIcon.ShowBalloonTip(2000, "Upload Cancelled", "", ToolTipIcon.Info);
+                Utils.SetTooltip(trayIcon, 2000, "Upload Cancelled", "", ToolTipIcon.Info);
             }
+
         }
 
         private void UploadFile()

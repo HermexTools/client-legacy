@@ -90,5 +90,20 @@ namespace Hermex.Classes
             output.Remove(output.ToString().LastIndexOf("+"), 1);
             return output.ToString();
         }
+
+        public static void SetTooltip(NotifyIcon icon, int timeout, string title, string text, ToolTipIcon tipicon)
+        {
+            icon.BalloonTipTitle = title;
+            icon.BalloonTipText = text;
+            icon.BalloonTipIcon = tipicon;
+
+            icon.ShowBalloonTip(timeout);
+        }
+
+        public static bool CheckURL(string source)
+        {
+            Uri uriResult;
+            return Uri.TryCreate(source, UriKind.Absolute, out uriResult) && uriResult.Scheme == Uri.UriSchemeHttp;
+        }
     }
 }

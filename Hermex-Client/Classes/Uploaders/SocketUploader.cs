@@ -64,6 +64,7 @@ namespace Hermex.Classes.Uploaders
                         worker.ReportProgress(progress);
                     }
                 }
+                
 
                 Link = input.ReadUTF();
                 socket.Close();
