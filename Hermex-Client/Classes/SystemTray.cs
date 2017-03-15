@@ -1,55 +1,46 @@
 ﻿using Hermex.Classes.Uploaders;
 using Hermex.Windows;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Hermex.Classes
 {
     public class SystemTray
     {
-        private NotifyIcon trayIcon;
+        private NotifyIcon tray;
+        private App GlobalEnvironment = App.Current as App;
 
         public SystemTray()
         {
-            trayIcon = new NotifyIcon();
+            tray = new NotifyIcon();
 
-            //trayicon name
-            trayIcon.Text = AppConstants.Name;
+            //tray name
+            tray.Text = AppConstants.Name;
 
-            //trayicon icon
-            trayIcon.Icon = Properties.Resources.AppIcon;
+            //tray icon
+            tray.Icon = Properties.Resources.AppIcon;
 
-            //trayicon doubleclick event
-            trayIcon.MouseDoubleClick += onDoubleClick;
+            //tray events
+            tray.MouseClick += OnClick; //for testing only
+            tray.MouseDoubleClick += OnDoubleClick;
+            tray.BalloonTipClicked += OnTooltipClick;
 
-            //trayicon menu
-            trayIcon.ContextMenuStrip = buildMenu();
+            //tray menu
+            tray.ContextMenuStrip = buildMenu();
 
-            //show trayicon
-            trayIcon.Visible = true;
+            //show tray 
+            tray.Visible = true;
 
-            trayIcon.BalloonTipClicked += TrayIcon_BalloonTipClicked;
-
-            (App.Current as App).GlobalKeyListener.OnShortcutEvent += KeyListener_OnShortcutEvent;
+            //global keylistener shortcut event
+            GlobalEnvironment.GlobalKeyListener.OnShortcutEvent += OnShortcutEvent;
         }
-
-        private void TrayIcon_BalloonTipClicked(object sender, EventArgs e)
-        {
-            string text = trayIcon.BalloonTipText;
-            
-            if(!string.IsNullOrEmpty(text) && Utils.CheckURL(text))
-            {
-                Process.Start(text);
-            }
-                        
-        }
-
-        private void KeyListener_OnShortcutEvent(object sender, ShortcutEventArgs e)
+        
+        //execute functions from shortcuts
+        private void OnShortcutEvent(object sender, ShortcutEventArgs e)
         {
             switch (e.shortcutEvent)
             {
@@ -72,7 +63,26 @@ namespace Hermex.Classes
         {
             //sub menu -> recent items
             ToolStripMenuItem recentItems = new ToolStripMenuItem("Recent Items");
-            recentItems.DropDownItems.Add("No items").Enabled = false;
+            var recent = AppSettings.Get<List<string>>("RecentItems");
+            if(recent.Count==0)
+            {
+                recentItems.DropDownItems.Add("No items").Enabled = false;
+            }
+            else
+            {
+                foreach(string item in recent)
+                {
+                    recentItems.DropDownItems.Add(item).Click+=(s,e)=>
+                    {
+                        var dropdownitem = (s as ToolStripItem);
+                        if(dropdownitem.Enabled)
+                        {
+                            MessageBox.Show(dropdownitem.Text);
+                        }
+                    };
+                }
+            }
+            
 
             //main menu
             ContextMenuStrip trayMenu = new ContextMenuStrip();
@@ -114,12 +124,36 @@ namespace Hermex.Classes
         }
 
         #region SYSTEMTRAY EVENTS
-
-        private void onDoubleClick(object sender, MouseEventArgs e)
+        int i = 0;
+        private void OnClick(object sender, MouseEventArgs e)
         {
-            if (!Utils.IsWindowOpen<UploadsPanel>())
+            if(e.Button == MouseButtons.Left)
             {
-                new UploadsPanel().Show();
+                //CaptureArea();
+                i++;
+                var recent = AppSettings.Get<List<string>>("RecentItems");
+                recent.Add("test item " + i);
+                AppSettings.Set("RecentItems", recent);
+                tray.ContextMenuStrip = buildMenu();
+            }
+        }
+
+        private void OnDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (!Utils.IsWindowOpen<Settings>())
+            {
+                new Settings().Show();
+            }
+        }
+
+        //if text is a correct url, open it in browser
+        private void OnTooltipClick(object sender, EventArgs e)
+        {
+            string text = tray.BalloonTipText;
+
+            if(!string.IsNullOrEmpty(text) && Utils.CheckURL(text))
+            {
+                Process.Start(text);
             }
         }
 
@@ -139,7 +173,7 @@ namespace Hermex.Classes
                 new StringFormat() { Alignment=StringAlignment.Center }
             );
 
-            trayIcon.Icon = Icon.FromHandle(iconBitmap.GetHicon());
+            tray.Icon = Icon.FromHandle(iconBitmap.GetHicon());
         }
 
         #endregion
@@ -164,10 +198,11 @@ namespace Hermex.Classes
             SocketUploader upload = new SocketUploader(screen, progressReporter, "{0}.png");
             if (upload.Upload())
             {
-                trayIcon.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                tray.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);  
             }
 
-            trayIcon.Icon = Properties.Resources.AppIcon;
+            tray.Icon = Properties.Resources.AppIcon;
+            //trayIcon.Icon = new Icon(this.GetType(), "AppIcon.ico");
 
         }
 
@@ -188,15 +223,15 @@ namespace Hermex.Classes
                 SocketUploader upload = new SocketUploader(screen, progressReporter, "{0}.png");
                 if (upload.Upload())
                 {
-                    Utils.SetTooltip(trayIcon, 5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                    Utils.SetTooltip(tray, 5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
                     ClipboardManager.SetText(upload.Link);
                 }
 
-                trayIcon.Icon = Properties.Resources.AppIcon;
+                tray.Icon = Properties.Resources.AppIcon;
             }
             else
             {
-                Utils.SetTooltip(trayIcon, 2000, "Upload Cancelled", "", ToolTipIcon.Info);
+                Utils.SetTooltip(tray, 2000, "Upload Cancelled", "", ToolTipIcon.Info);
             }
         }
 
@@ -241,7 +276,7 @@ namespace Hermex.Classes
 
         private void Exit()
         {
-            trayIcon.Dispose();
+            tray.Dispose();
             AppSettings.SaveSettingsFile();
             Utils.CheckRunAtStartup();
             App.Current.Shutdown();

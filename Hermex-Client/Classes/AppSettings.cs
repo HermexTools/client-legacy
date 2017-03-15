@@ -123,6 +123,7 @@ namespace Hermex.Classes
             Initialize("SaveLocal", false);
             Initialize("SaveLocalPath", AppConstants.SaveLocalDefaultPath);
             Initialize("UploadMethod", "SOCKET");
+            Initialize("RecentItems", new List<string>());
 
             //protocol
             Initialize("SocketAddress", "localhost");

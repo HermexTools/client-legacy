@@ -12,13 +12,15 @@ namespace Hermex.Classes
 {
     public class Utils
     {
-        public static bool IsWindowOpen<T>(string name = "") where T : System.Windows.Window
+        //check if app is already running
+        public static bool IsWindowOpen<T>(string name = "") where T : Window
         {
             return string.IsNullOrEmpty(name)
                ? App.Current.Windows.OfType<T>().Any()
                : App.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
         }
 
+        //check registry key for run at startup
         public static void CheckRunAtStartup()
         {
             var registryKey = AppConstants.StartUpRegistryKey;
@@ -39,28 +41,14 @@ namespace Hermex.Classes
             }
         }
 
-        public static string CoolMs(string ms)
-        {
-            if (ms.Length == 1)
-            {
-                return "00" + ms;
-            }
-            else if (ms.Length == 2)
-            {
-                return "0" + ms;
-            }
-            else
-            {
-                return ms;
-            }
-        }
-
+        //generate a file name
         public static string GenerateName()
         {
             string filename = DateTime.Now.ToString("ddMMyy-HHmmss");
             return new Random().Next(999) + "-" + filename;
         }
 
+        //generate a file from string
         public static string GenerateName(string name)
         {
             string st = name;
@@ -69,16 +57,19 @@ namespace Hermex.Classes
             return new Random().Next(99999) + "-" + st;
         }
 
+        //save a image from path to a local folder
         public static string SaveImageToLocalPath(string filename)
         {
             return AppSettings.Get<string>("SaveLocalPath") + Path.DirectorySeparatorChar + AppConstants.SaveLocalFileNamePrefix + filename;
         }
 
+        //save a file from path to temp folder
         public static string SaveFileToTempPath(string filename)
         {
             return AppConstants.TempFolder + AppConstants.SaveTempFileNamePrefix + filename;
         }
 
+        //get a human string key combination
         public static string GetStringCombination(HashSet<int> keyValues)
         {
             StringBuilder output = new StringBuilder();
@@ -91,6 +82,7 @@ namespace Hermex.Classes
             return output.ToString();
         }
 
+        //set a custom tooltip
         public static void SetTooltip(NotifyIcon icon, int timeout, string title, string text, ToolTipIcon tipicon)
         {
             icon.BalloonTipTitle = title;
@@ -100,6 +92,7 @@ namespace Hermex.Classes
             icon.ShowBalloonTip(timeout);
         }
 
+        //check if a string is a valid url
         public static bool CheckURL(string source)
         {
             Uri uriResult;
