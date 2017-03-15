@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hermex.Classes
 {
@@ -63,22 +64,22 @@ namespace Hermex.Classes
         {
             //sub menu -> recent items
             ToolStripMenuItem recentItems = new ToolStripMenuItem("Recent Items");
-            var recent = AppSettings.Get<List<string>>("RecentItems");
+            var recent = AppSettings.Get<Queue<string>>("RecentItems");
             if(recent.Count==0)
             {
                 recentItems.DropDownItems.Add("No items").Enabled = false;
             }
             else
             {
-                foreach(string item in recent)
+                foreach(string item in recent.Reverse())
                 {
                     recentItems.DropDownItems.Add(item).Click+=(s,e)=>
                     {
                         var dropdownitem = (s as ToolStripItem);
-                        if(dropdownitem.Enabled)
+                        if(dropdownitem.Enabled && !string.IsNullOrEmpty(dropdownitem.Text) && Utils.CheckURL(dropdownitem.Text))
                         {
-                            MessageBox.Show(dropdownitem.Text);
-                        }
+                            Process.Start(dropdownitem.Text);
+                        }                        
                     };
                 }
             }
@@ -123,18 +124,28 @@ namespace Hermex.Classes
             return trayMenu;
         }
 
+        private void SetRecentItem(string url)
+        {
+            var recent = AppSettings.Get<Queue<string>>("RecentItems");
+            recent.Enqueue(url);
+
+            if(recent.Count>10)
+            {
+                recent.Dequeue();
+            }
+
+            AppSettings.Set("RecentItems", recent);
+            tray.ContextMenuStrip = buildMenu();
+        }
+
         #region SYSTEMTRAY EVENTS
         int i = 0;
         private void OnClick(object sender, MouseEventArgs e)
         {
             if(e.Button == MouseButtons.Left)
             {
-                //CaptureArea();
                 i++;
-                var recent = AppSettings.Get<List<string>>("RecentItems");
-                recent.Add("test item " + i);
-                AppSettings.Set("RecentItems", recent);
-                tray.ContextMenuStrip = buildMenu();
+                SetRecentItem("test " + i);
             }
         }
 
