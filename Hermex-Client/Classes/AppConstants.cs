@@ -1,29 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hermex.Classes
 {
     public class AppConstants
     {
-        public static readonly string OwnAppDataFolderName = ".hermex";
+        //app names
+        public const string Name = "Hermex";        
+        public const string OwnAppDataFolderName = ".hermex";
+        public const string SaveLocalFileNamePrefix = "hermex_";
+        public const string SaveTempFileNamePrefix = "hermex_temp_";
+
+        //app version
+        public static readonly Version Version = new Version(0, 0, 3);
+        public const bool IsBetaVersion = true;
+
+        //registry
+        public const string StartUpRegistryKeyName = "Hermex";
+        public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+
+        //max recent items, devs        
+        public const int MaxRecentItems = 5;
+        public static readonly string[] Developers = new string[] { "Kaos1337", "SergiX44", "Lukasss93" };
+
+        //paths
         public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + OwnAppDataFolderName + Path.DirectorySeparatorChar;
         public static readonly string TempFolder = Path.GetTempPath() + Path.DirectorySeparatorChar;
-        public static readonly string SaveLocalFileNamePrefix = "hermex_";
-        public static readonly string SaveTempFileNamePrefix = "hermex_temp_";
-        public static readonly string Name = "Hermex";
-        public static readonly string[] Developers = new string[] { "Kaos1337", "SergiX44", "Lukasss93" };
-        public static readonly string Version = "0.0.3-Beta";
         public static readonly string SaveLocalDefaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         public static readonly string LoggerFileName = AppDataFolder + "logs.txt";
         public static readonly string SettingsFileName = AppDataFolder + "config.json";
-        public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-        public static readonly string StartUpRegistryKeyName = "Hermex";
+
+        //supported keys
         public static readonly Dictionary<Keys, string> SupportedKeys = new Dictionary<Keys, string>()
         {
             { Keys.LControlKey, "CTRL-L"},

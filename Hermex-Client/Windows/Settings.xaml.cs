@@ -78,7 +78,7 @@ namespace Hermex.Windows
             //info
             info_title.Text = AppConstants.Name;
             info_developers.Text = "Developed by " + String.Join(", ", AppConstants.Developers);
-            info_version.Text = "Version: " + AppConstants.Version;
+            info_version.Text = "Version: " + AppConstants.Version.ToString()+(AppConstants.IsBetaVersion?"-Beta":"");
 
             SettingsKeyListener.OnKeyPressed += SettingsKeyListener_OnKeyPressed;
             SettingsKeyListener.OnCombinationCompleted += SettingsKeyListener_OnCombinationCompleted;

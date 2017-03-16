@@ -129,7 +129,7 @@ namespace Hermex.Classes
             var recent = AppSettings.Get<Queue<string>>("RecentItems");
             recent.Enqueue(url);
 
-            if(recent.Count>10)
+            if(recent.Count>AppConstants.MaxRecentItems)
             {
                 recent.Dequeue();
             }
