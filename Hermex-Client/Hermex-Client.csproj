@@ -83,7 +83,8 @@
     </Compile>
     <Compile Include="Classes\AppConstants.cs" />
     <Compile Include="Classes\ClipboardManager.cs" />
-    <Compile Include="Classes\NewKeyListener .cs" />
+    <Compile Include="Classes\Dev.cs" />
+    <Compile Include="Classes\NewKeyListener.cs" />
     <Compile Include="Classes\KeyListener.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\Screenshot.cs" />
@@ -174,6 +175,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LoadingIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\recent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\github.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\it.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

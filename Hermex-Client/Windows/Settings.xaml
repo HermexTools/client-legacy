@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hermex.Windows"
         mc:Ignorable="d"
-        Title="Settings" Height="350" Width="380" ResizeMode="NoResize" Icon="/Hermex;component/AppIcon.ico">
+        Title="Settings" Height="440" Width="420" ResizeMode="NoResize" Icon="/Hermex;component/AppIcon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl BorderThickness="0,1,0,0" Margin="0,5,0,0">
-            <TabItem Header="Generals" FontSize="14" Width="70">
+            <TabItem Header="Generals" FontSize="14" Width="80">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <CheckBox x:Name="generals_startup" Content="Run at startup" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
                     <CheckBox x:Name="generals_save" Content="Save local copy of images" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
@@ -29,7 +29,7 @@
                     <RadioButton x:Name="generals_method_ftp" GroupName="1" Content="Use FTP" FontSize="16" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="tab_protocol" Header="Socket" FontSize="14" Width="70">
+            <TabItem x:Name="tab_protocol" Header="Socket" FontSize="14" Width="80">
                 <Grid>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
@@ -50,7 +50,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tab_ftp" Header="FTP" FontSize="14" Width="70">
+            <TabItem x:Name="tab_ftp" Header="FTP" FontSize="14" Width="80">
                 <Grid>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
@@ -83,7 +83,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Shortcuts" FontSize="14" Width="70">
+            <TabItem Header="Shortcuts" FontSize="14" Width="80">
                 <Grid>
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
@@ -110,11 +110,53 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Info" FontSize="14" Width="70">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock x:Name="info_title" Text="KSLUploader" FontSize="20" TextAlignment="Center" FontWeight="Bold" Padding="0,0,0,10"/>
-                    <TextBlock x:Name="info_developers" Text="Developed by SergiX44, Kaos1337, Lukasss93" FontSize="16" TextAlignment="Center" Padding="0,0,0,10"/>
-                    <TextBlock x:Name="info_version" Text="Version: 0.0.2-beta" FontSize="16" TextAlignment="Center"/>
+            <TabItem Header="Info" FontSize="14" Width="80">
+                <StackPanel Margin="10">
+                    <TextBlock x:Name="info_title" Text="AppTitle" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0"/>
+                    <TextBlock FontSize="12" Text="Derived project from KSU" FontStyle="Italic" Foreground="#FF767676" Margin="0,0,0,5"/>
+                    <TextBlock x:Name="info_project" FontSize="12" Text="Project page: xxx"/>
+                    <TextBlock x:Name="info_devheader" FontSize="12" Text="AppTitle Team:" Margin="0,10,0,0"/>
+                    <ListView x:Name="info_devs" BorderThickness="0" VerticalAlignment="Top" IsTextSearchEnabled="False">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding ImageFlag}" Width="16" Height="16" Margin="0,0,5,0"/>
+                                    <Image Tag="{Binding Github}" Source="{Binding GitImage}" Width="16" Height="16" Cursor="Hand" Margin="0,0,5,0" MouseUp="Image_MouseUp"/>
+                                    <TextBlock Text="{Binding Label}" FontStyle="{Binding LabelStyle}" Foreground="{Binding LabelColor}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <TextBlock x:Name="info_contributors" FontSize="12" Text="Contributors:" Margin="0,10,0,0"/>
+                    <TextBlock x:Name="info_librariesheader" Text="External libraries:" FontSize="12" Margin="0,10,0,0" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="info_libraries" FontSize="12" VerticalAlignment="Top">
+                        <Run Text="Json.NET:"/>
+                        <Hyperlink NavigateUri="https://github.com/JamesNK/Newtonsoft.Json">
+                            <Run Text="https://github.com/JamesNK/Newtonsoft.Json"/>
+                        </Hyperlink>
+                        <LineBreak/>
+                        <Run Text="MouseKeyHook:"/>
+                        <Hyperlink NavigateUri="https://github.com/gmamaladze/globalmousekeyhook">
+                            <Run Text="https://github.com/gmamaladze/globalmousekeyhook"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock x:Name="info_copy" FontSize="12" Text="Copyright (c) 2015-2017 Hermex Team" Margin="0,10,0,0"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

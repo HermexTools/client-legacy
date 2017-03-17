@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using Hermex.Classes;
 
@@ -76,9 +77,31 @@ namespace Hermex.Windows
             saveButton.Click += SaveButton_Click;
 
             //info
-            info_title.Text = AppConstants.Name;
-            info_developers.Text = "Developed by " + String.Join(", ", AppConstants.Developers);
-            info_version.Text = "Version: " + AppConstants.Version.ToString()+(AppConstants.IsBetaVersion?"-Beta":"");
+            this.Title = AppConstants.Name + " - Settings";
+            info_title.Text = AppConstants.Name +" "+ AppConstants.Version.ToString() + (AppConstants.IsBetaVersion ? "-Beta" : "");
+
+            info_project.Inlines.Clear();
+            info_project.Inlines.Add(new Run() { Text = "Project page: " });
+            Hyperlink projectLink = new Hyperlink();
+            projectLink.NavigateUri = new Uri(AppConstants.ProjectUrl);
+            projectLink.Inlines.Clear();
+            projectLink.Inlines.Add(new Run() { Text = AppConstants.ProjectUrl });
+            info_project.Inlines.Add(projectLink);
+
+            info_devheader.Text = AppConstants.Name + " Team:";
+            info_devs.ItemsSource = AppConstants.Devs;
+
+            info_contributors.Inlines.Clear();
+            info_contributors.Inlines.Add(new Run() { Text = "Contributors:\n" });
+            Hyperlink contributorsLink = new Hyperlink();
+            contributorsLink.NavigateUri = new Uri(AppConstants.ProjectUrl);
+            contributorsLink.Inlines.Clear();
+            contributorsLink.Inlines.Add(new Run() { Text = AppConstants.ContributorsUrl });
+            info_contributors.Inlines.Add(contributorsLink);
+
+            info_copy.Text = "Copyright © 2015 - 2017 " + AppConstants.Name + " Team";
+
+
 
             SettingsKeyListener.OnKeyPressed += SettingsKeyListener_OnKeyPressed;
             SettingsKeyListener.OnCombinationCompleted += SettingsKeyListener_OnCombinationCompleted;
@@ -205,6 +228,9 @@ namespace Hermex.Windows
                 //save config
                 AppSettings.SaveSettingsFile();
 
+                //refresh tray icon menu
+                (App.Current as App).TrayIcon.buildMenu();
+
                 //close window
                 Close();
             }
@@ -221,6 +247,12 @@ namespace Hermex.Windows
                         break;
                 }
             }
+        }
+
+        private void Image_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var control = sender as Image;
+            Process.Start(control.Tag.ToString());
         }
     }
 }

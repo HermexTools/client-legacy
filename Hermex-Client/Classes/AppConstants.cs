@@ -21,9 +21,16 @@ namespace Hermex.Classes
         public const string StartUpRegistryKeyName = "Hermex";
         public static readonly string StartUpRegistryKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 
-        //max recent items, devs        
+        //max recent items, devs, project url, contributors url      
         public const int MaxRecentItems = 5;
-        public static readonly string[] Developers = new string[] { "Kaos1337", "SergiX44", "Lukasss93" };
+        public static readonly List<Dev> Devs = new List<Dev>()
+        {
+            new Dev(Properties.Resources.it,"https://github.com/Kaos1337","Kaos1337","Francesco Marretta",true),
+            new Dev(Properties.Resources.it,"https://github.com/SergiX44","SergiX44","Sergio Brighenti"),
+            new Dev(Properties.Resources.it,"https://github.com/Lukasss93","Lukasss93","Luca Patera")
+        };
+        public const string ProjectUrl = "https://github.com/HermexTools/Hermex-client";
+        public const string ContributorsUrl = "https://github.com/HermexTools/Hermex-client/graphs/contributors";
 
         //paths
         public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + OwnAppDataFolderName + Path.DirectorySeparatorChar;

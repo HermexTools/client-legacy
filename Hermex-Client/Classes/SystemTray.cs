@@ -26,12 +26,11 @@ namespace Hermex.Classes
             tray.Icon = Properties.Resources.AppIcon;
 
             //tray events
-            tray.MouseClick += OnClick; //for testing only
             tray.MouseDoubleClick += OnDoubleClick;
             tray.BalloonTipClicked += OnTooltipClick;
 
             //tray menu
-            tray.ContextMenuStrip = buildMenu();
+            buildMenu();
 
             //show tray 
             tray.Visible = true;
@@ -60,10 +59,10 @@ namespace Hermex.Classes
             }
         }
 
-        private ContextMenuStrip buildMenu()
+        public void buildMenu()
         {
             //sub menu -> recent items
-            ToolStripMenuItem recentItems = new ToolStripMenuItem("Recent Items");
+            ToolStripMenuItem recentItems = new ToolStripMenuItem("Recent Items",Properties.Resources.recent);
             var recent = AppSettings.Get<Queue<string>>("RecentItems");
             if(recent.Count==0)
             {
@@ -71,15 +70,25 @@ namespace Hermex.Classes
             }
             else
             {
+                recentItems.DropDownItems.Add("Left click to copy. Right click to open.").Enabled = false;
+                recentItems.DropDownItems.Add("-");
                 foreach(string item in recent.Reverse())
-                {
-                    recentItems.DropDownItems.Add(item).Click+=(s,e)=>
+                {                    
+                    recentItems.DropDownItems.Add(item).MouseUp+=(s,e)=>
                     {
                         var dropdownitem = (s as ToolStripItem);
-                        if(dropdownitem.Enabled && !string.IsNullOrEmpty(dropdownitem.Text) && Utils.CheckURL(dropdownitem.Text))
+
+                        if(e.Button == MouseButtons.Left)
                         {
-                            Process.Start(dropdownitem.Text);
-                        }                        
+                            ClipboardManager.SetText(dropdownitem.Text);
+                        }
+                        else if(e.Button==MouseButtons.Right)
+                        {
+                            if(dropdownitem.Enabled && !string.IsNullOrEmpty(dropdownitem.Text) && Utils.CheckURL(dropdownitem.Text))
+                            {
+                                Process.Start(dropdownitem.Text);
+                            }
+                        }
                     };
                 }
             }
@@ -87,9 +96,14 @@ namespace Hermex.Classes
 
             //main menu
             ContextMenuStrip trayMenu = new ContextMenuStrip();
+            trayMenu.Items.Clear();
             trayMenu.Items.Add(AppConstants.Name + " v" + AppConstants.Version, null, null).Enabled = false;
             trayMenu.Items.Add("-");
             trayMenu.Items.Add(recentItems);
+            if(AppSettings.Get<bool>("SaveLocal"))
+            {
+                trayMenu.Items.Add("Screenshot folder", Properties.Resources.folder, delegate { Process.Start(AppSettings.Get<string>("SaveLocalPath")); });
+            }
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Capture Area", Properties.Resources.Area, delegate { CaptureArea(); });
             if (Screen.AllScreens.Length > 1)
@@ -120,8 +134,8 @@ namespace Hermex.Classes
             trayMenu.Items.Add("-");
             trayMenu.Items.Add("Exit", Properties.Resources.Quit, delegate { Exit(); });
 
-            //return menu
-            return trayMenu;
+            //build
+            tray.ContextMenuStrip = trayMenu;
         }
 
         private void SetRecentItem(string url)
@@ -135,29 +149,16 @@ namespace Hermex.Classes
             }
 
             AppSettings.Set("RecentItems", recent);
-            tray.ContextMenuStrip = buildMenu();
+            buildMenu();
         }
 
         #region SYSTEMTRAY EVENTS
-        int i = 0;
-        private void OnClick(object sender, MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Left)
-            {
-                i++;
-                SetRecentItem("test " + i);
-            }
-        }
 
         private void OnDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!Utils.IsWindowOpen<Settings>())
-            {
-                new Settings().Show();
-            }
+            ShowSettings();
         }
-
-        //if text is a correct url, open it in browser
+        
         private void OnTooltipClick(object sender, EventArgs e)
         {
             string text = tray.BalloonTipText;
@@ -209,7 +210,9 @@ namespace Hermex.Classes
             SocketUploader upload = new SocketUploader(screen, progressReporter, "{0}.png");
             if (upload.Upload())
             {
-                tray.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);  
+                tray.ShowBalloonTip(5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                SetRecentItem(upload.Link);
+                ClipboardManager.SetText(upload.Link);
             }
 
             tray.Icon = Properties.Resources.AppIcon;
@@ -235,6 +238,7 @@ namespace Hermex.Classes
                 if (upload.Upload())
                 {
                     Utils.SetTooltip(tray, 5000, "Upload Completed", upload.Link, ToolTipIcon.Info);
+                    SetRecentItem(upload.Link);
                     ClipboardManager.SetText(upload.Link);
                 }
 

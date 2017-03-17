@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace Hermex.Classes
 {
-    public enum LogType { INFO, SEVERE }
+    public enum LogType
+    {
+        INFO,
+        SEVERE
+    }
 
     public class Logger
     {
@@ -25,8 +30,21 @@ namespace Hermex.Classes
         {
             InitializeFile();
 
-            var ms = DateTime.Now.Millisecond.ToString().PadLeft(3,'0');
-            File.AppendAllText(logFile.FullName, DateTime.Now.ToString("[dd-MM-yyyy H:mm:ss.") + ms+"] [" + type + "|" + className + "] " + content + "\r\n");
+            var actualTime = DateTime.Now;
+            var day = actualTime.Day.ToString().PadLeft(2, '0');
+            var month = actualTime.Month.ToString().PadLeft(2, '0');
+            var year = actualTime.Year;
+            var hour = actualTime.Hour.ToString().PadLeft(2, '0');
+            var minute = actualTime.Minute.ToString().PadLeft(2, '0');
+            var second = actualTime.Second.ToString().PadLeft(2, '0');
+            var millisecond = actualTime.Millisecond.ToString().PadLeft(3, '0');
+
+            StringBuilder row = new StringBuilder();
+            row.AppendFormat("[{0}/{1}/{2} {3}:{4}:{5}.{6}] ", day, month, year, hour, minute, second, millisecond);
+            row.AppendFormat("[{0}|{1}] ", type, className);
+            row.AppendLine(content);
+
+            File.AppendAllText(logFile.FullName, row.ToString());
         }
 
         private static void InitializeFile()

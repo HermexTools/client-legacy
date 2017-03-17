@@ -1,5 +1,4 @@
 ﻿using Hermex.Classes;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 
@@ -7,14 +6,11 @@ namespace Hermex
 {
     public partial class App : Application
     {
-        private SystemTray TrayIcon;
+        public SystemTray TrayIcon;
         public KeyListener GlobalKeyListener;
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            //log app start
-            Logger.Set(AppConstants.Name + " started!");
-
             //no double instance
             if(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
@@ -22,7 +18,10 @@ namespace Hermex
                 Current.Shutdown();
                 return;
             }
-           
+
+            //log app start
+            Logger.Set(AppConstants.Name + " started!");
+
             //force explicit shutdown
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
